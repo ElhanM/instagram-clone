@@ -6,6 +6,7 @@ const UserSchema = new mongoose.Schema(
     username: {
       type: String,
       required: [true, "Username is required"],
+      unique: [true, "Duplicate username"],
     },
     email: {
       type: String,
@@ -37,5 +38,9 @@ UserSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
+
+UserSchema.methods.matchPasswords = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
 
 module.exports = mongoose.model("User", UserSchema);
