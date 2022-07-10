@@ -1,15 +1,17 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const cors = require('cors');
-const connectDB = require('./db/connect');
-const post = require('./routes/posts');
+const cors = require("cors");
+const connectDB = require("./db/connect");
+const post = require("./routes/posts");
+const auth = require("./routes/auth");
 
-require('dotenv').config();
+require("dotenv").config();
 
 app.use(express.json());
 app.use(cors());
 
-app.use('/api/posts', post);
+app.use("/api/posts", post);
+app.use("/api/auth", auth);
 
 const port = process.env.PORT || 5000;
 
