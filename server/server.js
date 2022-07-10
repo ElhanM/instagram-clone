@@ -4,6 +4,7 @@ const cors = require("cors");
 const connectDB = require("./db/connect");
 const post = require("./routes/posts");
 const auth = require("./routes/auth");
+const errorHandler = require("./middleware/error");
 
 require("dotenv").config();
 
@@ -12,6 +13,8 @@ app.use(cors());
 
 app.use("/api/posts", post);
 app.use("/api/auth", auth);
+
+app.use(errorHandler);
 
 const port = process.env.PORT || 5000;
 
