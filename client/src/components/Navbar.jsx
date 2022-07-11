@@ -1,4 +1,3 @@
-import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -10,7 +9,6 @@ import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/system";
 import { Link, NavLink } from "react-router-dom";
@@ -30,8 +28,9 @@ const theme = createTheme({
 });
 
 const Navbar = () => {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+  const [value, setValue] = useState();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -47,7 +46,6 @@ const Navbar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  const [value, setValue] = useState();
 
   return (
     <ThemeProvider theme={theme}>
@@ -71,7 +69,7 @@ const Navbar = () => {
                 textDecoration: "none",
               }}
             >
-              <Link to="/" onClick={()=>setValue()}>
+              <Link to="/" onClick={() => setValue()}>
                 INSTAGRAM
               </Link>
             </Typography>
@@ -104,27 +102,41 @@ const Navbar = () => {
                   display: { xs: "block", md: "none" },
                 }}
               >
-                <MenuItem onClick={handleCloseNavMenu}>
-                  <NavLink
-                    to="/create-post"
-                    textAlign="center"
-                    style={{ textDecoration: "none", color: "#000" }}
-                  >
+                <MenuItem
+                  onClick={handleCloseNavMenu}
+                  sx={[
+                    {
+                      "&:hover": {
+                        backgroundColor: "#dbdbdb",
+                      },
+                      transition: "background-color 0.2s ease",
+                    },
+                  ]}
+                >
+                  <NavLink to="/create-post" textAlign="center">
                     Create Post
                   </NavLink>
                 </MenuItem>
-                <MenuItem onClick={handleCloseNavMenu}>
-                  <NavLink
-                    to="/explore-page"
-                    textAlign="center"
-                    style={{ textDecoration: "none", color: "#000" }}
-                  >
+                <MenuItem
+                  onClick={handleCloseNavMenu}
+                  sx={[
+                    {
+                      "&:hover": {
+                        backgroundColor: "#dbdbdb",
+                      },
+                      transition: "background-color 0.2s ease",
+                    },
+                  ]}
+                >
+                  <NavLink to="/explore-page" textAlign="center">
                     Explore
                   </NavLink>
                 </MenuItem>
               </Menu>
             </Box>
-            <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+            <InstagramIcon
+              sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
+            />
             <Typography
               variant="h5"
               noWrap
@@ -182,7 +194,17 @@ const Navbar = () => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                <MenuItem onClick={handleCloseUserMenu}>
+                <MenuItem
+                  onClick={handleCloseUserMenu}
+                  sx={[
+                    {
+                      "&:hover": {
+                        backgroundColor: "#dbdbdb",
+                      },
+                      transition: "background-color 0.2s ease",
+                    },
+                  ]}
+                >
                   <NavLink
                     to="/profile"
                     textAlign="center"
@@ -191,7 +213,17 @@ const Navbar = () => {
                     Profile
                   </NavLink>
                 </MenuItem>
-                <MenuItem onClick={handleCloseUserMenu}>
+                <MenuItem
+                  onClick={handleCloseUserMenu}
+                  sx={[
+                    {
+                      "&:hover": {
+                        backgroundColor: "#dbdbdb",
+                      },
+                      transition: "background-color 0.2s ease",
+                    },
+                  ]}
+                >
                   <Typography
                     textAlign="center"
                     onClick={() => {
