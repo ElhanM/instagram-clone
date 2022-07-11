@@ -11,7 +11,8 @@ const getAllPosts = async (req, res, next) => {
 
 const createPost = async (req, res, next) => {
   try {
-    const post = await Post.create(req.body);
+    req.user.password = undefined;
+    const post = await Post.create({ ...req.body, user:req.user });
     res.status(201).json({ post });
   } catch (error) {
     next(error);

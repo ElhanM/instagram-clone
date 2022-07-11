@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const ErrorResponse = require("../utils/errorResponse");
 const User = require("../models/User");
 
-exports.protect = async (req, res, next) => {
+const protect = async (req, res, next) => {
   let token;
 
   if (req.headers.authorization?.startsWith("Bearer")) {
@@ -25,3 +25,5 @@ exports.protect = async (req, res, next) => {
     return next(new ErrorResponse("Not authorized to access this router", 401));
   }
 };
+
+module.exports = protect;
