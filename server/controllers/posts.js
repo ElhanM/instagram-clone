@@ -9,10 +9,24 @@ const getAllPosts = async (req, res, next) => {
   }
 };
 
+const getAllPostsByUser = async (req, res, next) => {
+  try {
+    const posts = await Post.find({ user: req.user._id }).populate(
+      "user",
+      "_id username"
+    );
+    res.status(200).json({ posts });
+  } catch (error) {
+    return next(
+      new ErrorResponse(`No posts from user with id : ${req.user._id}`, 404)
+    );
+  }
+};
+
 const createPost = async (req, res, next) => {
   try {
     req.user.password = undefined;
-    const post = await Post.create({ ...req.body, user:req.user });
+    const post = await Post.create({ ...req.body, user: req.user });
     res.status(201).json({ post });
   } catch (error) {
     next(error);
@@ -54,6 +68,7 @@ const updatePost = async (req, res, next) => {
 
 module.exports = {
   getAllPosts,
+  getAllPostsByUser,
   createPost,
   getPost,
   updatePost,
