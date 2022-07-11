@@ -8,6 +8,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: [true, "Username is required"],
       unique: [true, "Duplicate username"],
+      match: [/^[a-z0-9-_.]+$/, "Username can only contain lowercase letters, numbers, dash, underscore and dot, and can not contain spaces"],
     },
     email: {
       type: String,
