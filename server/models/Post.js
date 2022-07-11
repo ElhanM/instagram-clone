@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Schema.Types;
 
 const postSchema = new mongoose.Schema(
   {
@@ -12,6 +13,11 @@ const postSchema = new mongoose.Schema(
     },
     photo: {
       type: String,
+      required: true,
+    },
+    user: {
+      type: ObjectId,
+      ref: "User",
       required: true,
     },
   },
