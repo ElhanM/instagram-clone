@@ -5,6 +5,7 @@ const connectDB = require("./db/connect");
 const post = require("./routes/posts");
 const auth = require("./routes/auth");
 const errorHandler = require("./middleware/error");
+const private = require("./routes/private");
 
 require("dotenv").config();
 
@@ -13,6 +14,7 @@ app.use(cors());
 
 app.use("/api/posts", post);
 app.use("/api/auth", auth);
+app.use("/api/private", private);
 
 app.use(errorHandler);
 
