@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ExplorePage from "./pages/ExplorePage";
-import SharedLayout from "./pages/SharedLayout";
+import SharedLayout from "./components/SharedLayout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";

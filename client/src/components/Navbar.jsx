@@ -205,11 +205,7 @@ const Navbar = () => {
                     },
                   ]}
                 >
-                  <NavLink
-                    to="/profile"
-                    textAlign="center"
-                    style={{ textDecoration: "none", color: "#000" }}
-                  >
+                  <NavLink to="/profile" textAlign="center">
                     Profile
                   </NavLink>
                 </MenuItem>
