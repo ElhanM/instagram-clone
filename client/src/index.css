@@ -6,12 +6,86 @@ body {
   font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
-}
-
 .navbar-link {
   text-decoration: none;
   color: inherit;
   cursor: pointer;
+}
+
+.container {
+  margin: 0 auto;
+  width: 100vw;
+  max-width: 1000px;
+}
+.container__header {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.container__header__profile-photo {
+  margin-top: 2em;
+  margin-right: 10em;
+}
+.container__header__user-info__name {
+  font-size: 3rem;
+  margin: 0.1em 0;
+}
+@media (max-width: 1056px) {
+  .container__header {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  .container__header__profile-photo {
+    margin-top: 2em;
+    margin-right: 0;
+  }
+}
+.container__hr {
+  border: 1px solid black;
+  margin: 1rem auto;
+  max-width: 80%;
+}
+.container__posts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1em;
+}
+.container__posts img {
+  width: 318px;
+}
+@media (max-width: 1056px) {
+  .container__posts {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  .container__posts img {
+    width: 70vw;
+  }
 }/*# sourceMappingURL=index.css.map */

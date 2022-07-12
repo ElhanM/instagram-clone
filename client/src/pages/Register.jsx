@@ -76,10 +76,6 @@ const Register = () => {
               id="password"
               autoComplete="off"
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             <Button
               type="submit"
               fullWidth
