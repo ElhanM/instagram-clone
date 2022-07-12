@@ -69,7 +69,7 @@ const Navbar = () => {
                 textDecoration: "none",
               }}
             >
-              <Link to="/" onClick={() => setValue()}>
+              <Link to="/" onClick={() => setValue()} className="navbar-link">
                 INSTAGRAM
               </Link>
             </Typography>
@@ -107,13 +107,17 @@ const Navbar = () => {
                   sx={[
                     {
                       "&:hover": {
-                        backgroundColor: "#dbdbdb",
+                        backgroundColor: "#f0f0f0",
                       },
                       transition: "background-color 0.2s ease",
                     },
                   ]}
                 >
-                  <NavLink to="/create-post" textAlign="center">
+                  <NavLink
+                    to="/create-post"
+                    textAlign="center"
+                    className="navbar-link"
+                  >
                     Create Post
                   </NavLink>
                 </MenuItem>
@@ -122,13 +126,17 @@ const Navbar = () => {
                   sx={[
                     {
                       "&:hover": {
-                        backgroundColor: "#dbdbdb",
+                        backgroundColor: "#f0f0f0",
                       },
                       transition: "background-color 0.2s ease",
                     },
                   ]}
                 >
-                  <NavLink to="/explore-page" textAlign="center">
+                  <NavLink
+                    to="/explore-page"
+                    textAlign="center"
+                    className="navbar-link"
+                  >
                     Explore
                   </NavLink>
                 </MenuItem>
@@ -169,8 +177,14 @@ const Navbar = () => {
                 LinkComponent={NavLink}
                 to="/create-post"
                 label="Create Post"
+                className="navbar-link"
               />
-              <Tab LinkComponent={NavLink} to="/explore" label="Explore" />
+              <Tab
+                LinkComponent={NavLink}
+                to="/explore"
+                label="Explore"
+                className="navbar-link"
+              />
             </Tabs>
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
@@ -199,13 +213,17 @@ const Navbar = () => {
                   sx={[
                     {
                       "&:hover": {
-                        backgroundColor: "#dbdbdb",
+                        backgroundColor: "#f0f0f0",
                       },
                       transition: "background-color 0.2s ease",
                     },
                   ]}
                 >
-                  <NavLink to="/profile" textAlign="center">
+                  <NavLink
+                    to="/profile"
+                    textAlign="center"
+                    className="navbar-link"
+                  >
                     Profile
                   </NavLink>
                 </MenuItem>
@@ -214,7 +232,7 @@ const Navbar = () => {
                   sx={[
                     {
                       "&:hover": {
-                        backgroundColor: "#dbdbdb",
+                        backgroundColor: "#f0f0f0",
                       },
                       transition: "background-color 0.2s ease",
                     },

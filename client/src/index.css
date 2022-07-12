@@ -10,7 +10,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-a {
+.navbar-link {
   text-decoration: none;
   color: inherit;
   cursor: pointer;
