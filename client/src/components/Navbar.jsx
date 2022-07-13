@@ -76,7 +76,7 @@ const Navbar = () => {
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
               <IconButton
                 size="large"
-                aria-label="accou<div>Profile</div>nt of current user"
+                aria-label="account of current user"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
                 onClick={handleOpenNavMenu}
@@ -117,6 +117,7 @@ const Navbar = () => {
                     to="/create-post"
                     textAlign="center"
                     className="navbar-link"
+                    onClick={() => setValue(0)}
                   >
                     Create Post
                   </NavLink>
@@ -133,9 +134,10 @@ const Navbar = () => {
                   ]}
                 >
                   <NavLink
-                    to="/explore-page"
+                    to="/explore"
                     textAlign="center"
                     className="navbar-link"
+                    onClick={() => setValue(1)}
                   >
                     Explore
                   </NavLink>
@@ -168,7 +170,9 @@ const Navbar = () => {
               textColor="secondary"
               indicatorColor="secondary"
               value={value}
+              
               onChange={(e, val) => {
+                console.log(val);
                 setValue(val);
                 // mui shananigans
               }}
@@ -223,6 +227,7 @@ const Navbar = () => {
                     to="/profile"
                     textAlign="center"
                     className="navbar-link"
+                    onClick={() => setValue()}
                   >
                     Profile
                   </NavLink>
@@ -242,6 +247,7 @@ const Navbar = () => {
                     textAlign="center"
                     onClick={() => {
                       // ! add log out funtionality
+                      setValue();
                       console.log("LOG OUT");
                     }}
                   >
