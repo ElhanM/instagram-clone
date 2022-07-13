@@ -49,7 +49,7 @@ const Navbar = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <AppBar position="static" sx={{borderBottom:'1px solid #dbdbdb'}}>
+      <AppBar position="static" sx={{ borderBottom: "1px solid #dbdbdb" }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <InstagramIcon
@@ -170,7 +170,6 @@ const Navbar = () => {
               textColor="secondary"
               indicatorColor="secondary"
               value={value}
-              
               onChange={(e, val) => {
                 console.log(val);
                 setValue(val);
@@ -247,11 +246,16 @@ const Navbar = () => {
                     textAlign="center"
                     onClick={() => {
                       // ! add log out funtionality
-                      setValue();
                       console.log("LOG OUT");
                     }}
                   >
-                    Log out
+                    <Link
+                      to="/login"
+                      onClick={() => setValue()}
+                      className="navbar-link"
+                    >
+                      Log out
+                    </Link>
                   </Typography>
                 </MenuItem>
               </Menu>
