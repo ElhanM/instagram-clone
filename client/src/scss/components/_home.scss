@@ -1,0 +1,27 @@
+.home {
+  width: 100vw;
+  background-color: #fafafa;
+  padding-top: 1em;
+
+  &-container {
+    @include home-container-width;
+    max-width: 600px;
+    border: 1px solid #dbdbdb;
+    border-radius: 0.5em;
+    margin-bottom: 1em;
+    &__header {
+      margin: 1em 0;
+      display: flex;
+      align-items: center;
+      padding: 0 1em;
+    }
+    &__footer {
+      padding: 1em;
+    }
+    &__image {
+      img {
+        width: 600px;
+      }
+    }
+  }
+}

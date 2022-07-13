@@ -1,41 +1,45 @@
-.container {
-  @include continer-width;
+.profile {
+  width: 100vw;
+  background-color: #fafafa;
+  &-container {
+    @include home-container-width;
 
-  &__header {
-    @include flex-center;
-    &__profile-photo {
-      margin-top: 2em;
-      margin-right: 10em;
-    }
-    &__user-info__name {
-      font-size: 3rem;
-      margin: 0.1em 0;
-    }
-    @media (max-width: 1056px) {
-      flex-direction: column;
+    &__header {
+      @include flex-center;
       &__profile-photo {
         margin-top: 2em;
-        margin-right: 0;
+        margin-right: 10em;
+      }
+      &__user-info__name {
+        font-size: 3rem;
+        margin: 0.1em 0;
+      }
+      @media (max-width: 1056px) {
+        flex-direction: column;
+        &__profile-photo {
+          margin-top: 2em;
+          margin-right: 0;
+        }
       }
     }
-  }
-  &__hr {
-    border: 1px solid black;
-    margin: 1rem auto;
-    max-width: 80%;
-  }
-  &__posts {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1em;
-    img {
-      width: 318px;
+    &__hr {
+      border: 1px solid black;
+      margin: 1rem auto;
+      max-width: 80%;
     }
-    @media (max-width: 1056px) {
-      @include flex-center;
-      flex-direction: column;
+    &__posts {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1em;
       img {
-        width: 70vw;
+        width: 318px;
+      }
+      @media (max-width: 1056px) {
+        @include flex-center;
+        flex-direction: column;
+        img {
+          width: 70vw;
+        }
       }
     }
   }
