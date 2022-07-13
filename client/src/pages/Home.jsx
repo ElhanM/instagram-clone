@@ -6,28 +6,28 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 const Home = () => {
   return (
     <div className="home">
-      <div className="home-container">
-        <div className="home-container__header">
-          <div className="home-container__header__photo">
+      <div className="home__container">
+        <div className="home__container__header">
+          <div className="home__container__header__photo">
             <Avatar
               alt="John Doe"
               src="https://img.freepik.com/free-photo/pleasant-looking-serious-man-stands-profile-has-confident-expression-wears-casual-white-t-shirt_273609-16959.jpg?w=2000"
               sx={{ width: "3rem", height: "3rem" }}
             />
           </div>
-          <div className="home-container__header__user">
+          <div className="home__container__header__user">
             <Typography variant="h2" sx={{ fontSize: "2rem" }}>
               John Doe
             </Typography>
           </div>
         </div>
-        <div className="home-container__image">
+        <div className="home__container__image">
           <img
             src="https://img.freepik.com/free-photo/pleasant-looking-serious-man-stands-profile-has-confident-expression-wears-casual-white-t-shirt_273609-16959.jpg?w=2000"
             alt=""
           />
         </div>
-        <div className="home-container__footer">
+        <div className="home__container__footer">
           <FavoriteBorderIcon />
           <FavoriteIcon sx={{ color: "red" }} />
 
@@ -43,28 +43,28 @@ const Home = () => {
           </FormControl>
         </div>
       </div>
-      <div className="home-container">
-        <div className="home-container__header">
-          <div className="home-container__header__photo">
+      <div className="home__container">
+        <div className="home__container__header">
+          <div className="home__container__header__photo">
             <Avatar
               alt="John Doe"
               src="https://img.freepik.com/free-photo/pleasant-looking-serious-man-stands-profile-has-confident-expression-wears-casual-white-t-shirt_273609-16959.jpg?w=2000"
               sx={{ width: "3rem", height: "3rem" }}
             />
           </div>
-          <div className="home-container__header__user">
+          <div className="home__container__header__user">
             <Typography variant="h2" sx={{ fontSize: "2rem" }}>
               John Doe
             </Typography>
           </div>
         </div>
-        <div className="home-container__image">
+        <div className="home__container__image">
           <img
             src="https://img.freepik.com/free-photo/pleasant-looking-serious-man-stands-profile-has-confident-expression-wears-casual-white-t-shirt_273609-16959.jpg?w=2000"
             alt=""
           />
         </div>
-        <div className="home-container__footer">
+        <div className="home__container__footer">
           <Typography variant="h1" sx={{ fontSize: "1.7rem" }}>
             John Doe
           </Typography>
