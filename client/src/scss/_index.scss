@@ -1,4 +1,8 @@
-@import './mixins';
+@import "./mixins";
 
-@import './components/index';
-@import './pages/index';
+@import "./components/navbar";
+
+@import "./pages/profile";
+@import "./pages/home";
+@import "./pages/explore-page";
+@import "./pages/create-post";
