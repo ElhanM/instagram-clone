@@ -8,11 +8,46 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+const URL = "http://localhost:5000/api/auth/register";
 
 const Register = () => {
+  const history = useNavigate();
+  const [inputs, setInputs] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  const handleChange = (e) => {
+    setInputs({
+      ...inputs,
+      [e.target.name]: e.target.value,
+    });
+  };
+  const postRequest = async () => {
+    try {
+      const response = await axios.post(
+        URL,
+        { ...inputs },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response.data);
+      localStorage.setItem("authToken", response.data.token);
+      history("/");
+    } catch (error) {
+      console.log(error.response.data.message);
+    }
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("sumbit");
+    postRequest();
   };
 
   return (
@@ -39,29 +74,33 @@ const Register = () => {
             fullWidth
             name="username"
             label="Username"
-            id="username"
             autoFocus
+            type="text"
             autoComplete="off"
+            value={inputs.username}
+            onChange={handleChange}
           />
           <TextField
             margin="normal"
             required
             fullWidth
-            id="email"
             label="Email Address"
             name="email"
             type="email"
             autoComplete="off"
+            value={inputs.email}
+            onChange={handleChange}
           />
           <TextField
             margin="normal"
             required
             fullWidth
-            name="password"
             label="Password"
+            name="password"
             type="password"
-            id="password"
-            autoComplete="off"
+            autoComplete="new-password"
+            value={inputs.password}
+            onChange={handleChange}
           />
           <Button
             type="submit"
