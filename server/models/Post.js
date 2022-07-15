@@ -5,15 +5,15 @@ const postSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: true,
+      required: [true, "Title is required"],
     },
     description: {
       type: String,
-      required: true,
+      required: [true, "Description is required"],
     },
     photo: {
       type: String,
-      required: true,
+      required: [true, "Image is required"],
     },
     user: {
       type: ObjectId,

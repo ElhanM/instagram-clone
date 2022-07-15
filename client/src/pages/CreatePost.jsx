@@ -1,18 +1,77 @@
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import { Link } from "react-router-dom";
-import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+const CLOUDINARYURL =
+  "https://api.cloudinary.com/v1_1/instagram-clone-web-app/image/upload";
+const URL = "http://localhost:5000/api/posts";
 
 const Login = () => {
+  const history = useNavigate();
+  const [inputs, setInputs] = useState({
+    title: "",
+    description: "",
+  });
+  const [image, setImage] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const handleChange = (e) => {
+    setInputs({
+      ...inputs,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const cloudinaryRequest = async () => {
+    try {
+      const data = new FormData();
+      // data.append("title", inputs.title);
+      // data.append("description", inputs.description);
+      data.append("file", image);
+      data.append("upload_preset", "instagram-clone");
+      data.append("cloud_name", "instagram-clone-web-app");
+
+      const response = await axios.post(CLOUDINARYURL, data);
+      setImageUrl(response.data.url);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const postRequest = async () => {
+    try {
+      const response = await axios.post(
+        URL,
+        { ...inputs, photo: imageUrl },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        },
+        { withCredentials: false }
+      );
+      console.log(response.data);
+      history("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (imageUrl) {
+      postRequest();
+    }
+  }, [imageUrl]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("sumbit");
+    cloudinaryRequest();
   };
 
   return (
@@ -39,6 +98,8 @@ const Login = () => {
             id="title"
             autoFocus
             autoComplete="off"
+            value={inputs.title}
+            onChange={handleChange}
           />
           <TextField
             margin="normal"
@@ -48,6 +109,8 @@ const Login = () => {
             label="Description"
             id="description"
             autoComplete="off"
+            value={inputs.description}
+            onChange={handleChange}
           />
           <TextField
             margin="normal"
@@ -57,6 +120,7 @@ const Login = () => {
             id="photo"
             type="file"
             autoComplete="off"
+            onChange={(e) => setImage(e.target.files[0])}
           />
           <Button
             type="submit"

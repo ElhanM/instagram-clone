@@ -40,6 +40,7 @@ const Register = () => {
       );
       console.log(response.data);
       localStorage.setItem("authToken", response.data.token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
       history("/");
     } catch (error) {
       console.log(error.response.data.message);
