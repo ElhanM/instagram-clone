@@ -11,10 +11,13 @@ import Container from "@mui/material/Container";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useGlobalContext } from "../components/Context";
 
 const URL = "http://localhost:5000/api/auth/login";
 
 const Login = () => {
+  const { userDispatch } = useGlobalContext();
+
   const history = useNavigate();
   const [inputs, setInputs] = useState({
     email: "",
@@ -40,6 +43,7 @@ const Login = () => {
       console.log(response.data);
       localStorage.setItem("authToken", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user));
+      userDispatch(response.data.user);
       history("/");
     } catch (error) {
       console.log(error.response.data.message);
