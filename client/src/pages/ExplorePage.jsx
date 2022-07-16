@@ -2,8 +2,19 @@ import { FormControl, Input, InputLabel, Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useGlobalContext } from "../components/context";
 
 const ExplorePage = () => {
+  const { userDispatch, userInfo } = useGlobalContext();
+  const history = useNavigate();
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+      history("/login");
+    }
+  }, []);
   return (
     <div className="explore-page">
       <div className="explore-page__container">

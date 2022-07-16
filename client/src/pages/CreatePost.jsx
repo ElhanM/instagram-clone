@@ -7,6 +7,7 @@ import Container from "@mui/material/Container";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useGlobalContext } from "../components/context";
 
 const CLOUDINARYURL =
   "https://api.cloudinary.com/v1_1/instagram-clone-web-app/image/upload";
@@ -14,6 +15,13 @@ const URL = "http://localhost:5000/api/posts";
 
 const Login = () => {
   const history = useNavigate();
+  const { userDispatch, userInfo } = useGlobalContext();
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+      history("/login");
+    }
+  }, []);
   const [inputs, setInputs] = useState({
     title: "",
     description: "",

@@ -15,6 +15,7 @@ import { Link, NavLink } from "react-router-dom";
 import { Tabs, Tab } from "@mui/material";
 import { useState } from "react";
 import InstagramIcon from "@mui/icons-material/Instagram";
+import { useGlobalContext } from "../components/context";
 
 const theme = createTheme({
   palette: {
@@ -28,6 +29,7 @@ const theme = createTheme({
 });
 
 const Navbar = () => {
+  const { userDispatch, userInfo } = useGlobalContext();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [value, setValue] = useState();
@@ -248,6 +250,7 @@ const Navbar = () => {
                       // remove authToken and user from localStorage
                       localStorage.removeItem("authToken");
                       localStorage.removeItem("user");
+                      userDispatch(null);
                     }}
                   >
                     <Link

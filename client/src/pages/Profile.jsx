@@ -1,7 +1,18 @@
 import { Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useGlobalContext } from "../components/context";
 
 const Profile = () => {
+  const { userDispatch, userInfo } = useGlobalContext();
+  const history = useNavigate();
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+      history("/login");
+    }
+  }, []);
   return (
     <div className="profile">
       <div className="profile-container">

@@ -19,8 +19,7 @@ const URL = "http://localhost:5000/api/auth/login";
 const Login = () => {
   const { userDispatch } = useGlobalContext();
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    userDispatch(user);
+    userDispatch(null);
   }, []);
   const history = useNavigate();
   const [inputs, setInputs] = useState({
