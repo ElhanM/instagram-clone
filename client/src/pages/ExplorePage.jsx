@@ -11,6 +11,7 @@ const ExplorePage = () => {
   const history = useNavigate();
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
+    userDispatch(user);
     if (!user) {
       history("/login");
     }

@@ -18,6 +18,7 @@ const Login = () => {
   const { userDispatch, userInfo } = useGlobalContext();
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
+    userDispatch(user);
     if (!user) {
       history("/login");
     }

@@ -21,29 +21,24 @@ const Routing = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     userDispatch(user);
     console.log("app.jsx useEffect");
+    if (!user) {
+      console.log("nema");
+      history("/login");
+    }
   }, []);
   return (
     <Routes>
       <Route path="/" element={<SharedLayout />}>
-        {userInfo ? (
-          <>
-            <Route index element={<Home />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="profile/:userid" element={<UserProfile />} />
-            <Route path="create-post" element={<CreatePost />} />
-            <Route path="explore" element={<ExplorePage />} />
-            <Route path="reset" element={<Reset />} />
-            <Route path="reset/:token" element={<NewPassword />} />
-            <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
-          </>
-        ) : (
-          <>
-            <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
-          </>
-        )}
-
+        <Route index element={<Home />} />
+        {/* add redirects to all routes */}
+        <Route path="profile" element={<Profile />} />
+        <Route path="profile/:userid" element={<UserProfile />} />
+        <Route path="create-post" element={<CreatePost />} />
+        <Route path="explore" element={<ExplorePage />} />
+        <Route path="reset" element={<Reset />} />
+        <Route path="reset/:token" element={<NewPassword />} />
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
         <Route path="*" element={<Error />} />
       </Route>
     </Routes>
