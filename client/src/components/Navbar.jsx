@@ -245,8 +245,9 @@ const Navbar = () => {
                   <Typography
                     textAlign="center"
                     onClick={() => {
-                      // ! add log out funtionality
-                      console.log("LOG OUT");
+                      // remove authToken and user from localStorage
+                      localStorage.removeItem("authToken");
+                      localStorage.removeItem("user");
                     }}
                   >
                     <Link

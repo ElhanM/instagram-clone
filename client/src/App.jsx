@@ -12,15 +12,17 @@ import Reset from "./pages/Reset";
 import NewPassword from "./pages/NewPassword";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useGlobalContext } from "./components/Context";
+import { useGlobalContext } from "./components/context";
 
 const Routing = () => {
-  const { userDispatch } = useGlobalContext();
+  // state holds the details of the user
+  const { userDispatch, userInfo } = useGlobalContext();
   const history = useNavigate();
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
       userDispatch(user);
+      console.log("App.jsx useEffect triggered");
       history("/");
     } else {
       history("/login");
@@ -31,14 +33,14 @@ const Routing = () => {
     <Routes>
       <Route path="/" element={<SharedLayout />}>
         <Route index element={<Home />} />
-        <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
         <Route path="profile" element={<Profile />} />
         <Route path="profile/:userid" element={<UserProfile />} />
         <Route path="create-post" element={<CreatePost />} />
         <Route path="explore" element={<ExplorePage />} />
         <Route path="reset" element={<Reset />} />
         <Route path="reset/:token" element={<NewPassword />} />
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
         <Route path="*" element={<Error />} />
       </Route>
     </Routes>

@@ -11,13 +11,17 @@ import Container from "@mui/material/Container";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useGlobalContext } from "../components/Context";
+import { useGlobalContext } from "../components/context";
+import { useEffect } from "react";
 
 const URL = "http://localhost:5000/api/auth/login";
 
 const Login = () => {
   const { userDispatch } = useGlobalContext();
-
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    userDispatch(user);
+  }, []);
   const history = useNavigate();
   const [inputs, setInputs] = useState({
     email: "",

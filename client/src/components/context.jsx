@@ -1,9 +1,9 @@
 import React, { useState, useContext, useReducer, useEffect } from "react";
-import reducer from "./Reducer";
+import reducer from "./reducer";
 
 const AppContext = React.createContext();
 
-const initialState = null;
+const initialState = { userInfo: null };
 
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
