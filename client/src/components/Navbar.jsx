@@ -51,7 +51,7 @@ const Navbar = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <AppBar position="static" sx={{ borderBottom: "1px solid #dbdbdb" }}>
+      <AppBar position="sticky" sx={{ borderBottom: "1px solid #dbdbdb" }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <InstagramIcon

@@ -62,8 +62,7 @@ const Login = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
-        },
-        { withCredentials: false }
+        }
       );
       console.log(response.data);
       history("/");

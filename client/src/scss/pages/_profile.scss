@@ -33,6 +33,8 @@
       gap: 1em;
       img {
         width: 318px;
+        height: 318px;
+        object-fit: cover;
       }
       @media (max-width: 1056px) {
         @include flex-center;

@@ -72,6 +72,9 @@ a :hover {
 }
 .profile-container__posts img {
   width: 318px;
+  height: 318px;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 @media (max-width: 1056px) {
   .profile-container__posts {
@@ -101,7 +104,7 @@ a :hover {
 .home {
   width: 100vw;
   background-color: #fafafa;
-  padding-top: 1em;
+  padding-top: 2em;
 }
 .home__container {
   margin: 0 auto;
@@ -138,7 +141,7 @@ a :hover {
 .explore-page {
   width: 100vw;
   background-color: #fafafa;
-  padding-top: 1em;
+  padding-top: 2em;
 }
 .explore-page__container {
   margin: 0 auto;
