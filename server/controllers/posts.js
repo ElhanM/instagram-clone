@@ -1,4 +1,5 @@
 const Post = require("../models/Post");
+const ErrorResponse = require("../utils/errorResponse");
 
 const getAllPosts = async (req, res, next) => {
   try {
@@ -28,6 +29,36 @@ const createPost = async (req, res, next) => {
     req.user.password = undefined;
     const post = await Post.create({ ...req.body, user: req.user });
     res.status(201).json({ post });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const likePost = async (req, res, next) => {
+  try {
+    console.log(req.user);
+    const likePost = await Post.findByIdAndUpdate(
+      req.body.postId,
+      {
+        $push: { likes: req.user._id },
+      },
+      { new: true }
+    );
+    res.status(201).json({ likePost });
+  } catch (error) {
+    next(error);
+  }
+};
+const unLikePost = async (req, res, next) => {
+  try {
+    const unLikePost = await Post.findByIdAndUpdate(
+      req.body.postId,
+      {
+        $pull: { likes: req.user._id },
+      },
+      { new: true }
+    );
+    res.status(201).json({ unLikePost });
   } catch (error) {
     next(error);
   }
@@ -73,4 +104,6 @@ module.exports = {
   getPost,
   updatePost,
   deletePost,
+  likePost,
+  unLikePost,
 };
