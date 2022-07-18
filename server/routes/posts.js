@@ -10,13 +10,13 @@ const {
   deletePost,
   getAllPostsByUser,
   likePost,
-  unLikePost,
+  unlikePost,
 } = require("../controllers/posts");
 
 router.route("/").get(getAllPosts).post(protect, createPost);
 router.route("/my-posts").get(protect, getAllPostsByUser);
 router.route("/:id").get(getPost).patch(updatePost).delete(deletePost);
 router.route("/like").put(protect, likePost);
-router.route("/unlike").put(protect, unLikePost);
+router.route("/unlike").put(protect, unlikePost);
 
 module.exports = router;

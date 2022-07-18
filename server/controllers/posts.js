@@ -36,7 +36,6 @@ const createPost = async (req, res, next) => {
 
 const likePost = async (req, res, next) => {
   try {
-    console.log(req.user);
     const likePost = await Post.findByIdAndUpdate(
       req.body.postId,
       {
@@ -49,16 +48,16 @@ const likePost = async (req, res, next) => {
     next(error);
   }
 };
-const unLikePost = async (req, res, next) => {
+const unlikePost = async (req, res, next) => {
   try {
-    const unLikePost = await Post.findByIdAndUpdate(
+    const unlikePost = await Post.findByIdAndUpdate(
       req.body.postId,
       {
         $pull: { likes: req.user._id },
       },
       { new: true }
     );
-    res.status(201).json({ unLikePost });
+    res.status(201).json({ unlikePost });
   } catch (error) {
     next(error);
   }
@@ -105,5 +104,5 @@ module.exports = {
   updatePost,
   deletePost,
   likePost,
-  unLikePost,
+  unlikePost,
 };

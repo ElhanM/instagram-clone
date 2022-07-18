@@ -47,7 +47,7 @@ const ExplorePage = () => {
       ) : posts === [] ? (
         <h1>No posts to display </h1>
       ) : (
-        posts.map((post) => (
+        posts.reverse().map((post) => (
           <div className="explore-page__container">
             <div className="explore-page__container__header">
               <div className="explore-page__container__header__photo">
@@ -70,10 +70,10 @@ const ExplorePage = () => {
               <FavoriteBorderIcon />
               <FavoriteIcon sx={{ color: "red" }} />
               <Typography variant="h1" sx={{ fontSize: "1.7rem" }}>
-              {post.title}
+                {post.title}
               </Typography>
               <Typography variant="h1" sx={{ fontSize: "1.4rem" }}>
-              {post.description}
+                {post.description}
               </Typography>
               <FormControl variant="standard">
                 <InputLabel htmlFor="component-simple">Add comment</InputLabel>
