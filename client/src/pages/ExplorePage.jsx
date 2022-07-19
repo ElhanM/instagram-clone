@@ -114,20 +114,38 @@ const ExplorePage = () => {
                       onClick={() => {
                         unlikeRequest(post._id);
                       }}
-                      sx={{ color: "red" }}
+                      sx={[
+                        {
+                          "&:hover": {
+                            cursor: "pointer",
+                            scale: "1.2",
+                          },
+                          color: "red",
+                        },
+                      ]}
                     />
                   ) : (
                     <FavoriteBorderIcon
                       onClick={() => {
                         likeRequest(post._id);
                       }}
+                      sx={[
+                        {
+                          "&:hover": {
+                            cursor: "pointer",
+                            scale: "1.2",
+                          },
+                        },
+                      ]}
                     />
                   )}
                   <Typography
                     variant="h6"
                     sx={{ fontSize: "1.2rem", marginLeft: "0.2em" }}
                   >
-                    {post.likes.length} like
+                    {post.likes.length === 1
+                      ? `${post.likes.length} like`
+                      : `${post.likes.length} likes`}
                   </Typography>
                 </div>
                 <Typography variant="h1" sx={{ fontSize: "1.7rem" }}>

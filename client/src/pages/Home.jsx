@@ -72,12 +72,13 @@ const Home = () => {
       history("/login");
     }
     setHomePosts(
-      // ! add following functionality to home page
+      // ! only display posts from accounts the user is following
       allPosts.filter((post) => {
         return post.user._id !== user._id;
       })
     );
     console.log("homePosts", homePosts);
+    // having allPosts in the dependency array fixes async issues when changing state
   }, [allPosts]);
   return (
     <div className="home">
@@ -116,20 +117,35 @@ const Home = () => {
                       onClick={() => {
                         unlikeRequest(post._id);
                       }}
-                      sx={{ color: "red" }}
+                      sx={[
+                        {
+                          "&:hover": {
+                            cursor: "pointer",
+                            scale: "1.2",
+                          },
+                          color: "red",
+                        },
+                      ]}
                     />
                   ) : (
                     <FavoriteBorderIcon
                       onClick={() => {
                         likeRequest(post._id);
                       }}
+                      sx={[
+                        {
+                          "&:hover": {
+                            cursor: "pointer",
+                            scale: "1.2",
+                          },
+                        },
+                      ]}
                     />
                   )}
                   <Typography
                     variant="h6"
                     sx={{ fontSize: "1.2rem", marginLeft: "0.2em" }}
                   >
-                    {/* if post.likes.length === 1 display 1 like, else display post.likes.length likes */}
                     {post.likes.length === 1
                       ? `${post.likes.length} like`
                       : `${post.likes.length} likes`}
