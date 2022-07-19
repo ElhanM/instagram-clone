@@ -8,32 +8,14 @@ import { useGlobalContext } from "../components/context";
 import axios from "axios";
 import { useState } from "react";
 
-const URL = "http://localhost:5000/api/posts";
 const likeURL = "http://localhost:5000/api/posts/like";
 const unlikeURL = "http://localhost:5000/api/posts/unlike";
 
 const Home = () => {
-  const { userDispatch, userInfo } = useGlobalContext();
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { userDispatch, userInfo, allPosts, loading, getPostsDispatch } =
+    useGlobalContext();
+  const [homePosts, setHomePosts] = useState([]);
   const history = useNavigate();
-  const postRequest = async () => {
-    try {
-      const response = await axios(URL, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const {
-        data: { posts },
-      } = response;
-      setPosts(posts);
-      console.log(posts);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
   const likeRequest = async (postId) => {
     try {
       const response = await axios.put(
@@ -46,14 +28,14 @@ const Home = () => {
           },
         }
       );
-      const updatedPosts = posts.map((post) => {
+      const updatedPosts = allPosts.map((post) => {
         if (post._id === response.data.likePost._id) {
           return { ...post, likes: response.data.likePost.likes };
         } else {
           return post;
         }
       });
-      setPosts(updatedPosts);
+      getPostsDispatch(updatedPosts);
     } catch (error) {
       console.log(error);
     }
@@ -70,14 +52,14 @@ const Home = () => {
           },
         }
       );
-      const updatedPosts = posts.map((post) => {
+      const updatedPosts = allPosts.map((post) => {
         if (post._id === response.data.unlikePost._id) {
           return { ...post, likes: response.data.unlikePost.likes };
         } else {
           return post;
         }
       });
-      setPosts(updatedPosts);
+      getPostsDispatch(updatedPosts);
     } catch (error) {
       console.log(error);
     }
@@ -86,20 +68,26 @@ const Home = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     console.log(user);
     userDispatch(user);
-    postRequest();
     if (!user) {
       history("/login");
     }
-  }, []);
+    setHomePosts(
+      // ! add following functionality to home page
+      allPosts.filter((post) => {
+        return post.user._id !== user._id;
+      })
+    );
+    console.log("homePosts", homePosts);
+  }, [allPosts]);
   return (
     <div className="home">
       {loading ? (
         <h1>Loading...</h1>
-      ) : posts === [] ? (
-        <h1>No posts to display </h1>
+      ) : allPosts === [] ? (
+        <h1>No allPosts to display </h1>
       ) : (
-        posts
-        // slice, for some reason, prevents posts from jumping around when liking/unliking them 
+        homePosts
+          // slice, for some reason, prevents allPosts from jumping around when liking/unliking them
           .slice(0)
           .reverse()
           .map((post, index) => (
@@ -133,10 +121,6 @@ const Home = () => {
                   ) : (
                     <FavoriteBorderIcon
                       onClick={() => {
-                        let tempPosts = posts;
-                        console.log(tempPosts);
-                        tempPosts[index].likes.pop(String(userInfo._id));
-                        setPosts(tempPosts);
                         likeRequest(post._id);
                       }}
                     />
@@ -145,7 +129,10 @@ const Home = () => {
                     variant="h6"
                     sx={{ fontSize: "1.2rem", marginLeft: "0.2em" }}
                   >
-                    {post.likes.length} like
+                    {/* if post.likes.length === 1 display 1 like, else display post.likes.length likes */}
+                    {post.likes.length === 1
+                      ? `${post.likes.length} like`
+                      : `${post.likes.length} likes`}
                   </Typography>
                 </div>
 

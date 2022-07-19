@@ -4,6 +4,7 @@ body {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  background-color: #fafafa;
 }
 
 a :hover {
@@ -18,7 +19,6 @@ a :hover {
 
 .profile {
   width: 100vw;
-  background-color: #fafafa;
 }
 .profile-container {
   margin: 0 auto;
@@ -103,7 +103,6 @@ a :hover {
 
 .home {
   width: 100vw;
-  background-color: #fafafa;
   padding-top: 2em;
 }
 .home__container {
@@ -138,10 +137,18 @@ a :hover {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   -webkit-box-align: center;
   -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
 }
 .home__container__image img {
   width: 100vw;
@@ -150,7 +157,6 @@ a :hover {
 
 .explore-page {
   width: 100vw;
-  background-color: #fafafa;
   padding-top: 2em;
 }
 .explore-page__container {
@@ -179,6 +185,24 @@ a :hover {
 }
 .explore-page__container__footer {
   padding: 1em;
+}
+.explore-page__container__footer__likes {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
 }
 .explore-page__container__image img {
   width: 100vw;

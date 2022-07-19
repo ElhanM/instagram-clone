@@ -5,11 +5,9 @@ const postSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, "Title is required"],
     },
     description: {
       type: String,
-      required: [true, "Description is required"],
     },
     photo: {
       type: String,

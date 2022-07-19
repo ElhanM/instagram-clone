@@ -1,6 +1,5 @@
 .home {
   width: 100vw;
-  background-color: #fafafa;
   padding-top: 2em;
 
   &__container {
@@ -21,8 +20,8 @@
     &__footer {
       padding: 0.5em 1em;
       &__likes {
-        display: flex;
-        align-items: center;
+        @include flex-center;
+        justify-content: flex-start;
       }
     }
     &__image {

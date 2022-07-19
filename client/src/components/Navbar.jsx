@@ -244,6 +244,26 @@ const Navbar = () => {
                     },
                   ]}
                 >
+                  <NavLink
+                    to="/login"
+                    textAlign="center"
+                    className="navbar-link"
+                    onClick={() => setValue()}
+                  >
+                    Switch Account
+                  </NavLink>
+                </MenuItem>
+                <MenuItem
+                  onClick={handleCloseUserMenu}
+                  sx={[
+                    {
+                      "&:hover": {
+                        backgroundColor: "#f0f0f0",
+                      },
+                      transition: "background-color 0.2s ease",
+                    },
+                  ]}
+                >
                   <Typography
                     textAlign="center"
                     onClick={() => {
