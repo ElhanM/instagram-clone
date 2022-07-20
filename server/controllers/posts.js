@@ -3,7 +3,7 @@ const ErrorResponse = require("../utils/errorResponse");
 
 const getAllPosts = async (req, res, next) => {
   try {
-    const posts = await Post.find({}).populate("user", "_id username");
+    const posts = await Post.find({}).populate("user", "_id username").populate("comments.user", "_id username");
     res.status(200).json({ posts });
   } catch (error) {
     next(error);
@@ -62,6 +62,20 @@ const unlikePost = async (req, res, next) => {
     next(error);
   }
 };
+const comment = async (req, res, next) => {
+  try {
+    const comment = await Post.findByIdAndUpdate(
+      req.body.postId,
+      {
+        $push: { comments: { text: req.body.text, user: req.user._id } },
+      },
+      { new: true }
+    ).populate("comments.user", "_id username");
+    res.status(201).json({ comment });
+  } catch (error) {
+    next(error);
+  }
+};
 
 const getPost = async (req, res, next) => {
   try {
@@ -105,4 +119,5 @@ module.exports = {
   deletePost,
   likePost,
   unlikePost,
+  comment,
 };

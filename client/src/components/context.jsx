@@ -38,7 +38,7 @@ const AppProvider = ({ children }) => {
   useEffect(() => {
     axiosGetPosts();
   }, []);
-  const getPostsDispatch = (postsData) => {
+  const updatePostsDispatch = (postsData) => {
     dispatch({ type: "UPDATE_POSTS", payload: postsData });
   };
 
@@ -47,7 +47,7 @@ const AppProvider = ({ children }) => {
       value={{
         ...state,
         userDispatch,
-        getPostsDispatch,
+        updatePostsDispatch,
       }}
     >
       {children}

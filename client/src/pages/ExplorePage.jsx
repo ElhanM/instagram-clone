@@ -12,7 +12,7 @@ const likeURL = "http://localhost:5000/api/posts/like";
 const unlikeURL = "http://localhost:5000/api/posts/unlike";
 
 const ExplorePage = () => {
-  const { userDispatch, userInfo, allPosts, loading, getPostsDispatch } =
+  const { userDispatch, userInfo, allPosts, loading, updatePostsDispatch } =
     useGlobalContext();
   const [explorePosts, setExplorePosts] = useState([]);
   const history = useNavigate();
@@ -36,7 +36,7 @@ const ExplorePage = () => {
           return post;
         }
       });
-      getPostsDispatch(updatedPosts);
+      updatePostsDispatch(updatedPosts);
     } catch (error) {
       console.log(error);
     }
@@ -60,7 +60,7 @@ const ExplorePage = () => {
           return post;
         }
       });
-      getPostsDispatch(updatedPosts);
+      updatePostsDispatch(updatedPosts);
     } catch (error) {
       console.log(error);
     }
@@ -73,6 +73,7 @@ const ExplorePage = () => {
       history("/login");
     }
     setExplorePosts(
+      // ! don't display posts from accounts the user is following
       allPosts.filter((post) => {
         return post.user._id !== user._id;
       })

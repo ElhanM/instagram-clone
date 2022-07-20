@@ -12,7 +12,7 @@ const likeURL = "http://localhost:5000/api/posts/like";
 const unlikeURL = "http://localhost:5000/api/posts/unlike";
 
 const Home = () => {
-  const { userDispatch, userInfo, allPosts, loading, getPostsDispatch } =
+  const { userDispatch, userInfo, allPosts, loading, updatePostsDispatch } =
     useGlobalContext();
   const [homePosts, setHomePosts] = useState([]);
   const history = useNavigate();
@@ -35,7 +35,7 @@ const Home = () => {
           return post;
         }
       });
-      getPostsDispatch(updatedPosts);
+      updatePostsDispatch(updatedPosts);
     } catch (error) {
       console.log(error);
     }
@@ -59,7 +59,7 @@ const Home = () => {
           return post;
         }
       });
-      getPostsDispatch(updatedPosts);
+      updatePostsDispatch(updatedPosts);
     } catch (error) {
       console.log(error);
     }
