@@ -13,7 +13,7 @@ const CLOUDINARYURL =
   "https://api.cloudinary.com/v1_1/instagram-clone-web-app/image/upload";
 const URL = "http://localhost:5000/api/posts";
 
-const Login = () => {
+const CreatePost = () => {
   const history = useNavigate();
   const { userDispatch, userInfo } = useGlobalContext();
   useEffect(() => {
@@ -144,4 +144,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default CreatePost;

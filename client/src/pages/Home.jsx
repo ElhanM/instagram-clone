@@ -1,4 +1,12 @@
-import { FormControl, Input, InputLabel, Typography } from "@mui/material";
+import {
+  Button,
+  CssBaseline,
+  FormControl,
+  Input,
+  InputLabel,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -7,15 +15,47 @@ import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
 import axios from "axios";
 import { useState } from "react";
+import { Box, Container } from "@mui/system";
 
 const likeURL = "http://localhost:5000/api/posts/like";
 const unlikeURL = "http://localhost:5000/api/posts/unlike";
+const commentURL = "http://localhost:5000/api/posts/comment";
 
 const Home = () => {
   const { userDispatch, userInfo, allPosts, loading, updatePostsDispatch } =
     useGlobalContext();
   const [homePosts, setHomePosts] = useState([]);
+  const [addComment, setAddComment] = useState("");
   const history = useNavigate();
+  const handleChange = (e) => {
+    setAddComment(e.target.value);
+  };
+  const handleSubmit = async (postId) => {
+    try {
+      console.log(postId, addComment);
+      const response = await axios.put(
+        commentURL,
+        { postId, text: addComment },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+
+      const updatedPosts = homePosts.map((post) => {
+        if (post._id === response.data.comment._id) {
+          return { ...post, comments: response.data.comment.comments };
+        } else {
+          return post;
+        }
+      });
+      updatePostsDispatch(updatedPosts);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const likeRequest = async (postId) => {
     try {
       const response = await axios.put(
@@ -28,7 +68,7 @@ const Home = () => {
           },
         }
       );
-      const updatedPosts = allPosts.map((post) => {
+      const updatedPosts = homePosts.map((post) => {
         if (post._id === response.data.likePost._id) {
           return { ...post, likes: response.data.likePost.likes };
         } else {
@@ -52,7 +92,7 @@ const Home = () => {
           },
         }
       );
-      const updatedPosts = allPosts.map((post) => {
+      const updatedPosts = homePosts.map((post) => {
         if (post._id === response.data.unlikePost._id) {
           return { ...post, likes: response.data.unlikePost.likes };
         } else {
@@ -80,6 +120,7 @@ const Home = () => {
     console.log("homePosts", homePosts);
     // having allPosts in the dependency array fixes async issues when changing state
   }, [allPosts]);
+
   return (
     <div className="home">
       {loading ? (
@@ -158,12 +199,50 @@ const Home = () => {
                 <Typography variant="h1" sx={{ fontSize: "1.4rem" }}>
                   {post.description}
                 </Typography>
-                <FormControl variant="standard">
-                  <InputLabel htmlFor="component-simple">
-                    Add comment
-                  </InputLabel>
-                  <Input id="component-simple" />
+                <FormControl
+                  component="form"
+                  variant="standard"
+                  sx={{
+                    paddingBottom: "0.4em",
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                  }}
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleSubmit(post._id);
+                  }}
+                >
+                      <TextField
+                    variant="standard"
+                    required
+                    name="comment"
+                    label="Add comment"
+                    id="comment"
+                    autoComplete="off"
+                    value={addComment}
+                    onChange={handleChange}
+                    sx={{ width: "15rem" }}
+                  />
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2, width: "5rem" }}
+                  >
+                    Add
+                  </Button>
                 </FormControl>
+
+                {post.comments.map((comment) => (
+                  <Typography
+                    variant="h1"
+                    sx={{ fontSize: "1.2rem", paddingTop: "0.2em" }}
+                  >
+                    {comment.user.username}:{comment.text}
+                  </Typography>
+                ))}
               </div>
             </div>
           ))

@@ -70,7 +70,7 @@ const comment = async (req, res, next) => {
         $push: { comments: { text: req.body.text, user: req.user._id } },
       },
       { new: true }
-    ).populate("comments.user", "_id username");
+    ).populate("comments.user", "username");
     res.status(201).json({ comment });
   } catch (error) {
     next(error);
