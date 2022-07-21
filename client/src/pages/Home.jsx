@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
 import axios from "axios";
 import { useState } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
 const Home = () => {
   const {
@@ -104,19 +106,19 @@ const Home = () => {
           .map((post, index) => (
             <div className="home__container">
               <div className="home__container__header">
-                <div className="home__container__header__photo">
-                  <Avatar
-                    alt={post.user.username}
-                    src="https://img.freepik.com/free-photo/pleasant-looking-serious-man-stands-profile-has-confident-expression-wears-casual-white-t-shirt_273609-16959.jpg?w=2000"
-                    sx={{ width: "3rem", height: "3rem" }}
-                  />
+                  <div className="home__container__header__photo">
+                    <Avatar
+                      alt={post.user.username}
+                      src="https://img.freepik.com/free-photo/pleasant-looking-serious-man-stands-profile-has-confident-expression-wears-casual-white-t-shirt_273609-16959.jpg?w=2000"
+                      sx={{ width: "3rem", height: "3rem" }}
+                    />
+                  </div>
+                  <div className="home__container__header__user">
+                    <Typography variant="h2" sx={{ fontSize: "2rem" }}>
+                      {post.user.username}
+                    </Typography>
+                  </div>
                 </div>
-                <div className="home__container__header__user">
-                  <Typography variant="h2" sx={{ fontSize: "2rem" }}>
-                    {post.user.username}
-                  </Typography>
-                </div>
-              </div>
               <div className="home__container__image">
                 <img src={post.photo} alt={post.title} />
               </div>
@@ -205,12 +207,25 @@ const Home = () => {
                 </FormControl>
 
                 {post.comments.map((comment) => (
-                  <Typography
-                    variant="h1"
-                    sx={{ fontSize: "1.2rem", paddingTop: "0.2em" }}
-                  >
-                    {comment.user.username}:{comment.text}
-                  </Typography>
+                  <div className="comments-flex">
+                    <Typography
+                      variant="span"
+                      sx={{ fontSize: "1.2rem", paddingTop: "0.2em" }}
+                    >
+                      {comment.user.username}:
+                    </Typography>
+                    <Typography
+                      variant="span"
+                      sx={{
+                        fontSize: "1.2rem",
+                        paddingTop: "0.2em",
+                        ml: "0.2em",
+                        fontWeight: "light",
+                      }}
+                    >
+                      {comment.text}
+                    </Typography>
+                  </div>
                 ))}
               </div>
             </div>

@@ -77,7 +77,7 @@ const AppProvider = ({ children }) => {
         likeURL,
         unlikeURL,
         commentURL,
-        handleSubmit
+        handleSubmit,
       }}
     >
       {children}

@@ -13,6 +13,7 @@ import NewPassword from "./pages/NewPassword";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "./components/context";
+import Post from "./pages/Post";
 
 const Routing = () => {
   const { userDispatch, userInfo } = useGlobalContext();
@@ -30,6 +31,9 @@ const Routing = () => {
       <Route path="/" element={<SharedLayout />}>
         <Route index element={<Home />} />
         {/* add redirects to all routes */}
+        <Route path="profile" element={<Profile />}>
+          <Route path=":postId" element={<Post />} />
+        </Route>
         <Route path="profile" element={<Profile />} />
         <Route path="profile/:userid" element={<UserProfile />} />
         <Route path="create-post" element={<CreatePost />} />
