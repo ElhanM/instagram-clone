@@ -1,12 +1,4 @@
-import {
-  Button,
-  CssBaseline,
-  FormControl,
-  Input,
-  InputLabel,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Button, FormControl, TextField, Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -15,47 +7,22 @@ import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
 import axios from "axios";
 import { useState } from "react";
-import { Box, Container } from "@mui/system";
-
-const likeURL = "http://localhost:5000/api/posts/like";
-const unlikeURL = "http://localhost:5000/api/posts/unlike";
-const commentURL = "http://localhost:5000/api/posts/comment";
 
 const Home = () => {
-  const { userDispatch, userInfo, allPosts, loading, updatePostsDispatch } =
-    useGlobalContext();
+  const {
+    userDispatch,
+    userInfo,
+    allPosts,
+    loading,
+    updatePostsDispatch,
+    likeURL,
+    unlikeURL,
+    commentURL,
+    handleSubmit,
+  } = useGlobalContext();
   const [homePosts, setHomePosts] = useState([]);
   const [addComment, setAddComment] = useState("");
   const history = useNavigate();
-  const handleChange = (e) => {
-    setAddComment(e.target.value);
-  };
-  const handleSubmit = async (postId) => {
-    try {
-      console.log(postId, addComment);
-      const response = await axios.put(
-        commentURL,
-        { postId, text: addComment },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-          },
-        }
-      );
-
-      const updatedPosts = homePosts.map((post) => {
-        if (post._id === response.data.comment._id) {
-          return { ...post, comments: response.data.comment.comments };
-        } else {
-          return post;
-        }
-      });
-      updatePostsDispatch(updatedPosts);
-    } catch (error) {
-      console.log(error);
-    }
-  };
   const likeRequest = async (postId) => {
     try {
       const response = await axios.put(
@@ -117,9 +84,11 @@ const Home = () => {
         return post.user._id !== user._id;
       })
     );
-    console.log("homePosts", homePosts);
     // having allPosts in the dependency array fixes async issues when changing state
   }, [allPosts]);
+  useEffect(() => {
+    console.log("homePosts", homePosts);
+  }, [homePosts]);
 
   return (
     <div className="home">
@@ -211,18 +180,18 @@ const Home = () => {
                   }}
                   onSubmit={(e) => {
                     e.preventDefault();
-                    handleSubmit(post._id);
+                    console.log(e.target[0].value);
+                    handleSubmit(post._id, e.target[0].value, homePosts);
+                    e.target[0].value = "";
                   }}
                 >
-                      <TextField
+                  <TextField
                     variant="standard"
                     required
                     name="comment"
                     label="Add comment"
                     id="comment"
                     autoComplete="off"
-                    value={addComment}
-                    onChange={handleChange}
                     sx={{ width: "15rem" }}
                   />
                   <Button

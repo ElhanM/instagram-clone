@@ -1,4 +1,4 @@
-import { FormControl, Input, InputLabel, Typography } from "@mui/material";
+import { Button, FormControl, TextField, Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -8,13 +8,21 @@ import { useGlobalContext } from "../components/context";
 import axios from "axios";
 import { useState } from "react";
 
-const likeURL = "http://localhost:5000/api/posts/like";
-const unlikeURL = "http://localhost:5000/api/posts/unlike";
-
 const ExplorePage = () => {
-  const { userDispatch, userInfo, allPosts, loading, updatePostsDispatch } =
-    useGlobalContext();
+  const {
+    userDispatch,
+    userInfo,
+    allPosts,
+    loading,
+    updatePostsDispatch,
+    likeURL,
+    unlikeURL,
+    commentURL,
+    handleSubmit,
+  } = useGlobalContext();
   const [explorePosts, setExplorePosts] = useState([]);
+  const [addComment, setAddComment] = useState("");
+
   const history = useNavigate();
 
   const likeRequest = async (postId) => {
@@ -155,12 +163,41 @@ const ExplorePage = () => {
                 <Typography variant="h1" sx={{ fontSize: "1.4rem" }}>
                   {post.description}
                 </Typography>
-                <FormControl variant="standard">
-                  <InputLabel htmlFor="component-simple">
-                    Add comment
-                  </InputLabel>
-                  <Input id="component-simple" />
+                <FormControl
+                  component="form"
+                  variant="standard"
+                  sx={{
+                    paddingBottom: "0.4em",
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                  }}
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleSubmit(post._id, e.target[0].value, explorePosts);
+                    e.target[0].value = "";
+                  }}
+                >
+                  <TextField
+                    variant="standard"
+                    required
+                    name="comment"
+                    label="Add comment"
+                    id="comment"
+                    autoComplete="off"
+                    sx={{ width: "15rem" }}
+                  />
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2, width: "5rem" }}
+                  >
+                    Add
+                  </Button>
                 </FormControl>
+
                 {post.comments.map((comment) => (
                   <Typography
                     variant="h1"

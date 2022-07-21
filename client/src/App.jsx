@@ -22,7 +22,6 @@ const Routing = () => {
     userDispatch(user);
     console.log("app.jsx useEffect");
     if (!user) {
-      console.log("nema");
       history("/login");
     }
   }, []);

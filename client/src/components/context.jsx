@@ -12,6 +12,7 @@ const authURL = `${baseURL}/api/auth`;
 
 const likeURL = `${postsURL}/like`;
 const unlikeURL = `${postsURL}/unlike`;
+const commentURL = `${postsURL}/comment`;
 
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -35,6 +36,31 @@ const AppProvider = ({ children }) => {
       console.log(error);
     }
   };
+  const handleSubmit = async (postId, addComment, posts) => {
+    try {
+      const response = await axios.put(
+        commentURL,
+        { postId, text: addComment },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+
+      const updatedPosts = posts.map((post) => {
+        if (post._id === response.data.comment._id) {
+          return { ...post, comments: response.data.comment.comments };
+        } else {
+          return post;
+        }
+      });
+      updatePostsDispatch(updatedPosts);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     axiosGetPosts();
   }, []);
@@ -48,6 +74,10 @@ const AppProvider = ({ children }) => {
         ...state,
         userDispatch,
         updatePostsDispatch,
+        likeURL,
+        unlikeURL,
+        commentURL,
+        handleSubmit
       }}
     >
       {children}

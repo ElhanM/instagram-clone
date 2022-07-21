@@ -8,7 +8,6 @@ const SharedLayout = () => {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     userDispatch(user);
-    console.log("SharedLayout useEffect");
   }, []);
 
   return (
