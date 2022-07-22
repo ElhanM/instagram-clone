@@ -196,6 +196,9 @@ const Home = () => {
                     autoComplete="off"
                     sx={[
                       {
+                        "& .MuiInput-underline:after": {
+                          borderBottomColor: "#000",
+                        },
                         "& label.Mui-focused": {
                           color: "#000",
                         },

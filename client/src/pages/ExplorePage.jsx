@@ -188,6 +188,9 @@ const ExplorePage = () => {
                     autoComplete="off"
                     sx={[
                       {
+                        "& .MuiInput-underline:after": {
+                          borderBottomColor: "#000",
+                        },
                         "& label.Mui-focused": {
                           color: "#000",
                         },
@@ -197,7 +200,7 @@ const ExplorePage = () => {
                           },
                         },
                         width: "90%",
-                        marginRight:'0.5em'
+                        marginRight: "0.5em",
                       },
                     ]}
                   />
