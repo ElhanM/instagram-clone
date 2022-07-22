@@ -106,19 +106,19 @@ const Home = () => {
           .map((post, index) => (
             <div className="home__container">
               <div className="home__container__header">
-                  <div className="home__container__header__photo">
-                    <Avatar
-                      alt={post.user.username}
-                      src="https://img.freepik.com/free-photo/pleasant-looking-serious-man-stands-profile-has-confident-expression-wears-casual-white-t-shirt_273609-16959.jpg?w=2000"
-                      sx={{ width: "3rem", height: "3rem" }}
-                    />
-                  </div>
-                  <div className="home__container__header__user">
-                    <Typography variant="h2" sx={{ fontSize: "2rem" }}>
-                      {post.user.username}
-                    </Typography>
-                  </div>
+                <div className="home__container__header__photo">
+                  <Avatar
+                    alt={post.user.username}
+                    src="https://img.freepik.com/free-photo/pleasant-looking-serious-man-stands-profile-has-confident-expression-wears-casual-white-t-shirt_273609-16959.jpg?w=2000"
+                    sx={{ width: "3rem", height: "3rem" }}
+                  />
                 </div>
+                <div className="home__container__header__user">
+                  <Typography variant="h2" sx={{ fontSize: "2rem" }}>
+                    {post.user.username}
+                  </Typography>
+                </div>
+              </div>
               <div className="home__container__image">
                 <img src={post.photo} alt={post.title} />
               </div>
@@ -194,15 +194,43 @@ const Home = () => {
                     label="Add comment"
                     id="comment"
                     autoComplete="off"
-                    sx={{ width: "15rem" }}
+                    sx={[
+                      {
+                        "& label.Mui-focused": {
+                          color: "#000",
+                        },
+                        "& .MuiOutlinedInput-root": {
+                          "&.Mui-focused fieldset": {
+                            borderColor: "#000",
+                          },
+                        },
+                        width: "90%",
+                        marginRight: "0.5em",
+                      },
+                    ]}
                   />
                   <Button
                     type="submit"
                     fullWidth
                     variant="contained"
-                    sx={{ mt: 3, mb: 2, width: "5rem" }}
+                    sx={[
+                      {
+                        "&:hover": {
+                          backgroundColor: "#000",
+                          color: "#fff",
+                        },
+                        mt: 3,
+                        mb: 2,
+                        color: "#000",
+                        backgroundColor: "#fff",
+                        borderColor: "#000",
+                        border: "2px solid #000",
+                        transition: "background-color 0.2s ease",
+                        width: "3em",
+                      },
+                    ]}
                   >
-                    Add
+                    Post
                   </Button>
                 </FormControl>
 

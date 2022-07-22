@@ -39,8 +39,6 @@ const CreatePost = () => {
   const cloudinaryRequest = async () => {
     try {
       const data = new FormData();
-      // data.append("title", inputs.title);
-      // data.append("description", inputs.description);
       data.append("file", image);
       data.append("upload_preset", "instagram-clone");
       data.append("cloud_name", "instagram-clone-web-app");
@@ -108,6 +106,18 @@ const CreatePost = () => {
             autoComplete="off"
             value={inputs.title}
             onChange={handleChange}
+            sx={[
+              {
+                "& label.Mui-focused": {
+                  color: "#000",
+                },
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#000",
+                  },
+                },
+              },
+            ]}
           />
           <TextField
             margin="normal"
@@ -119,6 +129,18 @@ const CreatePost = () => {
             autoComplete="off"
             value={inputs.description}
             onChange={handleChange}
+            sx={[
+              {
+                "& label.Mui-focused": {
+                  color: "#000",
+                },
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#000",
+                  },
+                },
+              },
+            ]}
           />
           <TextField
             margin="normal"
@@ -129,12 +151,38 @@ const CreatePost = () => {
             type="file"
             autoComplete="off"
             onChange={(e) => setImage(e.target.files[0])}
+            sx={[
+              {
+                "& label.Mui-focused": {
+                  color: "#000",
+                },
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#000",
+                  },
+                },
+              },
+            ]}
           />
           <Button
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={[
+              {
+                "&:hover": {
+                  backgroundColor: "#000",
+                  color: "#fff",
+                },
+                mt: 3,
+                mb: 2,
+                color: "#000",
+                backgroundColor: "#fff",
+                borderColor: "#000",
+                border: "2px solid #000",
+                transition: "background-color 0.2s ease",
+              },
+            ]}
           >
             Create
           </Button>

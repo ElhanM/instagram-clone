@@ -186,13 +186,41 @@ const ExplorePage = () => {
                     label="Add comment"
                     id="comment"
                     autoComplete="off"
-                    sx={{ width: "15rem" }}
+                    sx={[
+                      {
+                        "& label.Mui-focused": {
+                          color: "#000",
+                        },
+                        "& .MuiOutlinedInput-root": {
+                          "&.Mui-focused fieldset": {
+                            borderColor: "#000",
+                          },
+                        },
+                        width: "90%",
+                        marginRight:'0.5em'
+                      },
+                    ]}
                   />
                   <Button
                     type="submit"
                     fullWidth
                     variant="contained"
-                    sx={{ mt: 3, mb: 2, width: "5rem" }}
+                    sx={[
+                      {
+                        "&:hover": {
+                          backgroundColor: "#000",
+                          color: "#fff",
+                        },
+                        mt: 3,
+                        mb: 2,
+                        color: "#000",
+                        backgroundColor: "#fff",
+                        borderColor: "#000",
+                        border: "2px solid #000",
+                        transition: "background-color 0.2s ease",
+                        width: "3em",
+                      },
+                    ]}
                   >
                     Add
                   </Button>
