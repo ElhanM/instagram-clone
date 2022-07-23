@@ -1,15 +1,17 @@
 import { Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
 import axios from "axios";
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
-
-const URL = "http://localhost:5000/api/posts/my-posts";
+import { useParams } from "react-router-dom";
 
 const Profile = () => {
+  const { userId } = useParams();
+  console.log(userId);
+  const URL = `http://localhost:5000/api/posts/user-posts/${userId}`;
   const { userDispatch, userInfo } = useGlobalContext();
   const history = useNavigate();
   const [posts, setPosts] = useState({});
@@ -19,7 +21,6 @@ const Profile = () => {
       const response = await axios(URL, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
       });
       const {
@@ -79,7 +80,9 @@ const Profile = () => {
             <div className="profile-container__hr"></div>
             <div className="profile-container__posts">
               {posts.map((post) => (
-                <img src={post.photo} alt={post.title} />
+                <Link to={`/profile/${post._id}`}>
+                  <img src={post.photo} alt={post.title} />
+                </Link>
               ))}
             </div>
           </div>

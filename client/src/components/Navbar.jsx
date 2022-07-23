@@ -225,7 +225,9 @@ const Navbar = () => {
                   ]}
                 >
                   <NavLink
-                    to="/profile"
+                    to={`/profile/${
+                      JSON.parse(localStorage.getItem("user"))._id
+                    }`}
                     textAlign="center"
                     className="navbar-link"
                     onClick={() => setValue()}

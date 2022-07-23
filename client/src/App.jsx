@@ -31,11 +31,9 @@ const Routing = () => {
       <Route path="/" element={<SharedLayout />}>
         <Route index element={<Home />} />
         {/* add redirects to all routes */}
-        <Route path="profile" element={<Profile />}>
+        <Route path="profile/:userId" element={<Profile />}>
           <Route path=":postId" element={<Post />} />
         </Route>
-        <Route path="profile" element={<Profile />} />
-        <Route path="profile/:userid" element={<UserProfile />} />
         <Route path="create-post" element={<CreatePost />} />
         <Route path="explore" element={<ExplorePage />} />
         <Route path="reset" element={<Reset />} />

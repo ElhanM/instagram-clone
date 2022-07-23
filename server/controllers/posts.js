@@ -3,7 +3,9 @@ const ErrorResponse = require("../utils/errorResponse");
 
 const getAllPosts = async (req, res, next) => {
   try {
-    const posts = await Post.find({}).populate("user", "_id username").populate("comments.user", "_id username");
+    const posts = await Post.find({})
+      .populate("user", "_id username")
+      .populate("comments.user", "_id username");
     res.status(200).json({ posts });
   } catch (error) {
     next(error);
@@ -12,14 +14,14 @@ const getAllPosts = async (req, res, next) => {
 
 const getAllPostsByUser = async (req, res, next) => {
   try {
-    const posts = await Post.find({ user: req.user._id }).populate(
+    const posts = await Post.find({ user: req.params.user }).populate(
       "user",
       "_id username"
     );
     res.status(200).json({ posts });
   } catch (error) {
     return next(
-      new ErrorResponse(`No posts from user with id : ${req.user._id}`, 404)
+      new ErrorResponse(`No posts from user with id : ${req.params.user}`, 404)
     );
   }
 };
@@ -77,16 +79,6 @@ const comment = async (req, res, next) => {
   }
 };
 
-const getPost = async (req, res, next) => {
-  try {
-    const { postId } = req.params;
-    const post = await Post.findOne({ _id: postId });
-    res.status(200).json({ post });
-  } catch (error) {
-    return next(new ErrorResponse(`No post with id : ${postId}`, 404));
-  }
-};
-
 const deletePost = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -114,7 +106,6 @@ module.exports = {
   getAllPosts,
   getAllPostsByUser,
   createPost,
-  getPost,
   updatePost,
   deletePost,
   likePost,
