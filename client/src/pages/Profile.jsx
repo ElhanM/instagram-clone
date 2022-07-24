@@ -79,9 +79,16 @@ const Profile = () => {
             </div>
             <div className="profile-container__hr"></div>
             <div className="profile-container__posts">
-              {posts.map((post) => (
-                <Link to={`/profile/${post._id}`}>
-                  <img src={post.photo} alt={post.title} />
+              {posts.reverse().map((post) => (
+                <Link
+                  to={`/profile/${
+                    JSON.parse(localStorage.getItem("user"))._id
+                  }/${post._id}`}
+                >
+                  <img
+                    src={post.photo}
+                    alt={post?.description || post?.title}
+                  />
                 </Link>
               ))}
             </div>

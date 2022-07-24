@@ -105,6 +105,10 @@ a :hover {
   width: 100vw;
   padding-top: 2em;
 }
+.home a, .explore-page a {
+  text-decoration: none;
+  color: #000;
+}
 .home__container, .explore-page__container {
   margin: 0 auto;
   width: 100vw;
@@ -153,4 +157,62 @@ a :hover {
 .home__container__image img, .explore-page__container__image img {
   width: 100vw;
   max-width: 600px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  max-height: 750px;
+}
+
+.post {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+@media screen and (max-width: 1200px) {
+  .post {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+}
+.post__image img {
+  width: 60vw;
+  height: 47vw;
+  max-height: 90vh;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+@media screen and (max-width: 1200px) {
+  .post__image img {
+    width: 90vw;
+  }
+}
+@media screen and (max-height: 600px) {
+  .post__image img {
+    width: 100%;
+  }
+}
+.post__info {
+  width: 30vw;
+}
+@media screen and (max-height: 600px) {
+  .post__info {
+    width: 45%;
+  }
+}
+.post__info__user {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 1em;
+}
+.post__info__user__item {
+  margin-right: 1em;
 }/*# sourceMappingURL=index.css.map */

@@ -79,6 +79,16 @@ const comment = async (req, res, next) => {
   }
 };
 
+const getPost = async (req, res, next) => {
+  try {
+    const { postId } = req.params;
+    const post = await Post.findOne({ _id: postId }).populate("user", "username");
+    res.status(200).json({ post });
+  } catch (error) {
+    return next(new ErrorResponse(`No post with id : ${postId}`, 404));
+  }
+};
+
 const deletePost = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -111,4 +121,5 @@ module.exports = {
   likePost,
   unlikePost,
   comment,
+  getPost
 };

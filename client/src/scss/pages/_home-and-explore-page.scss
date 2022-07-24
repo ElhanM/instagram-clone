@@ -1,6 +1,10 @@
 .home, .explore-page{
   width: 100vw;
   padding-top: 2em;
+  a{
+    text-decoration: none;
+    color: #000;
+  }
 
   &__container {
     @include home-container-width;
@@ -28,6 +32,8 @@
       img {
         width: 100vw;
         max-width: 600px;
+        object-fit: cover;
+        max-height: 750px;
       }
     }
   }

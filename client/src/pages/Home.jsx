@@ -3,7 +3,7 @@ import Avatar from "@mui/material/Avatar";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
 import axios from "axios";
 import { useState } from "react";
@@ -107,20 +107,29 @@ const Home = () => {
             <div className="home__container">
               <div className="home__container__header">
                 <div className="home__container__header__photo">
-                  <Avatar
-                    alt={post.user.username}
-                    src="https://img.freepik.com/free-photo/pleasant-looking-serious-man-stands-profile-has-confident-expression-wears-casual-white-t-shirt_273609-16959.jpg?w=2000"
-                    sx={{ width: "3rem", height: "3rem" }}
-                  />
+                  <Link to={`/profile/${post.user._id}`}>
+                    <Avatar
+                      alt={post.user.username}
+                      src="https://img.freepik.com/free-photo/pleasant-looking-serious-man-stands-profile-has-confident-expression-wears-casual-white-t-shirt_273609-16959.jpg?w=2000"
+                      sx={{ width: "3rem", height: "3rem" }}
+                    />
+                  </Link>
                 </div>
                 <div className="home__container__header__user">
-                  <Typography variant="h2" sx={{ fontSize: "2rem" }}>
-                    {post.user.username}
-                  </Typography>
+                  <Link to={`/profile/${post.user._id}`}>
+                    <Typography variant="h3" sx={{ fontSize: "2rem" }}>
+                      {post.user.username}
+                    </Typography>
+                  </Link>
                 </div>
               </div>
               <div className="home__container__image">
-                <img src={post.photo} alt={post.title} />
+                <Link to={`/profile/${post.user._id}/${post._id}`}>
+                  <img
+                    src={post.photo}
+                    alt={post?.description || post?.title}
+                  />
+                </Link>
               </div>
               <div className="home__container__footer">
                 <div className="home__container__footer__likes">
