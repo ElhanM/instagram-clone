@@ -5,7 +5,6 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
-import UserProfile from "./pages/UserProfile";
 import CreatePost from "./pages/CreatePost";
 import Error from "./pages/Error";
 import Reset from "./pages/Reset";

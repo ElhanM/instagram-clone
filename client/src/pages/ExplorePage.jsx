@@ -45,6 +45,12 @@ const ExplorePage = () => {
         }
       });
       updatePostsDispatch(updatedPosts);
+      const user = JSON.parse(localStorage.getItem("user"));
+      setExplorePosts(
+        updatedPosts.filter((post) => {
+          return post.user._id !== user._id;
+        })
+      );
     } catch (error) {
       console.log(error);
     }
@@ -69,6 +75,12 @@ const ExplorePage = () => {
         }
       });
       updatePostsDispatch(updatedPosts);
+      const user = JSON.parse(localStorage.getItem("user"));
+      setExplorePosts(
+        updatedPosts.filter((post) => {
+          return post.user._id !== user._id;
+        })
+      );
     } catch (error) {
       console.log(error);
     }
@@ -184,7 +196,7 @@ const ExplorePage = () => {
                   }}
                   onSubmit={(e) => {
                     e.preventDefault();
-                    handleSubmit(post._id, e.target[0].value, explorePosts);
+                    handleSubmit(post._id, e.target[0].value, allPosts);
                     e.target[0].value = "";
                   }}
                 >

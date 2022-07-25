@@ -12,35 +12,35 @@ const Profile = () => {
   const { userId } = useParams();
   console.log(userId);
   const URL = `http://localhost:5000/api/posts/user-posts/${userId}`;
-  const { userDispatch, userInfo } = useGlobalContext();
+  const {
+    userDispatch,
+    userInfo,
+    allPosts,
+    loading,
+    updatePostsDispatch,
+    likeURL,
+    unlikeURL,
+    commentURL,
+    handleSubmit,
+  } = useGlobalContext();
   const history = useNavigate();
-  const [posts, setPosts] = useState({});
-  const [loading, setLoading] = useState(true);
-  const postRequest = async () => {
-    try {
-      const response = await axios(URL, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const {
-        data: { posts },
-      } = response;
-      setPosts(posts);
-      console.log(posts);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const [posts, setPosts] = useState([]);
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     userDispatch(user);
-    postRequest();
+    setPosts(
+      allPosts.filter((post) => {
+        return post.user._id === userId;
+      })
+    );
     if (!user) {
       history("/login");
     }
-  }, []);
+  }, [allPosts]);
+  useEffect(() => {
+    console.log(posts);
+  }, [posts]);
+
   return (
     <>
       <div className="profile">
@@ -53,7 +53,7 @@ const Profile = () => {
             <div className="profile-container__header">
               <div className="profile-container__header__profile-photo">
                 <Avatar
-                  alt={posts[0].user.username}
+                  alt={posts[0]?.user?.username}
                   src="https://img.freepik.com/free-photo/pleasant-looking-serious-man-stands-profile-has-confident-expression-wears-casual-white-t-shirt_273609-16959.jpg?w=2000"
                   sx={{ width: "13rem", height: "13rem" }}
                 />
@@ -61,7 +61,7 @@ const Profile = () => {
               <div className="profile-container__header__user-info">
                 <div className="profile-container__header__user-info__name">
                   <Typography variant="h5" sx={{ fontSize: "2.6rem" }}>
-                    {posts[0].user.username}
+                    {posts[0]?.user?.username}
                   </Typography>
                 </div>
                 <div className="profile-container__header__user-info__stats">
@@ -79,18 +79,21 @@ const Profile = () => {
             </div>
             <div className="profile-container__hr"></div>
             <div className="profile-container__posts">
-              {posts.reverse().map((post) => (
-                <Link
-                  to={`/profile/${
-                    JSON.parse(localStorage.getItem("user"))._id
-                  }/${post._id}`}
-                >
-                  <img
-                    src={post.photo}
-                    alt={post?.description || post?.title}
-                  />
-                </Link>
-              ))}
+              {posts
+                .slice(0)
+                .reverse()
+                .map((post) => (
+                  <Link
+                    to={`/profile/${
+                      JSON.parse(localStorage.getItem("user"))._id
+                    }/${post._id}`}
+                  >
+                    <img
+                      src={post?.photo}
+                      alt={post?.description || post?.title}
+                    />
+                  </Link>
+                ))}
             </div>
           </div>
         )}

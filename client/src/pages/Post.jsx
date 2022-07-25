@@ -6,13 +6,16 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Avatar } from "@mui/material";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { useGlobalContext } from "../components/context";
 
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: '90vw',
+  width: "90vw",
   bgcolor: "#fafafa",
   border: "2px solid #000",
   boxShadow: 24,
@@ -20,8 +23,19 @@ const style = {
 };
 
 const Post = () => {
+  const {
+    userDispatch,
+    userInfo,
+    allPosts,
+    loading,
+    updatePostsDispatch,
+    likeURL,
+    unlikeURL,
+    commentURL,
+    handleSubmit,
+  } = useGlobalContext();
   const history = useNavigate();
-  const { postId } = useParams();
+  const { userId, postId } = useParams();
   const [open, setOpen] = useState(true);
   const handleOpen = () => setOpen(true);
   const [post, setPost] = useState({});
@@ -41,6 +55,56 @@ const Post = () => {
       );
       setPost(response.data.post);
       console.log(response.data.post);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const likeRequest = async (postId) => {
+    try {
+      const response = await axios.put(
+        likeURL,
+        { postId },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      const updatedPosts = allPosts.map((post) => {
+        if (post._id === postId) {
+          return { ...post, likes: response.data.likePost.likes };
+        } else {
+          return post;
+        }
+      });
+      updatePostsDispatch(updatedPosts);
+      setPost(response.data.likePost);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const unlikeRequest = async (postId) => {
+    try {
+      const response = await axios.put(
+        unlikeURL,
+        { postId },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      const updatedPosts = allPosts.map((post) => {
+        if (post._id === postId) {
+          return { ...post, likes: response.data.unlikePost.likes };
+        } else {
+          return post;
+        }
+      });
+      updatePostsDispatch(updatedPosts);
+      setPost(response.data.unlikePost);
     } catch (error) {
       console.log(error);
     }
@@ -77,7 +141,50 @@ const Post = () => {
                   </Typography>
                 </div>
               </div>
-              <div className="post__info__stats"></div>
+              <div className="post__info__stats">
+                <div className="home__container__footer__likes">
+                  {post?.likes?.includes(
+                    JSON.parse(localStorage.getItem("user"))._id
+                  ) ? (
+                    <FavoriteIcon
+                      onClick={() => {
+                        unlikeRequest(postId);
+                      }}
+                      sx={[
+                        {
+                          "&:hover": {
+                            cursor: "pointer",
+                            scale: "1.2",
+                          },
+                          color: "red",
+                        },
+                      ]}
+                    />
+                  ) : (
+                    <FavoriteBorderIcon
+                      onClick={() => {
+                        likeRequest(postId);
+                      }}
+                      sx={[
+                        {
+                          "&:hover": {
+                            cursor: "pointer",
+                            scale: "1.2",
+                          },
+                        },
+                      ]}
+                    />
+                  )}
+                  <Typography
+                    variant="h6"
+                    sx={{ fontSize: "1.2rem", marginLeft: "0.2em" }}
+                  >
+                    {post?.likes?.length === 1
+                      ? `${post?.likes?.length} like`
+                      : `${post?.likes?.length} likes`}
+                  </Typography>
+                </div>
+              </div>
             </div>
           </div>
         </Box>

@@ -15,7 +15,7 @@ const URL = "http://localhost:5000/api/posts";
 
 const CreatePost = () => {
   const history = useNavigate();
-  const { userDispatch, userInfo } = useGlobalContext();
+  const { userDispatch, userInfo, updatePostsDispatch, allPosts } = useGlobalContext();
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     userDispatch(user);
@@ -62,7 +62,9 @@ const CreatePost = () => {
           },
         }
       );
+      const tempPosts = [...allPosts, response.data.post];
       console.log(response.data);
+      updatePostsDispatch(tempPosts);
       history("/");
     } catch (error) {
       console.log(error);

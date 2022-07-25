@@ -1,4 +1,10 @@
-import { Button, FormControl, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  getLinearProgressUtilityClass,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -37,7 +43,7 @@ const Home = () => {
           },
         }
       );
-      const updatedPosts = homePosts.map((post) => {
+      const updatedPosts = allPosts.map((post) => {
         if (post._id === response.data.likePost._id) {
           return { ...post, likes: response.data.likePost.likes };
         } else {
@@ -45,6 +51,12 @@ const Home = () => {
         }
       });
       updatePostsDispatch(updatedPosts);
+      const user = JSON.parse(localStorage.getItem("user"));
+      setHomePosts(
+        updatedPosts.filter((post) => {
+          return post.user._id !== user._id;
+        })
+      );
     } catch (error) {
       console.log(error);
     }
@@ -61,7 +73,7 @@ const Home = () => {
           },
         }
       );
-      const updatedPosts = homePosts.map((post) => {
+      const updatedPosts = allPosts.map((post) => {
         if (post._id === response.data.unlikePost._id) {
           return { ...post, likes: response.data.unlikePost.likes };
         } else {
@@ -69,6 +81,12 @@ const Home = () => {
         }
       });
       updatePostsDispatch(updatedPosts);
+      const user = JSON.parse(localStorage.getItem("user"));
+      setHomePosts(
+        updatedPosts.filter((post) => {
+          return post.user._id !== user._id;
+        })
+      );
     } catch (error) {
       console.log(error);
     }
@@ -80,9 +98,12 @@ const Home = () => {
     if (!user) {
       history("/login");
     }
+    console.log("allPosts", allPosts);
     setHomePosts(
       // ! only display posts from accounts the user is following
       allPosts.filter((post) => {
+        console.log(post.user._id, user._id);
+
         return post.user._id !== user._id;
       })
     );
@@ -192,7 +213,7 @@ const Home = () => {
                   onSubmit={(e) => {
                     e.preventDefault();
                     console.log(e.target[0].value);
-                    handleSubmit(post._id, e.target[0].value, homePosts);
+                    handleSubmit(post._id, e.target[0].value, allPosts);
                     e.target[0].value = "";
                   }}
                 >
