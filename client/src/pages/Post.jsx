@@ -5,7 +5,7 @@ import Modal from "@mui/material/Modal";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { Avatar } from "@mui/material";
+import { Avatar, FormControl, TextField } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useGlobalContext } from "../components/context";
@@ -112,6 +112,9 @@ const Post = () => {
   useEffect(() => {
     getPost();
   }, []);
+  useEffect(() => {
+    console.log("Post", post);
+  }, [post]);
 
   return (
     <div>
@@ -160,7 +163,7 @@ const Post = () => {
                         },
                       ]}
                     />
-                  ) : (
+                  ) : ("Post",
                     <FavoriteBorderIcon
                       onClick={() => {
                         likeRequest(postId);
@@ -184,6 +187,101 @@ const Post = () => {
                       : `${post?.likes?.length} likes`}
                   </Typography>
                 </div>
+                <Typography variant="h1" sx={{ fontSize: "1.7rem" }}>
+                  {post.title}
+                </Typography>
+                <Typography variant="h1" sx={{ fontSize: "1.4rem" }}>
+                  {post.description}
+                </Typography>
+                <FormControl
+                  component="form"
+                  variant="standard"
+                  sx={{
+                    paddingBottom: "0.4em",
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                  }}
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    console.log(e.target[0].value);
+                    handleSubmit(postId, e.target[0].value, allPosts);
+                    e.target[0].value = "";
+                  }}
+                >
+                  <TextField
+                    variant="standard"
+                    required
+                    name="comment"
+                    label="Add comment"
+                    id="comment"
+                    autoComplete="off"
+                    sx={[
+                      {
+                        "& .MuiInput-underline:after": {
+                          borderBottomColor: "#000",
+                        },
+                        "& label.Mui-focused": {
+                          color: "#000",
+                        },
+                        "& .MuiOutlinedInput-root": {
+                          "&.Mui-focused fieldset": {
+                            borderColor: "#000",
+                          },
+                        },
+                        width: "80%",
+                        marginLeft: "auto",
+                        marginRight: "1em",
+                      },
+                    ]}
+                  />
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={[
+                      {
+                        "&:hover": {
+                          backgroundColor: "#000",
+                          color: "#fff",
+                        },
+                        mt: 3,
+                        mb: 2,
+                        color: "#000",
+                        backgroundColor: "#fff",
+                        borderColor: "#000",
+                        border: "2px solid #000",
+                        transition: "background-color 0.2s ease",
+                        width: "3em",
+                        marginRight: "auto",
+                      },
+                    ]}
+                  >
+                    Post
+                  </Button>
+                </FormControl>
+                {post?.comments?.map((comment) => (
+                  <div className="comments-flex">
+                    <Typography
+                      variant="span"
+                      sx={{ fontSize: "1.2rem", paddingTop: "0.2em" }}
+                    >
+                      {comment?.user?.username}:
+                    </Typography>
+                    <Typography
+                      variant="span"
+                      sx={{
+                        fontSize: "1.2rem",
+                        paddingTop: "0.2em",
+                        ml: "0.2em",
+                        fontWeight: "light",
+                      }}
+                    >
+                      {comment?.text}
+                    </Typography>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

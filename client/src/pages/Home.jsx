@@ -200,6 +200,7 @@ const Home = () => {
                 <Typography variant="h1" sx={{ fontSize: "1.4rem" }}>
                   {post.description}
                 </Typography>
+                
                 <FormControl
                   component="form"
                   variant="standard"
