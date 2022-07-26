@@ -43,7 +43,7 @@ const Post = () => {
   const [post, setPost] = useState({});
   const handleClose = () => {
     setOpen(false);
-    history(`/profile/${JSON.parse(localStorage.getItem("user"))._id}`);
+    history(`/profile/${userId}`);
   };
   const getPost = async () => {
     try {
@@ -124,7 +124,7 @@ const Post = () => {
       );
       const updatedPosts = allPosts?.map((post) => {
         if (post?._id === postId) {
-          return ;
+          return;
         } else {
           return post;
         }
@@ -140,6 +140,7 @@ const Post = () => {
   }, []);
   useEffect(() => {
     console.log("Post", post);
+    console.log(JSON.parse(localStorage.getItem("user"))._id, userId);
   }, [post]);
 
   return (
@@ -172,30 +173,34 @@ const Post = () => {
                   </div>
                 </div>
                 <div className="post__info__user__options">
-                  <EditIcon
-                    sx={[
-                      {
-                        "&:hover": {
-                          cursor: "pointer",
-                          scale: "1.2",
-                        },
-                        fontSize: "1.9rem",
-                      },
-                    ]}
-                  />
-                  <DeleteIcon
-                    sx={[
-                      {
-                        "&:hover": {
-                          cursor: "pointer",
-                          scale: "1.2",
-                        },
-                        fontSize: "1.9rem",
-                        color: "red",
-                      },
-                    ]}
-                    onClick={deleteRequest}
-                  />
+                  {JSON.parse(localStorage.getItem("user"))._id === userId ? (
+                    <>
+                      <EditIcon
+                        sx={[
+                          {
+                            "&:hover": {
+                              cursor: "pointer",
+                              scale: "1.2",
+                            },
+                            fontSize: "1.9rem",
+                          },
+                        ]}
+                      />
+                      <DeleteIcon
+                        sx={[
+                          {
+                            "&:hover": {
+                              cursor: "pointer",
+                              scale: "1.2",
+                            },
+                            fontSize: "1.9rem",
+                            color: "red",
+                          },
+                        ]}
+                        onClick={deleteRequest}
+                      />
+                    </>
+                  ) : null}
                 </div>
               </div>
 

@@ -101,16 +101,16 @@ const deletePost = async (req, res, next) => {
   }
 };
 
-const updatePost = async (req, res, next) => {
+const editPost = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const post = await Post.findOneAndUpdate({ _id: id }, req.body, {
+    const { postId } = req.params;
+    const post = await Post.findOneAndUpdate({ _id: postId }, req.body, {
       new: true,
       runValidators: true,
     });
     res.status(200).json({ post });
   } catch (error) {
-    res.status(404).json({ msg: `No post with id : ${id}`, status: 404 });
+    res.status(404).json({ msg: `No post with id : ${postId}`, status: 404 });
   }
 };
 
@@ -118,7 +118,7 @@ module.exports = {
   getAllPosts,
   getAllPostsByUser,
   createPost,
-  updatePost,
+  editPost,
   deletePost,
   likePost,
   unlikePost,
