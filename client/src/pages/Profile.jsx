@@ -29,8 +29,8 @@ const Profile = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     userDispatch(user);
     setPosts(
-      allPosts.filter((post) => {
-        return post.user._id === userId;
+      allPosts?.filter((post) => {
+        return post?.user?._id === userId;
       })
     );
     if (!user) {
@@ -66,7 +66,7 @@ const Profile = () => {
                 </div>
                 <div className="profile-container__header__user-info__stats">
                   <Typography variant="p" sx={{ marginRight: "0.8em" }}>
-                    {posts.length} posts
+                    {posts?.length} posts
                   </Typography>
                   <Typography variant="p" sx={{ marginRight: "0.8em" }}>
                     10 followers
@@ -80,7 +80,7 @@ const Profile = () => {
             <div className="profile-container__hr"></div>
             <div className="profile-container__posts">
               {posts
-                .slice(0)
+                ?.slice(0)
                 .reverse()
                 .map((post) => (
                   <Link

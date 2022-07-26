@@ -9,6 +9,8 @@ import { Avatar, FormControl, TextField } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useGlobalContext } from "../components/context";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
 const style = {
   position: "absolute",
@@ -109,6 +111,30 @@ const Post = () => {
       console.log(error);
     }
   };
+  const deleteRequest = async () => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:5000/api/posts/${postId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      const updatedPosts = allPosts?.map((post) => {
+        if (post?._id === postId) {
+          return ;
+        } else {
+          return post;
+        }
+      });
+      updatePostsDispatch(updatedPosts);
+      history(`/profile/${userId}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     getPost();
   }, []);
@@ -131,19 +157,48 @@ const Post = () => {
             </div>
             <div className="post__info">
               <div className="post__info__user">
-                <div className="post__info__user__item">
-                  <Avatar
-                    alt={post?.user?.username}
-                    src="https://img.freepik.com/free-photo/pleasant-looking-serious-man-stands-profile-has-confident-expression-wears-casual-white-t-shirt_273609-16959.jpg?w=2000"
-                    sx={{ width: "4rem", height: "4rem" }}
+                <div className="post__info__user__user-info">
+                  <div className="post__info__user__user-info__item">
+                    <Avatar
+                      alt={post?.user?.username}
+                      src="https://img.freepik.com/free-photo/pleasant-looking-serious-man-stands-profile-has-confident-expression-wears-casual-white-t-shirt_273609-16959.jpg?w=2000"
+                      sx={{ width: "4rem", height: "4rem" }}
+                    />
+                  </div>
+                  <div className="post__info__user__user-info__item">
+                    <Typography variant="h2" sx={{ fontSize: "2rem" }}>
+                      {post?.user?.username}
+                    </Typography>
+                  </div>
+                </div>
+                <div className="post__info__user__options">
+                  <EditIcon
+                    sx={[
+                      {
+                        "&:hover": {
+                          cursor: "pointer",
+                          scale: "1.2",
+                        },
+                        fontSize: "1.9rem",
+                      },
+                    ]}
+                  />
+                  <DeleteIcon
+                    sx={[
+                      {
+                        "&:hover": {
+                          cursor: "pointer",
+                          scale: "1.2",
+                        },
+                        fontSize: "1.9rem",
+                        color: "red",
+                      },
+                    ]}
+                    onClick={deleteRequest}
                   />
                 </div>
-                <div className="post__info__user__item">
-                  <Typography variant="h2" sx={{ fontSize: "2rem" }}>
-                    {post?.user?.username}
-                  </Typography>
-                </div>
               </div>
+
               <div className="post__info__stats">
                 <div className="home__container__footer__likes">
                   {post?.likes?.includes(
@@ -163,20 +218,23 @@ const Post = () => {
                         },
                       ]}
                     />
-                  ) : ("Post",
-                    <FavoriteBorderIcon
-                      onClick={() => {
-                        likeRequest(postId);
-                      }}
-                      sx={[
-                        {
-                          "&:hover": {
-                            cursor: "pointer",
-                            scale: "1.2",
+                  ) : (
+                    ("Post",
+                    (
+                      <FavoriteBorderIcon
+                        onClick={() => {
+                          likeRequest(postId);
+                        }}
+                        sx={[
+                          {
+                            "&:hover": {
+                              cursor: "pointer",
+                              scale: "1.2",
+                            },
                           },
-                        },
-                      ]}
-                    />
+                        ]}
+                      />
+                    ))
                   )}
                   <Typography
                     variant="h6"

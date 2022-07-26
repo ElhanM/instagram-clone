@@ -93,11 +93,11 @@ const getPost = async (req, res, next) => {
 
 const deletePost = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const post = await Post.findOneAndDelete({ _id: id });
+    const { postId } = req.params;
+    const post = await Post.findOneAndDelete({ _id: postId });
     res.status(200).json({ post });
   } catch (error) {
-    return next(new ErrorResponse(`No post with id : ${id}`, 404));
+    return next(new ErrorResponse(`No post with id : ${postId}`, 404));
   }
 };
 

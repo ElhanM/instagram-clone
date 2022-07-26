@@ -20,16 +20,24 @@
     }
   }
   &__info {
+    // @include flex-center;
     width: 30vw;
     @media screen and (max-height: 600px) {
       width: 45%;
     }
     &__user {
-      display: flex;
-      align-items: center;
-      margin: 1em;
-      &__item {
+      @include flex-center;
+      justify-content: space-between;
+      &__options{
         margin-right: 1em;
+      }
+      &__user-info {
+        display: flex;
+        align-items: center;
+        margin: 1em;
+        &__item {
+          margin-right: 1em;
+        }
       }
     }
   }

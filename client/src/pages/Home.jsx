@@ -1,10 +1,4 @@
-import {
-  Button,
-  FormControl,
-  getLinearProgressUtilityClass,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Button, FormControl, TextField, Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -13,8 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
 import axios from "axios";
 import { useState } from "react";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+
 
 const Home = () => {
   const {
@@ -200,7 +193,7 @@ const Home = () => {
                 <Typography variant="h1" sx={{ fontSize: "1.4rem" }}>
                   {post.description}
                 </Typography>
-                
+
                 <FormControl
                   component="form"
                   variant="standard"
