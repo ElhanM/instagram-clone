@@ -28,7 +28,7 @@
     &__user {
       @include flex-center;
       justify-content: space-between;
-      &__options{
+      &__options {
         margin-right: 1em;
       }
       &__user-info {
@@ -40,5 +40,18 @@
         }
       }
     }
+  }
+}
+
+.comments-flex-post {
+  // ! make this a mixin after adding delete and edit to home and explore
+  @include flex-center;
+  justify-content: space-between;
+  &__item-left {
+    margin: 0 0.5em;
+  }
+  &__item-right {
+    @include flex-center;
+    margin: 0 0.5em;
   }
 }

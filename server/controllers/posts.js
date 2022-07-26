@@ -100,6 +100,15 @@ const deletePost = async (req, res, next) => {
     return next(new ErrorResponse(`No post with id : ${postId}`, 404));
   }
 };
+const deleteComment = async (req, res, next) => {
+  try {
+    const { commentId } = req.body;
+    const comment = await Post.findOneAndDelete({ _id: commentId });
+    res.status(200).json({ comment });
+  } catch (error) {
+    return next(new ErrorResponse(`No post with id : ${req.body.commentId}`, 404));
+  }
+};
 
 const editPost = async (req, res, next) => {
   try {
@@ -124,4 +133,5 @@ module.exports = {
   unlikePost,
   comment,
   getPost,
+  deleteComment,
 };

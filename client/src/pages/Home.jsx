@@ -44,12 +44,6 @@ const Home = () => {
         }
       });
       updatePostsDispatch(updatedPosts);
-      const user = JSON.parse(localStorage.getItem("user"));
-      setHomePosts(
-        updatedPosts.filter((post) => {
-          return post.user._id !== user._id;
-        })
-      );
     } catch (error) {
       console.log(error);
     }
@@ -74,12 +68,6 @@ const Home = () => {
         }
       });
       updatePostsDispatch(updatedPosts);
-      const user = JSON.parse(localStorage.getItem("user"));
-      setHomePosts(
-        updatedPosts.filter((post) => {
-          return post.user._id !== user._id;
-        })
-      );
     } catch (error) {
       console.log(error);
     }

@@ -74,14 +74,13 @@ const Post = () => {
         }
       );
       const updatedPosts = allPosts.map((post) => {
-        if (post._id === postId) {
-          return { ...post, likes: response.data.likePost.likes };
+        if (post?._id === postId) {
+          return { ...post, likes: response?.data?.likePost?.likes };
         } else {
           return post;
         }
       });
       updatePostsDispatch(updatedPosts);
-      setPost(response.data.likePost);
     } catch (error) {
       console.log(error);
     }
@@ -99,19 +98,18 @@ const Post = () => {
         }
       );
       const updatedPosts = allPosts.map((post) => {
-        if (post._id === postId) {
-          return { ...post, likes: response.data.unlikePost.likes };
+        if (post?._id === postId) {
+          return { ...post, likes: response?.data?.unlikePost?.likes };
         } else {
           return post;
         }
       });
       updatePostsDispatch(updatedPosts);
-      setPost(response.data.unlikePost);
     } catch (error) {
       console.log(error);
     }
   };
-  const deleteRequest = async () => {
+  const deletePost = async () => {
     try {
       const response = await axios.delete(
         `http://localhost:5000/api/posts/${postId}`,
@@ -135,9 +133,33 @@ const Post = () => {
       console.log(error);
     }
   };
+  const deleteComment = async () => {
+    try {
+      // const response = await axios.delete(
+      //   `http://localhost:5000/api/posts/${postId}`,
+      //   {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      //     },
+      //   }
+      // );
+      // const updatedPosts = allPosts?.map((post) => {
+      //   if (post?._id === postId) {
+      //     return;
+      //   } else {
+      //     return post;
+      //   }
+      // });
+      // updatePostsDispatch(updatedPosts);
+      // history(`/profile/${userId}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     getPost();
-  }, []);
+  }, [allPosts]);
   useEffect(() => {
     console.log("Post", post);
     console.log(JSON.parse(localStorage.getItem("user"))._id, userId);
@@ -197,7 +219,7 @@ const Post = () => {
                             color: "red",
                           },
                         ]}
-                        onClick={deleteRequest}
+                        onClick={deletePost}
                       />
                     </>
                   ) : null}
@@ -220,6 +242,7 @@ const Post = () => {
                             scale: "1.2",
                           },
                           color: "red",
+                          marginLeft: "0.5em",
                         },
                       ]}
                     />
@@ -236,6 +259,7 @@ const Post = () => {
                               cursor: "pointer",
                               scale: "1.2",
                             },
+                            marginLeft: "0.5em",
                           },
                         ]}
                       />
@@ -325,24 +349,58 @@ const Post = () => {
                   </Button>
                 </FormControl>
                 {post?.comments?.map((comment) => (
-                  <div className="comments-flex">
-                    <Typography
-                      variant="span"
-                      sx={{ fontSize: "1.2rem", paddingTop: "0.2em" }}
-                    >
-                      {comment?.user?.username}:
-                    </Typography>
-                    <Typography
-                      variant="span"
-                      sx={{
-                        fontSize: "1.2rem",
-                        paddingTop: "0.2em",
-                        ml: "0.2em",
-                        fontWeight: "light",
-                      }}
-                    >
-                      {comment?.text}
-                    </Typography>
+                  <div className="comments-flex-post">
+                    <div className="comments-flex-post__item-left">
+                      <Typography
+                        variant="span"
+                        sx={{ fontSize: "1.2rem", paddingTop: "0.2em" }}
+                      >
+                        {comment?.user?.username}:
+                      </Typography>
+                      <Typography
+                        variant="span"
+                        sx={{
+                          fontSize: "1.2rem",
+                          paddingTop: "0.2em",
+                          ml: "0.2em",
+                          fontWeight: "light",
+                        }}
+                      >
+                        {comment?.text}
+                      </Typography>
+                    </div>
+
+                    <div className="comments-flex-post__item-right">
+                      {JSON.parse(localStorage.getItem("user"))._id ===
+                      userId ? (
+                        <>
+                          <EditIcon
+                            sx={[
+                              {
+                                "&:hover": {
+                                  cursor: "pointer",
+                                  scale: "1.2",
+                                },
+                                fontSize: "1.9rem",
+                              },
+                            ]}
+                          />
+                          <DeleteIcon
+                            sx={[
+                              {
+                                "&:hover": {
+                                  cursor: "pointer",
+                                  scale: "1.2",
+                                },
+                                fontSize: "1.9rem",
+                                color: "red",
+                              },
+                            ]}
+                            onClick={deleteComment}
+                          />
+                        </>
+                      ) : null}
+                    </div>
                   </div>
                 ))}
               </div>
