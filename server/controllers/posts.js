@@ -75,7 +75,9 @@ const comment = async (req, res, next) => {
     ).populate("comments.user", "username");
     res.status(201).json({ comment });
   } catch (error) {
-    next(error);
+    return next(
+      new ErrorResponse(`No post with post id of: ${req.body.postId}`, 404)
+    );
   }
 };
 
@@ -100,7 +102,6 @@ const deleteComment = async (req, res, next) => {
 };
 const editComment = async (req, res, next) => {
   try {
-    // edit comment with id of req.body.commentId in post with id of req.params.postId by making the text of the comment equal to req.body.commentText
     const { postId } = req.params;
     const post = await Post.findOneAndUpdate(
       { _id: postId, "comments._id": req.body.commentId },

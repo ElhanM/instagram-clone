@@ -37,6 +37,7 @@ const Post = () => {
     commentURL,
     handleSubmit,
     deleteComment,
+    editComment
   } = useGlobalContext();
   const history = useNavigate();
   const { userId, postId } = useParams();
@@ -182,33 +183,7 @@ const Post = () => {
       console.log(error);
     }
   };
-  const editComment = async () => {
-    try {
-      const response = await axios.put(
-        `http://localhost:5000/api/posts/${postId}`,
-        {
-          commentId: inputs.editCommentId,
-          commentText: inputs.editComment,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-          },
-        }
-      );
-      const updatedPosts = allPosts?.map((post) => {
-        if (post?._id === postId) {
-          return response.data.post;
-        } else {
-          return post;
-        }
-      });
-      updatePostsDispatch(updatedPosts);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  
   useEffect(() => {
     getPost();
   }, [allPosts]);
@@ -542,7 +517,7 @@ const Post = () => {
                     }}
                     onSubmit={(e) => {
                       e.preventDefault();
-                      editComment();
+                      editComment(postId,inputs,allPosts);
                       setEditCommentMode((prev) => !prev);
                     }}
                   >
@@ -641,7 +616,7 @@ const Post = () => {
 
                         <div className="comments-flex-post__item-right">
                           {JSON.parse(localStorage.getItem("user"))._id ===
-                          userId ? (
+                          comment?.user?._id ? (
                             <>
                               <EditIcon
                                 sx={[

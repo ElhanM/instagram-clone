@@ -9,6 +9,7 @@ import axios from "axios";
 import { useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import CloseIcon from "@mui/icons-material/Close";
 
 const Home = () => {
   const {
@@ -22,9 +23,22 @@ const Home = () => {
     commentURL,
     handleSubmit,
     deleteComment,
+    editComment,
   } = useGlobalContext();
   const [homePosts, setHomePosts] = useState([]);
   const [addComment, setAddComment] = useState("");
+  const [editCommentMode, setEditCommentMode] = useState(false);
+  const [inputs, setInputs] = useState({
+    editComment: "",
+    editCommentId: "",
+    editCommentPostId: "",
+  });
+  const handleChange = (e) => {
+    setInputs({
+      ...inputs,
+      [e.target.name]: e.target.value,
+    });
+  };
   const history = useNavigate();
   const likeRequest = async (postId) => {
     try {
@@ -250,63 +264,167 @@ const Home = () => {
                   </Button>
                 </FormControl>
 
-                {post.comments.map((comment) => (
-                  <div className="comments-flex">
-                    <div className="comments-flex__item-left">
-                      <Typography
-                        variant="span"
-                        sx={{ fontSize: "1.2rem", paddingTop: "0.2em" }}
-                      >
-                        {comment?.user?.username}:
-                      </Typography>
-                      <Typography
-                        variant="span"
-                        sx={{
-                          fontSize: "1.2rem",
-                          paddingTop: "0.2em",
-                          ml: "0.2em",
-                          fontWeight: "light",
+                {editCommentMode && inputs.editCommentPostId === post._id ? (
+                  <FormControl
+                    component="form"
+                    variant="standard"
+                    sx={{
+                      paddingBottom: "0.4em",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      editComment(post?._id, inputs, allPosts);
+                      setEditCommentMode((prev) => !prev);
+                      setInputs({ ...inputs, editCommentPostId: post._id });
+                    }}
+                  >
+                    <div className="post__edit-comment-flex">
+                      <TextField
+                        variant="standard"
+                        required
+                        name="editComment"
+                        label="Edit comment"
+                        id="editComment"
+                        autoComplete="off"
+                        value={inputs.editComment}
+                        onChange={handleChange}
+                        autoFocus
+                        sx={[
+                          {
+                            "& .MuiInput-underline:after": {
+                              borderBottomColor: "#000",
+                            },
+                            "& label.Mui-focused": {
+                              color: "#000",
+                            },
+                            "& .MuiOutlinedInput-root": {
+                              "&.Mui-focused fieldset": {
+                                borderColor: "#000",
+                              },
+                            },
+                            width: "30em",
+                            marginTop: "1em",
+                          },
+                        ]}
+                      />
+                      <CloseIcon
+                        sx={[
+                          {
+                            "&:hover": {
+                              cursor: "pointer",
+                              scale: "1.2",
+                            },
+                            fontSize: "1.9rem",
+                            marginTop: "1em",
+                          },
+                        ]}
+                        onClick={() => {
+                          setEditCommentMode((prev) => !prev);
                         }}
-                      >
-                        {comment?.text}
-                      </Typography>
+                      />
                     </div>
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      sx={[
+                        {
+                          "&:hover": {
+                            backgroundColor: "#000",
+                            color: "#fff",
+                          },
+                          mt: 3,
+                          mb: 2,
+                          color: "#000",
+                          backgroundColor: "#fff",
+                          borderColor: "#000",
+                          border: "2px solid #000",
+                          transition: "background-color 0.2s ease",
+                          width: "8em",
+                        },
+                      ]}
+                    >
+                      Save changes
+                    </Button>
+                  </FormControl>
+                ) : (
+                  <>
+                    {post?.comments?.map((comment) => (
+                      <div className="comments-flex-post">
+                        <div className="comments-flex-post__item-left">
+                          <Typography
+                            variant="span"
+                            sx={{ fontSize: "1.2rem", paddingTop: "0.2em" }}
+                          >
+                            {comment?.user?.username}:
+                          </Typography>
+                          <Typography
+                            variant="span"
+                            sx={{
+                              fontSize: "1.2rem",
+                              paddingTop: "0.2em",
+                              ml: "0.2em",
+                              fontWeight: "light",
+                            }}
+                          >
+                            {comment?.text}
+                          </Typography>
+                        </div>
 
-                    <div className="comments-flex__item-right">
-                      {JSON.parse(localStorage.getItem("user"))._id ===
-                      comment?.user?._id ? (
-                        <>
-                          <EditIcon
-                            sx={[
-                              {
-                                "&:hover": {
-                                  cursor: "pointer",
-                                  scale: "1.2",
-                                },
-                                fontSize: "1.9rem",
-                              },
-                            ]}
-                          />
-                          <DeleteIcon
-                            sx={[
-                              {
-                                "&:hover": {
-                                  cursor: "pointer",
-                                  scale: "1.2",
-                                },
-                                fontSize: "1.9rem",
-                                color: "red",
-                              },
-                            ]}
-                            onClick={() =>
-                              deleteComment(post._id, comment._id, allPosts)
-                            }
-                          />
-                        </>
-                      ) : null}
-                    </div>
-                  </div>
-                ))}
+                        <div className="comments-flex-post__item-right">
+                          {JSON.parse(localStorage.getItem("user"))._id ===
+                          comment?.user?._id ? (
+                            <>
+                              <EditIcon
+                                sx={[
+                                  {
+                                    "&:hover": {
+                                      cursor: "pointer",
+                                      scale: "1.2",
+                                    },
+                                    fontSize: "1.9rem",
+                                  },
+                                ]}
+                                onClick={() => {
+                                  setEditCommentMode((prev) => !prev);
+                                  setInputs({
+                                    ...inputs,
+                                    editComment: comment?.text,
+                                    editCommentId: comment?._id,
+                                    editCommentPostId: post._id,
+                                  });
+                                }}
+                              />
+                              <DeleteIcon
+                                sx={[
+                                  {
+                                    "&:hover": {
+                                      cursor: "pointer",
+                                      scale: "1.2",
+                                    },
+                                    fontSize: "1.9rem",
+                                    color: "red",
+                                  },
+                                ]}
+                                onClick={() =>
+                                  deleteComment(
+                                    post?._id,
+                                    comment._id,
+                                    allPosts
+                                  )
+                                }
+                              />
+                            </>
+                          ) : null}
+                        </div>
+                      </div>
+                    ))}
+                  </>
+                )}
               </div>
             </div>
           ))

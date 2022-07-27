@@ -30,6 +30,6 @@ router
   .put(protect, editComment);
 router.route("/like").put(protect, likePost);
 router.route("/unlike").put(protect, unlikePost);
-router.route("/comment").put(protect, comment);
+router.route("/add/comment").put(protect, comment);
 
 module.exports = router;

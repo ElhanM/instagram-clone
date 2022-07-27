@@ -12,7 +12,7 @@ const authURL = `${baseURL}/api/auth`;
 
 const likeURL = `${postsURL}/like`;
 const unlikeURL = `${postsURL}/unlike`;
-const commentURL = `${postsURL}/comment`;
+const commentURL = `${postsURL}/add/comment`;
 
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -85,6 +85,33 @@ const AppProvider = ({ children }) => {
       console.log(error);
     }
   };
+  const editComment = async (postId,inputs,posts) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/api/posts/${postId}`,
+        {
+          commentId: inputs.editCommentId,
+          commentText: inputs.editComment,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      const updatedPosts = posts?.map((post) => {
+        if (post?._id === postId) {
+          return response.data.post;
+        } else {
+          return post;
+        }
+      });
+      updatePostsDispatch(updatedPosts);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     axiosGetPosts();
   }, []);
@@ -103,6 +130,7 @@ const AppProvider = ({ children }) => {
         commentURL,
         handleSubmit,
         deleteComment,
+        editComment
       }}
     >
       {children}
