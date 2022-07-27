@@ -35,6 +35,7 @@ const Post = () => {
     unlikeURL,
     commentURL,
     handleSubmit,
+    deleteComment
   } = useGlobalContext();
   const history = useNavigate();
   const { userId, postId } = useParams();
@@ -129,30 +130,6 @@ const Post = () => {
       });
       updatePostsDispatch(updatedPosts);
       history(`/profile/${userId}`);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const deleteComment = async (commentId) => {
-    try {
-      const response = await axios.put(
-        `http://localhost:5000/api/posts`,
-        { postId, commentId },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-          },
-        }
-      );
-      const updatedPosts = allPosts?.map((post) => {
-        if (post?._id === postId) {
-          return { ...post, comments: response?.data?.comment?.comments };
-        } else {
-          return post;
-        }
-      });
-      updatePostsDispatch(updatedPosts);
     } catch (error) {
       console.log(error);
     }
@@ -396,7 +373,7 @@ const Post = () => {
                                 color: "red",
                               },
                             ]}
-                            onClick={() => deleteComment(comment._id)}
+                            onClick={() => deleteComment(postId, comment._id, allPosts)}
                           />
                         </>
                       ) : null}

@@ -21,6 +21,7 @@ const Home = () => {
     unlikeURL,
     commentURL,
     handleSubmit,
+    deleteComment,
   } = useGlobalContext();
   const [homePosts, setHomePosts] = useState([]);
   const [addComment, setAddComment] = useState("");
@@ -64,30 +65,6 @@ const Home = () => {
       const updatedPosts = allPosts.map((post) => {
         if (post._id === response.data.unlikePost._id) {
           return { ...post, likes: response.data.unlikePost.likes };
-        } else {
-          return post;
-        }
-      });
-      updatePostsDispatch(updatedPosts);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const deleteComment = async (postId, commentId) => {
-    try {
-      const response = await axios.put(
-        `http://localhost:5000/api/posts`,
-        { postId, commentId },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-          },
-        }
-      );
-      const updatedPosts = allPosts?.map((post) => {
-        if (post?._id === postId) {
-          return { ...post, comments: response?.data?.comment?.comments };
         } else {
           return post;
         }
@@ -321,7 +298,9 @@ const Home = () => {
                                 color: "red",
                               },
                             ]}
-                            onClick={() => deleteComment(post._id, comment._id)}
+                            onClick={() =>
+                              deleteComment(post._id, comment._id, allPosts)
+                            }
                           />
                         </>
                       ) : null}

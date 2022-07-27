@@ -61,6 +61,30 @@ const AppProvider = ({ children }) => {
       console.log(error);
     }
   };
+  const deleteComment = async (postId, commentId, posts) => {
+    try {
+      const response = await axios.put(
+        `${postsURL}`,
+        { postId, commentId },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      const updatedPosts = posts?.map((post) => {
+        if (post?._id === postId) {
+          return { ...post, comments: response?.data?.comment?.comments };
+        } else {
+          return post;
+        }
+      });
+      updatePostsDispatch(updatedPosts);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     axiosGetPosts();
   }, []);
@@ -78,6 +102,7 @@ const AppProvider = ({ children }) => {
         unlikeURL,
         commentURL,
         handleSubmit,
+        deleteComment,
       }}
     >
       {children}
