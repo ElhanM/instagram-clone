@@ -79,6 +79,26 @@ const comment = async (req, res, next) => {
   }
 };
 
+const deleteComment = async (req, res, next) => {
+  try {
+    const comment = await Post.findByIdAndUpdate(
+      req.body.postId,
+      {
+        $pull: { comments: { _id: req.body.commentId } },
+      },
+      { new: true }
+    ).populate("comments.user", "username");
+    res.status(200).json({ comment });
+  } catch (error) {
+    return next(
+      new ErrorResponse(
+        `No post with post id of: ${req.body.postId} and comment id of: ${req.body.commentId}`,
+        404
+      )
+    );
+  }
+};
+
 const getPost = async (req, res, next) => {
   try {
     const { postId } = req.params;
@@ -98,15 +118,6 @@ const deletePost = async (req, res, next) => {
     res.status(200).json({ post });
   } catch (error) {
     return next(new ErrorResponse(`No post with id : ${postId}`, 404));
-  }
-};
-const deleteComment = async (req, res, next) => {
-  try {
-    const { commentId } = req.body;
-    const comment = await Post.findOneAndDelete({ _id: commentId });
-    res.status(200).json({ comment });
-  } catch (error) {
-    return next(new ErrorResponse(`No post with id : ${req.body.commentId}`, 404));
   }
 };
 

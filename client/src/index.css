@@ -101,15 +101,18 @@ a :hover {
   }
 }
 
-.home, .explore-page {
+.home,
+.explore-page {
   width: 100vw;
   padding-top: 2em;
 }
-.home a, .explore-page a {
+.home a,
+.explore-page a {
   text-decoration: none;
   color: #000;
 }
-.home__container, .explore-page__container {
+.home__container,
+.explore-page__container {
   margin: 0 auto;
   width: 100vw;
   max-width: 1000px;
@@ -118,7 +121,8 @@ a :hover {
   border-radius: 0.5em;
   margin-bottom: 1em;
 }
-.home__container__header, .explore-page__container__header {
+.home__container__header,
+.explore-page__container__header {
   margin: 1em 0;
   display: -webkit-box;
   display: -webkit-flex;
@@ -130,13 +134,16 @@ a :hover {
           align-items: center;
   padding: 0 1em;
 }
-.home__container__header__photo, .explore-page__container__header__photo {
+.home__container__header__photo,
+.explore-page__container__header__photo {
   margin-right: 0.5em;
 }
-.home__container__footer, .explore-page__container__footer {
+.home__container__footer,
+.explore-page__container__footer {
   padding: 0.5em 1em;
 }
-.home__container__footer__likes, .explore-page__container__footer__likes {
+.home__container__footer__likes,
+.explore-page__container__footer__likes {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -154,12 +161,46 @@ a :hover {
       -ms-flex-pack: start;
           justify-content: flex-start;
 }
-.home__container__image img, .explore-page__container__image img {
+.home__container__image img,
+.explore-page__container__image img {
   width: 100vw;
   max-width: 600px;
   -o-object-fit: cover;
      object-fit: cover;
   max-height: 750px;
+}
+
+.comments-flex {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.comments-flex__item-right {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .post {

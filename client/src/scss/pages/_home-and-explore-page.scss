@@ -1,7 +1,8 @@
-.home, .explore-page{
+.home,
+.explore-page {
   width: 100vw;
   padding-top: 2em;
-  a{
+  a {
     text-decoration: none;
     color: #000;
   }
@@ -36,5 +37,16 @@
         max-height: 750px;
       }
     }
+  }
+}
+
+.comments-flex {
+  // ! make this a mixin after adding delete and edit to home and explore
+  @include flex-center;
+  justify-content: space-between;
+  // &__item-left {
+  // }
+  &__item-right {
+    @include flex-center;
   }
 }

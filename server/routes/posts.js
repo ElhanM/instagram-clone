@@ -19,7 +19,7 @@ router
   .route("/")
   .get(getAllPosts)
   .post(protect, createPost)
-  .delete(protect, deleteComment);
+  .put(protect, deleteComment);
 router.route("/user-posts/:user").get(getAllPostsByUser);
 router
   .route("/:postId")

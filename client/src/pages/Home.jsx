@@ -7,7 +7,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
 import axios from "axios";
 import { useState } from "react";
-
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
 const Home = () => {
   const {
@@ -72,6 +73,30 @@ const Home = () => {
       console.log(error);
     }
   };
+  const deleteComment = async (postId, commentId) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/api/posts`,
+        { postId, commentId },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      const updatedPosts = allPosts?.map((post) => {
+        if (post?._id === postId) {
+          return { ...post, comments: response?.data?.comment?.comments };
+        } else {
+          return post;
+        }
+      });
+      updatePostsDispatch(updatedPosts);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     console.log(user);
@@ -88,7 +113,6 @@ const Home = () => {
         return post.user._id !== user._id;
       })
     );
-    // having allPosts in the dependency array fixes async issues when changing state
   }, [allPosts]);
   useEffect(() => {
     console.log("homePosts", homePosts);
@@ -251,23 +275,57 @@ const Home = () => {
 
                 {post.comments.map((comment) => (
                   <div className="comments-flex">
-                    <Typography
-                      variant="span"
-                      sx={{ fontSize: "1.2rem", paddingTop: "0.2em" }}
-                    >
-                      {comment.user.username}:
-                    </Typography>
-                    <Typography
-                      variant="span"
-                      sx={{
-                        fontSize: "1.2rem",
-                        paddingTop: "0.2em",
-                        ml: "0.2em",
-                        fontWeight: "light",
-                      }}
-                    >
-                      {comment.text}
-                    </Typography>
+                    <div className="comments-flex__item-left">
+                      <Typography
+                        variant="span"
+                        sx={{ fontSize: "1.2rem", paddingTop: "0.2em" }}
+                      >
+                        {comment?.user?.username}:
+                      </Typography>
+                      <Typography
+                        variant="span"
+                        sx={{
+                          fontSize: "1.2rem",
+                          paddingTop: "0.2em",
+                          ml: "0.2em",
+                          fontWeight: "light",
+                        }}
+                      >
+                        {comment?.text}
+                      </Typography>
+                    </div>
+
+                    <div className="comments-flex__item-right">
+                      {JSON.parse(localStorage.getItem("user"))._id ===
+                      comment?.user?._id ? (
+                        <>
+                          <EditIcon
+                            sx={[
+                              {
+                                "&:hover": {
+                                  cursor: "pointer",
+                                  scale: "1.2",
+                                },
+                                fontSize: "1.9rem",
+                              },
+                            ]}
+                          />
+                          <DeleteIcon
+                            sx={[
+                              {
+                                "&:hover": {
+                                  cursor: "pointer",
+                                  scale: "1.2",
+                                },
+                                fontSize: "1.9rem",
+                                color: "red",
+                              },
+                            ]}
+                            onClick={() => deleteComment(post._id, comment._id)}
+                          />
+                        </>
+                      ) : null}
+                    </div>
                   </div>
                 ))}
               </div>

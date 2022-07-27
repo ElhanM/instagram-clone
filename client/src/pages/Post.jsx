@@ -133,26 +133,26 @@ const Post = () => {
       console.log(error);
     }
   };
-  const deleteComment = async () => {
+  const deleteComment = async (commentId) => {
     try {
-      // const response = await axios.delete(
-      //   `http://localhost:5000/api/posts/${postId}`,
-      //   {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //       Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-      //     },
-      //   }
-      // );
-      // const updatedPosts = allPosts?.map((post) => {
-      //   if (post?._id === postId) {
-      //     return;
-      //   } else {
-      //     return post;
-      //   }
-      // });
-      // updatePostsDispatch(updatedPosts);
-      // history(`/profile/${userId}`);
+      const response = await axios.put(
+        `http://localhost:5000/api/posts`,
+        { postId, commentId },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      const updatedPosts = allPosts?.map((post) => {
+        if (post?._id === postId) {
+          return { ...post, comments: response?.data?.comment?.comments };
+        } else {
+          return post;
+        }
+      });
+      updatePostsDispatch(updatedPosts);
     } catch (error) {
       console.log(error);
     }
@@ -396,7 +396,7 @@ const Post = () => {
                                 color: "red",
                               },
                             ]}
-                            onClick={deleteComment}
+                            onClick={() => deleteComment(comment._id)}
                           />
                         </>
                       ) : null}
