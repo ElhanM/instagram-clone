@@ -35,13 +35,24 @@ const Post = () => {
     unlikeURL,
     commentURL,
     handleSubmit,
-    deleteComment
+    deleteComment,
   } = useGlobalContext();
   const history = useNavigate();
   const { userId, postId } = useParams();
   const [open, setOpen] = useState(true);
   const handleOpen = () => setOpen(true);
   const [post, setPost] = useState({});
+  const [inputs, setInputs] = useState({
+    title: "",
+    description: "",
+    comment: "",
+  });
+  const handleChange = (e) => {
+    setInputs({
+      ...inputs,
+      [e.target.name]: e.target.value,
+    });
+  };
   const handleClose = () => {
     setOpen(false);
     history(`/profile/${userId}`);
@@ -251,10 +262,16 @@ const Post = () => {
                       : `${post?.likes?.length} likes`}
                   </Typography>
                 </div>
-                <Typography variant="h1" sx={{ fontSize: "1.7rem" }}>
+                <Typography
+                  variant="h1"
+                  sx={{ fontSize: "1.7rem", marginLeft: ".5em" }}
+                >
                   {post.title}
                 </Typography>
-                <Typography variant="h1" sx={{ fontSize: "1.4rem" }}>
+                <Typography
+                  variant="h1"
+                  sx={{ fontSize: "1.4rem", marginLeft: ".5em" }}
+                >
                   {post.description}
                 </Typography>
                 <FormControl
@@ -269,9 +286,8 @@ const Post = () => {
                   }}
                   onSubmit={(e) => {
                     e.preventDefault();
-                    console.log(e.target[0].value);
-                    handleSubmit(postId, e.target[0].value, allPosts);
-                    e.target[0].value = "";
+                    handleSubmit(postId, inputs.comment, allPosts);
+                    inputs.comment = "";
                   }}
                 >
                   <TextField
@@ -281,6 +297,8 @@ const Post = () => {
                     label="Add comment"
                     id="comment"
                     autoComplete="off"
+                    value={inputs.comment}
+                    onChange={handleChange}
                     sx={[
                       {
                         "& .MuiInput-underline:after": {
@@ -295,7 +313,7 @@ const Post = () => {
                           },
                         },
                         width: "80%",
-                        marginLeft: "auto",
+                        marginLeft: "0.5em",
                         marginRight: "1em",
                       },
                     ]}
@@ -373,7 +391,9 @@ const Post = () => {
                                 color: "red",
                               },
                             ]}
-                            onClick={() => deleteComment(postId, comment._id, allPosts)}
+                            onClick={() =>
+                              deleteComment(postId, comment._id, allPosts)
+                            }
                           />
                         </>
                       ) : null}
