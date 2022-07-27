@@ -4,7 +4,9 @@
   @media screen and (max-width: 1200px) {
     flex-direction: column;
   }
-
+  &__edit-comment-flex {
+    @include flex-center;
+  }
   &__image {
     img {
       width: 60vw;

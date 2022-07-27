@@ -44,10 +44,13 @@ const Post = () => {
   const handleOpen = () => setOpen(true);
   const [post, setPost] = useState({});
   const [editPostMode, setEditPostMode] = useState(false);
+  const [editCommentMode, setEditCommentMode] = useState(false);
   const [inputs, setInputs] = useState({
     title: "",
     description: "",
     comment: "",
+    editComment: "",
+    editCommentId: "",
   });
   const handleChange = (e) => {
     setInputs({
@@ -159,6 +162,33 @@ const Post = () => {
         {
           title: inputs.title,
           description: inputs.description,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      const updatedPosts = allPosts?.map((post) => {
+        if (post?._id === postId) {
+          return response.data.post;
+        } else {
+          return post;
+        }
+      });
+      updatePostsDispatch(updatedPosts);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const editComment = async () => {
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/api/posts/${postId}`,
+        {
+          commentId: inputs.editCommentId,
+          commentText: inputs.editComment,
         },
         {
           headers: {
@@ -499,63 +529,161 @@ const Post = () => {
                     Post
                   </Button>
                 </FormControl>
-                {post?.comments?.map((comment) => (
-                  <div className="comments-flex-post">
-                    <div className="comments-flex-post__item-left">
-                      <Typography
-                        variant="span"
-                        sx={{ fontSize: "1.2rem", paddingTop: "0.2em" }}
-                      >
-                        {comment?.user?.username}:
-                      </Typography>
-                      <Typography
-                        variant="span"
-                        sx={{
-                          fontSize: "1.2rem",
-                          paddingTop: "0.2em",
-                          ml: "0.2em",
-                          fontWeight: "light",
+                {editCommentMode ? (
+                  <FormControl
+                    component="form"
+                    variant="standard"
+                    sx={{
+                      paddingBottom: "0.4em",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      editComment();
+                      setEditCommentMode((prev) => !prev);
+                    }}
+                  >
+                    <div className="post__edit-comment-flex">
+                      <TextField
+                        variant="standard"
+                        required
+                        name="editComment"
+                        label="Edit comment"
+                        id="editComment"
+                        autoComplete="off"
+                        value={inputs.editComment}
+                        onChange={handleChange}
+                        autoFocus
+                        sx={[
+                          {
+                            "& .MuiInput-underline:after": {
+                              borderBottomColor: "#000",
+                            },
+                            "& label.Mui-focused": {
+                              color: "#000",
+                            },
+                            "& .MuiOutlinedInput-root": {
+                              "&.Mui-focused fieldset": {
+                                borderColor: "#000",
+                              },
+                            },
+                            width: "30em",
+                            marginTop: "1em",
+                          },
+                        ]}
+                      />
+                      <CloseIcon
+                        sx={[
+                          {
+                            "&:hover": {
+                              cursor: "pointer",
+                              scale: "1.2",
+                            },
+                            fontSize: "1.9rem",
+                            marginTop: "1em",
+                          },
+                        ]}
+                        onClick={() => {
+                          setEditCommentMode((prev) => !prev);
                         }}
-                      >
-                        {comment?.text}
-                      </Typography>
+                      />
                     </div>
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      sx={[
+                        {
+                          "&:hover": {
+                            backgroundColor: "#000",
+                            color: "#fff",
+                          },
+                          mt: 3,
+                          mb: 2,
+                          color: "#000",
+                          backgroundColor: "#fff",
+                          borderColor: "#000",
+                          border: "2px solid #000",
+                          transition: "background-color 0.2s ease",
+                          width: "8em",
+                        },
+                      ]}
+                    >
+                      Save changes
+                    </Button>
+                  </FormControl>
+                ) : (
+                  <>
+                    {post?.comments?.map((comment) => (
+                      <div className="comments-flex-post">
+                        <div className="comments-flex-post__item-left">
+                          <Typography
+                            variant="span"
+                            sx={{ fontSize: "1.2rem", paddingTop: "0.2em" }}
+                          >
+                            {comment?.user?.username}:
+                          </Typography>
+                          <Typography
+                            variant="span"
+                            sx={{
+                              fontSize: "1.2rem",
+                              paddingTop: "0.2em",
+                              ml: "0.2em",
+                              fontWeight: "light",
+                            }}
+                          >
+                            {comment?.text}
+                          </Typography>
+                        </div>
 
-                    <div className="comments-flex-post__item-right">
-                      {JSON.parse(localStorage.getItem("user"))._id ===
-                      userId ? (
-                        <>
-                          <EditIcon
-                            sx={[
-                              {
-                                "&:hover": {
-                                  cursor: "pointer",
-                                  scale: "1.2",
-                                },
-                                fontSize: "1.9rem",
-                              },
-                            ]}
-                          />
-                          <DeleteIcon
-                            sx={[
-                              {
-                                "&:hover": {
-                                  cursor: "pointer",
-                                  scale: "1.2",
-                                },
-                                fontSize: "1.9rem",
-                                color: "red",
-                              },
-                            ]}
-                            onClick={() =>
-                              deleteComment(postId, comment._id, allPosts)
-                            }
-                          />
-                        </>
-                      ) : null}
-                    </div>
-                  </div>
-                ))}
+                        <div className="comments-flex-post__item-right">
+                          {JSON.parse(localStorage.getItem("user"))._id ===
+                          userId ? (
+                            <>
+                              <EditIcon
+                                sx={[
+                                  {
+                                    "&:hover": {
+                                      cursor: "pointer",
+                                      scale: "1.2",
+                                    },
+                                    fontSize: "1.9rem",
+                                  },
+                                ]}
+                                onClick={() => {
+                                  setEditCommentMode((prev) => !prev);
+                                  setInputs({
+                                    ...inputs,
+                                    editComment: comment?.text,
+                                    editCommentId: comment?._id,
+                                  });
+                                }}
+                              />
+                              <DeleteIcon
+                                sx={[
+                                  {
+                                    "&:hover": {
+                                      cursor: "pointer",
+                                      scale: "1.2",
+                                    },
+                                    fontSize: "1.9rem",
+                                    color: "red",
+                                  },
+                                ]}
+                                onClick={() =>
+                                  deleteComment(postId, comment._id, allPosts)
+                                }
+                              />
+                            </>
+                          ) : null}
+                        </div>
+                      </div>
+                    ))}
+                  </>
+                )}
               </div>
             </div>
           </div>
