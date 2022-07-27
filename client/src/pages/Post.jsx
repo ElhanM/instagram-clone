@@ -11,6 +11,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useGlobalContext } from "../components/context";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import CloseIcon from "@mui/icons-material/Close";
 
 const style = {
   position: "absolute",
@@ -42,6 +43,7 @@ const Post = () => {
   const [open, setOpen] = useState(true);
   const handleOpen = () => setOpen(true);
   const [post, setPost] = useState({});
+  const [editPostMode, setEditPostMode] = useState(false);
   const [inputs, setInputs] = useState({
     title: "",
     description: "",
@@ -68,6 +70,11 @@ const Post = () => {
         }
       );
       setPost(response.data.post);
+      setInputs({
+        ...inputs,
+        title: response.data.post.title,
+        description: response.data.post.description,
+      });
       console.log(response.data.post);
     } catch (error) {
       console.log(error);
@@ -145,13 +152,36 @@ const Post = () => {
       console.log(error);
     }
   };
+  const editPost = async () => {
+    try {
+      const response = await axios.patch(
+        `http://localhost:5000/api/posts/${postId}`,
+        {
+          title: inputs.title,
+          description: inputs.description,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      const updatedPosts = allPosts?.map((post) => {
+        if (post?._id === postId) {
+          return response.data.post;
+        } else {
+          return post;
+        }
+      });
+      updatePostsDispatch(updatedPosts);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     getPost();
   }, [allPosts]);
-  useEffect(() => {
-    console.log("Post", post);
-    console.log(JSON.parse(localStorage.getItem("user"))._id, userId);
-  }, [post]);
 
   return (
     <div>
@@ -185,17 +215,41 @@ const Post = () => {
                 <div className="post__info__user__options">
                   {JSON.parse(localStorage.getItem("user"))._id === userId ? (
                     <>
-                      <EditIcon
-                        sx={[
-                          {
-                            "&:hover": {
-                              cursor: "pointer",
-                              scale: "1.2",
+                      {editPostMode ? (
+                        <CloseIcon
+                          sx={[
+                            {
+                              "&:hover": {
+                                cursor: "pointer",
+                                scale: "1.2",
+                              },
+                              fontSize: "1.9rem",
                             },
-                            fontSize: "1.9rem",
-                          },
-                        ]}
-                      />
+                          ]}
+                          onClick={() => {
+                            setEditPostMode((prev) => !prev);
+                            setInputs({
+                              ...inputs,
+                              title: post.title,
+                              description: post.description,
+                            });
+                          }}
+                        />
+                      ) : (
+                        <EditIcon
+                          sx={[
+                            {
+                              "&:hover": {
+                                cursor: "pointer",
+                                scale: "1.2",
+                              },
+                              fontSize: "1.9rem",
+                            },
+                          ]}
+                          onClick={() => setEditPostMode((prev) => !prev)}
+                        />
+                      )}
+
                       <DeleteIcon
                         sx={[
                           {
@@ -262,18 +316,120 @@ const Post = () => {
                       : `${post?.likes?.length} likes`}
                   </Typography>
                 </div>
-                <Typography
-                  variant="h1"
-                  sx={{ fontSize: "1.7rem", marginLeft: ".5em" }}
-                >
-                  {post.title}
-                </Typography>
-                <Typography
-                  variant="h1"
-                  sx={{ fontSize: "1.4rem", marginLeft: ".5em" }}
-                >
-                  {post.description}
-                </Typography>
+                {editPostMode ? (
+                  <FormControl
+                    component="form"
+                    variant="standard"
+                    sx={{
+                      paddingBottom: "0.4em",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      editPost();
+                      setEditPostMode((prev) => !prev);
+                    }}
+                  >
+                    <TextField
+                      variant="standard"
+                      required
+                      name="title"
+                      label="Edit title"
+                      id="title"
+                      autoComplete="off"
+                      value={inputs.title}
+                      onChange={handleChange}
+                      autoFocus
+                      sx={[
+                        {
+                          "& .MuiInput-underline:after": {
+                            borderBottomColor: "#000",
+                          },
+                          "& label.Mui-focused": {
+                            color: "#000",
+                          },
+                          "& .MuiOutlinedInput-root": {
+                            "&.Mui-focused fieldset": {
+                              borderColor: "#000",
+                            },
+                          },
+                          width: "80%",
+                          marginTop: "1em",
+                        },
+                      ]}
+                    />
+                    <TextField
+                      variant="standard"
+                      required
+                      name="description"
+                      label="Edit description"
+                      id="description"
+                      autoComplete="off"
+                      value={inputs.description}
+                      onChange={handleChange}
+                      sx={[
+                        {
+                          "& .MuiInput-underline:after": {
+                            borderBottomColor: "#000",
+                          },
+                          "& label.Mui-focused": {
+                            color: "#000",
+                          },
+                          "& .MuiOutlinedInput-root": {
+                            "&.Mui-focused fieldset": {
+                              borderColor: "#000",
+                            },
+                          },
+                          width: "80%",
+                          marginTop: "1em",
+                        },
+                      ]}
+                    />
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      sx={[
+                        {
+                          "&:hover": {
+                            backgroundColor: "#000",
+                            color: "#fff",
+                          },
+                          mt: 3,
+                          mb: 2,
+                          color: "#000",
+                          backgroundColor: "#fff",
+                          borderColor: "#000",
+                          border: "2px solid #000",
+                          transition: "background-color 0.2s ease",
+                          width: "8em",
+                          // marginRight: "auto",
+                        },
+                      ]}
+                    >
+                      Save changes
+                    </Button>
+                  </FormControl>
+                ) : (
+                  <>
+                    <Typography
+                      variant="h1"
+                      sx={{ fontSize: "1.7rem", marginLeft: ".5em" }}
+                    >
+                      {post.title}
+                    </Typography>
+                    <Typography
+                      variant="h1"
+                      sx={{ fontSize: "1.4rem", marginLeft: ".5em" }}
+                    >
+                      {post.description}
+                    </Typography>
+                  </>
+                )}
+
                 <FormControl
                   component="form"
                   variant="standard"
