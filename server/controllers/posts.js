@@ -98,6 +98,25 @@ const deleteComment = async (req, res, next) => {
     );
   }
 };
+const editComment = async (req, res, next) => {
+  try {
+    // edit comment with id of req.body.commentId in post with id of req.params.postId by making the text of the comment equal to req.body.commentText
+    const { postId } = req.params;
+    const post = await Post.findOneAndUpdate(
+      { _id: postId, "comments._id": req.body.commentId },
+      { $set: { "comments.$.text": req.body.commentText } },
+      { new: true }
+    ).populate("comments.user", "username");
+    res.status(200).json({ post });
+  } catch (error) {
+    return next(
+      new ErrorResponse(
+        `No post with post id of: ${req.params.postId} and comment id of: ${req.body.commentId}`,
+        404
+      )
+    );
+  }
+};
 
 const getPost = async (req, res, next) => {
   try {
@@ -145,4 +164,5 @@ module.exports = {
   comment,
   getPost,
   deleteComment,
+  editComment,
 };
