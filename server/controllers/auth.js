@@ -50,9 +50,55 @@ const sendToken = (user, statusCode, res) => {
   });
 };
 
+const followUser = async (req, res, next) => {
+  try {
+    const followUser = await User.findByIdAndUpdate(
+      req.body.userId,
+      {
+        $push: { followers: req.user._id },
+      },
+      { new: true }
+    );
+    const updateFollowing = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $push: { following: req.body.userId },
+      },
+      { new: true }
+    );
+    res.status(201).json({ followUser, updateFollowing });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const unfollowUser = async (req, res, next) => {
+  try {
+    const unfollowUser = await User.findByIdAndUpdate(
+      req.body.userId,
+      {
+        $pull: { followers: req.user._id },
+      },
+      { new: true }
+    );
+    const updateFollowing = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $pull: { following: req.body.userId },
+      },
+      { new: true }
+    );
+    res.status(201).json({ unfollowUser, updateFollowing });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   register,
   login,
   forgotPassword,
   resetPassword,
+  followUser,
+  unfollowUser,
 };

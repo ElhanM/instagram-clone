@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { ObjectId } = mongoose.Schema.Types;
 
 const UserSchema = new mongoose.Schema(
   {
@@ -8,7 +9,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: [true, "Username is required"],
       unique: [true, "Duplicate username"],
-      match: [/^[a-z0-9-_.]+$/, "Username can only contain lowercase letters, numbers, dash, underscore and dot, and can not contain spaces"],
+      match: [
+        /^[a-z0-9-_.]+$/,
+        "Username can only contain lowercase letters, numbers, dash, underscore and dot, and can not contain spaces",
+      ],
     },
     email: {
       type: String,
@@ -25,6 +29,8 @@ const UserSchema = new mongoose.Schema(
       minlength: [8, "Password must be at least 8 characters"],
       maxlength: [32, "Password must be at most 32 characters"],
     },
+    followers: [{ type: ObjectId, ref: "User" }],
+    following: [{ type: ObjectId, ref: "User" }],
   },
   {
     collection: "users",

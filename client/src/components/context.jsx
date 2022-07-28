@@ -85,10 +85,10 @@ const AppProvider = ({ children }) => {
       console.log(error);
     }
   };
-  const editComment = async (postId,inputs,posts) => {
+  const editComment = async (postId, inputs, posts) => {
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/posts/${postId}`,
+        `${postsURL}/${postId}`,
         {
           commentId: inputs.editCommentId,
           commentText: inputs.editComment,
@@ -130,7 +130,7 @@ const AppProvider = ({ children }) => {
         commentURL,
         handleSubmit,
         deleteComment,
-        editComment
+        editComment,
       }}
     >
       {children}
