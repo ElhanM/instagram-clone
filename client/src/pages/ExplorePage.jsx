@@ -24,6 +24,7 @@ const ExplorePage = () => {
     handleSubmit,
     deleteComment,
     editComment,
+    followRequest,
   } = useGlobalContext();
   const [explorePosts, setExplorePosts] = useState([]);
   const [addComment, setAddComment] = useState("");
@@ -54,9 +55,9 @@ const ExplorePage = () => {
           },
         }
       );
-      const updatedPosts = allPosts.map((post) => {
-        if (post._id === response.data.likePost._id) {
-          return { ...post, likes: response.data.likePost.likes };
+      const updatedPosts = allPosts?.map((post) => {
+        if (post?._id === response?.data?.likePost?._id) {
+          return { ...post, likes: response?.data?.likePost?.likes };
         } else {
           return post;
         }
@@ -78,9 +79,9 @@ const ExplorePage = () => {
           },
         }
       );
-      const updatedPosts = allPosts.map((post) => {
-        if (post._id === response.data.unlikePost._id) {
-          return { ...post, likes: response.data.unlikePost.likes };
+      const updatedPosts = allPosts?.map((post) => {
+        if (post._id === response?.data?.unlikePost?._id) {
+          return { ...post, likes: response?.data?.unlikePost?.likes };
         } else {
           return post;
         }
@@ -98,8 +99,8 @@ const ExplorePage = () => {
     }
     setExplorePosts(
       // ! don't display posts from accounts the user is following
-      allPosts.filter((post) => {
-        return post.user._id !== user._id;
+      allPosts?.filter((post) => {
+        return post?.user?._id !== user?._id;
       })
     );
   }, [allPosts]);
@@ -111,42 +112,106 @@ const ExplorePage = () => {
         <h1>No posts to display </h1>
       ) : (
         explorePosts
-          .slice(0)
+          ?.slice(0)
           .reverse()
           .map((post, index) => (
             <div className="explore-page__container">
               <div className="explore-page__container__header">
-                <div className="explore-page__container__header__photo">
-                  <Link to={`/profile/${post.user._id}`}>
-                    <Avatar
-                      alt={post.user.username}
-                      src="https://img.freepik.com/free-photo/pleasant-looking-serious-man-stands-profile-has-confident-expression-wears-casual-white-t-shirt_273609-16959.jpg?w=2000"
-                      sx={{ width: "3rem", height: "3rem" }}
-                    />
-                  </Link>
+                <div className="explore-page__container__header__left">
+                  <div className="explore-page__container__header__left__photo">
+                    <Link to={`/profile/${post?.user?._id}`}>
+                      <Avatar
+                        alt={post?.user?.username}
+                        src="https://img.freepik.com/free-photo/pleasant-looking-serious-man-stands-profile-has-confident-expression-wears-casual-white-t-shirt_273609-16959.jpg?w=2000"
+                        sx={{ width: "3rem", height: "3rem" }}
+                      />
+                    </Link>
+                  </div>
+                  <div className="explore-page__container__header__left__user">
+                    <Link to={`/profile/${post?.user?._id}`}>
+                      <Typography variant="h3" sx={{ fontSize: "2rem" }}>
+                        {post?.user?.username}
+                      </Typography>
+                    </Link>
+                  </div>
                 </div>
-                <div className="explore-page__container__header__user">
-                  <Link to={`/profile/${post.user._id}`}>
-                    <Typography variant="h3" sx={{ fontSize: "2rem" }}>
-                      {post.user.username}
-                    </Typography>
-                  </Link>
+                <div className="explore-page__container__header__right">
+                  {post?.user?.followers?.includes(
+                    JSON.parse(localStorage.getItem("user"))._id
+                  ) ? (
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      onClick={() => {
+                        followRequest(post?.user?._id, post?._id, allPosts);
+                      }}
+                      sx={[
+                        {
+                          "&:hover": {
+                            backgroundColor: "#000",
+                            color: "#fff",
+                          },
+                          mt: 3,
+                          mb: 2,
+                          color: "#000",
+                          backgroundColor: "#fff",
+                          borderColor: "#000",
+                          border: "2px solid #000",
+                          transition: "background-color 0.2s ease",
+                          height: "2em",
+                        },
+                      ]}
+                    >
+                      Unfollow
+                    </Button>
+                  ) : (
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      onClick={() => {
+                        followRequest(
+                          post?.user?._id,
+                          post?._id,
+                          allPosts,
+                          "follow"
+                        );
+                      }}
+                      sx={[
+                        {
+                          "&:hover": {
+                            backgroundColor: "#000",
+                            color: "#fff",
+                          },
+                          mt: 3,
+                          mb: 2,
+                          color: "#000",
+                          backgroundColor: "#fff",
+                          borderColor: "#000",
+                          border: "2px solid #000",
+                          transition: "background-color 0.2s ease",
+                          height: "2em",
+                        },
+                      ]}
+                    >
+                      Follow
+                    </Button>
+                  )}
                 </div>
               </div>
               <div className="explore-page__container__image">
-                <Link to={`/profile/${post.user._id}/${post._id}`}>
+                <Link to={`/profile/${post?.user?._id}/${post?._id}`}>
                   <img
-                    src={post.photo}
+                    src={post?.photo}
                     alt={post?.description || post?.title}
                   />
                 </Link>
               </div>
               <div className="explore-page__container__footer">
                 <div className="explore-page__container__footer__likes">
-                  {post.likes.includes(userInfo._id) ? (
+                  {post?.likes?.includes(userInfo?._id) ? (
                     <FavoriteIcon
                       onClick={() => {
-                        unlikeRequest(post._id);
+                        unlikeRequest(post?._id);
                       }}
                       sx={[
                         {
@@ -161,7 +226,7 @@ const ExplorePage = () => {
                   ) : (
                     <FavoriteBorderIcon
                       onClick={() => {
-                        likeRequest(post._id);
+                        likeRequest(post?._id);
                       }}
                       sx={[
                         {
@@ -177,16 +242,16 @@ const ExplorePage = () => {
                     variant="h6"
                     sx={{ fontSize: "1.2rem", marginLeft: "0.2em" }}
                   >
-                    {post.likes.length === 1
-                      ? `${post.likes.length} like`
-                      : `${post.likes.length} likes`}
+                    {post?.likes?.length === 1
+                      ? `${post?.likes?.length} like`
+                      : `${post?.likes?.length} likes`}
                   </Typography>
                 </div>
                 <Typography variant="h1" sx={{ fontSize: "1.7rem" }}>
-                  {post.title}
+                  {post?.title}
                 </Typography>
                 <Typography variant="h1" sx={{ fontSize: "1.4rem" }}>
-                  {post.description}
+                  {post?.description}
                 </Typography>
                 <FormControl
                   component="form"
@@ -200,7 +265,7 @@ const ExplorePage = () => {
                   }}
                   onSubmit={(e) => {
                     e.preventDefault();
-                    handleSubmit(post._id, e.target[0].value, allPosts);
+                    handleSubmit(post?._id, e.target[0].value, allPosts);
                     e.target[0].value = "";
                   }}
                 >
@@ -254,7 +319,7 @@ const ExplorePage = () => {
                   </Button>
                 </FormControl>
 
-                {editCommentMode && inputs.editCommentPostId === post._id ? (
+                {editCommentMode && inputs?.editCommentPostId === post?._id ? (
                   <FormControl
                     component="form"
                     variant="standard"
@@ -269,7 +334,7 @@ const ExplorePage = () => {
                       e.preventDefault();
                       editComment(post?._id, inputs, allPosts);
                       setEditCommentMode((prev) => !prev);
-                      setInputs({ ...inputs, editCommentPostId: post._id });
+                      setInputs({ ...inputs, editCommentPostId: post?._id });
                     }}
                   >
                     <div className="post__edit-comment-flex">
@@ -385,7 +450,7 @@ const ExplorePage = () => {
                                     ...inputs,
                                     editComment: comment?.text,
                                     editCommentId: comment?._id,
-                                    editCommentPostId: post._id,
+                                    editCommentPostId: post?._id,
                                   });
                                 }}
                               />
@@ -403,7 +468,7 @@ const ExplorePage = () => {
                                 onClick={() =>
                                   deleteComment(
                                     post?._id,
-                                    comment._id,
+                                    comment?._id,
                                     allPosts
                                   )
                                 }

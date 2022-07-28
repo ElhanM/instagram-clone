@@ -112,6 +112,45 @@ const AppProvider = ({ children }) => {
       console.log(error);
     }
   };
+  const followRequest = async (userId, postId, posts, url = "unfollow") => {
+    try {
+      const response = await axios.put(
+        `${authURL}/${url === "follow" ? "follow" : "unfollow"}`,
+        {
+          userId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      const updatedPosts = posts?.map((post) => {
+        if (post?._id === postId) {
+          return {
+            ...post,
+            user: {
+              ...post.user,
+              following:
+                url === "follow"
+                  ? response.data.followUser.following
+                  : response.data.unfollowUser.following,
+              followers:
+                url === "follow"
+                  ? response.data.followUser.followers
+                  : response.data.unfollowUser.followers,
+            },
+          };
+        } else {
+          return post;
+        }
+      });
+      updatePostsDispatch(updatedPosts);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     axiosGetPosts();
   }, []);
@@ -131,6 +170,7 @@ const AppProvider = ({ children }) => {
         handleSubmit,
         deleteComment,
         editComment,
+        followRequest,
       }}
     >
       {children}

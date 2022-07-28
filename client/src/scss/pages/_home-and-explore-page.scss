@@ -40,6 +40,21 @@
   }
 }
 
+.explore-page {
+  &__container__header {
+    @include flex-center;
+    justify-content: space-between;
+    margin: 0.35em 0;
+    &__left {
+      display: flex;
+      align-items: center;
+      &__photo {
+        margin-right: 0.5em;
+      }
+    }
+  }
+}
+
 .comments-flex {
   // ! make this a mixin after adding delete and edit to home and explore
   @include flex-center;
