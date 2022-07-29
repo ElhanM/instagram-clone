@@ -98,29 +98,46 @@ const ExplorePage = () => {
     if (!user) {
       history("/login");
     }
-    setExplorePosts(
-      // ! don't display posts from accounts the user is following
-      allPosts?.filter((post) => {
-        // if index je last index promjenim initial render
+    if (initialRender) {
+      setExplorePosts(
+        allPosts?.filter((post) => {
+          return (
+            // return post if post?.user?._id !== user?._id and if initial render is true make!post?.user?.followers?.includes(JSON.parse(localStorage.getItem("user"))._id) second condition
+            post?.user?._id !== JSON.parse(localStorage.getItem("user"))._id &&
+            (!initialRender ||
+              !post?.user?.followers?.includes(
+                JSON.parse(localStorage.getItem("user"))._id
+              ))
+          );
+        })
+      );
+    } else {
+      const tempAllPosts = allPosts?.filter((post) => {
         return (
           // return post if post?.user?._id !== user?._id and if initial render is true make!post?.user?.followers?.includes(JSON.parse(localStorage.getItem("user"))._id) second condition
-          post?.user?._id !== user?._id &&
+          post?.user?._id !== JSON.parse(localStorage.getItem("user"))._id &&
           (!initialRender ||
             !post?.user?.followers?.includes(
               JSON.parse(localStorage.getItem("user"))._id
             ))
         );
-      })
-    );
-
-    setTimeout(() => {}, 5000);
+      });
+      // if explorePosts does not contain post from tempHomePosts then remove it
+      const tempExplorePosts = tempAllPosts?.filter((post) => {
+        return explorePosts.find(
+          (explorePost) => post?._id === explorePost?._id
+        );
+      });
+      setExplorePosts(tempExplorePosts);
+      // setExplorePosts();
+    }
   }, [allPosts]);
   useEffect(() => {
-    console.log("initialRender", initialRender);
+    console.log("initialrender", initialRender);
     if (explorePosts.length > 0) {
       setInitialRender(false);
     }
-  }, [explorePosts]);
+  }, [explorePosts, initialRender]);
   return (
     <div className="explore-page">
       {loading ? (
