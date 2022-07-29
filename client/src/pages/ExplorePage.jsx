@@ -29,6 +29,7 @@ const ExplorePage = () => {
   const [explorePosts, setExplorePosts] = useState([]);
   const [addComment, setAddComment] = useState("");
   const [editCommentMode, setEditCommentMode] = useState(false);
+  const [initialRender, setInitialRender] = useState(true);
 
   const [inputs, setInputs] = useState({
     editComment: "",
@@ -100,10 +101,26 @@ const ExplorePage = () => {
     setExplorePosts(
       // ! don't display posts from accounts the user is following
       allPosts?.filter((post) => {
-        return post?.user?._id !== user?._id;
+        // if index je last index promjenim initial render
+        return (
+          // return post if post?.user?._id !== user?._id and if initial render is true make!post?.user?.followers?.includes(JSON.parse(localStorage.getItem("user"))._id) second condition
+          post?.user?._id !== user?._id &&
+          (!initialRender ||
+            !post?.user?.followers?.includes(
+              JSON.parse(localStorage.getItem("user"))._id
+            ))
+        );
       })
     );
+
+    setTimeout(() => {}, 5000);
   }, [allPosts]);
+  useEffect(() => {
+    console.log("initialRender", initialRender);
+    if (explorePosts.length > 0) {
+      setInitialRender(false);
+    }
+  }, [explorePosts]);
   return (
     <div className="explore-page">
       {loading ? (

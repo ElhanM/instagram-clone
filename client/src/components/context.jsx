@@ -127,7 +127,7 @@ const AppProvider = ({ children }) => {
         }
       );
       const updatedPosts = posts?.map((post) => {
-        if (post?._id === postId) {
+        if (post?.user?._id === userId) {
           return {
             ...post,
             user: {
