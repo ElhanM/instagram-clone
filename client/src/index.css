@@ -170,6 +170,7 @@ a :hover {
   max-height: 750px;
 }
 
+.home-page__container__header,
 .explore-page__container__header {
   display: -webkit-box;
   display: -webkit-flex;
@@ -189,6 +190,7 @@ a :hover {
           justify-content: space-between;
   margin: 0.35em 0;
 }
+.home-page__container__header__left,
 .explore-page__container__header__left {
   display: -webkit-box;
   display: -webkit-flex;
@@ -199,6 +201,7 @@ a :hover {
       -ms-flex-align: center;
           align-items: center;
 }
+.home-page__container__header__left__photo,
 .explore-page__container__header__left__photo {
   margin-right: 0.5em;
 }

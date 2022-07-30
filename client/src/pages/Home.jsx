@@ -24,10 +24,13 @@ const Home = () => {
     handleSubmit,
     deleteComment,
     editComment,
+    followRequest,
   } = useGlobalContext();
   const [homePosts, setHomePosts] = useState([]);
   const [addComment, setAddComment] = useState("");
   const [editCommentMode, setEditCommentMode] = useState(false);
+  const [initialRender, setInitialRender] = useState(true);
+
   const [inputs, setInputs] = useState({
     editComment: "",
     editCommentId: "",
@@ -40,6 +43,7 @@ const Home = () => {
     });
   };
   const history = useNavigate();
+
   const likeRequest = async (postId) => {
     try {
       const response = await axios.put(
@@ -95,17 +99,43 @@ const Home = () => {
     if (!user) {
       history("/login");
     }
-    console.log("allPosts", allPosts);
-    setHomePosts(
-      // ! only display posts from accounts the user is following
-      allPosts?.filter((post) => {
-        return post?.user?._id !== user?._id;
-      })
-    );
+    if (initialRender) {
+      setHomePosts(
+        allPosts?.filter((post) => {
+          return (
+            // return post if post?.user?._id !== user?._id and if initial render is true make !post?.user?.followers?.includes(JSON.parse(localStorage.getItem("user"))._id) second condition
+            post?.user?._id !== JSON.parse(localStorage.getItem("user"))._id &&
+            (!initialRender ||
+              post?.user?.followers?.includes(
+                JSON.parse(localStorage.getItem("user"))._id
+              ))
+          );
+        })
+      );
+    } else {
+      // fixing bug where posts from people the user was following showed up in explore page
+      const tempAllPosts = allPosts?.filter((post) => {
+        return (
+          post?.user?._id !== JSON.parse(localStorage.getItem("user"))._id &&
+          (!initialRender ||
+            post?.user?.followers?.includes(
+              JSON.parse(localStorage.getItem("user"))._id
+            ))
+        );
+      });
+      // if homePosts does not contain post from tempHomePosts then remove it
+      const temphomePosts = tempAllPosts?.filter((post) => {
+        return homePosts.find((explorePost) => post?._id === explorePost?._id);
+      });
+      setHomePosts(temphomePosts);
+    }
   }, [allPosts]);
   useEffect(() => {
-    console.log("homePosts", homePosts);
-  }, [homePosts]);
+    console.log("initialrender", initialRender);
+    if (homePosts.length > 0) {
+      setInitialRender(false);
+    }
+  }, [homePosts, initialRender]);
 
   return (
     <div className="home">
@@ -120,22 +150,86 @@ const Home = () => {
           .reverse()
           .map((post, index) => (
             <div className="home__container">
-              <div className="home__container__header">
-                <div className="home__container__header__photo">
-                  <Link to={`/profile/${post?.user?._id}`}>
-                    <Avatar
-                      alt={post?.user?.username}
-                      src="https://img.freepik.com/free-photo/pleasant-looking-serious-man-stands-profile-has-confident-expression-wears-casual-white-t-shirt_273609-16959.jpg?w=2000"
-                      sx={{ width: "3rem", height: "3rem" }}
-                    />
-                  </Link>
+              <div className="home-page__container__header">
+                <div className="home-page__container__header__left">
+                  <div className="home-page__container__header__left__photo">
+                    <Link to={`/profile/${post?.user?._id}`}>
+                      <Avatar
+                        alt={post?.user?.username}
+                        src="https://img.freepik.com/free-photo/pleasant-looking-serious-man-stands-profile-has-confident-expression-wears-casual-white-t-shirt_273609-16959.jpg?w=2000"
+                        sx={{ width: "3rem", height: "3rem" }}
+                      />
+                    </Link>
+                  </div>
+                  <div className="home-page__container__header__left__user">
+                    <Link to={`/profile/${post?.user?._id}`}>
+                      <Typography variant="h3" sx={{ fontSize: "2rem" }}>
+                        {post?.user?.username}
+                      </Typography>
+                    </Link>
+                  </div>
                 </div>
-                <div className="home__container__header__user">
-                  <Link to={`/profile/${post?.user?._id}`}>
-                    <Typography variant="h3" sx={{ fontSize: "2rem" }}>
-                      {post?.user?.username}
-                    </Typography>
-                  </Link>
+                <div className="home-page__container__header__right">
+                  {post?.user?.followers?.includes(
+                    JSON.parse(localStorage.getItem("user"))._id
+                  ) ? (
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      onClick={() => {
+                        followRequest(post?.user?._id, post?._id, allPosts);
+                      }}
+                      sx={[
+                        {
+                          "&:hover": {
+                            backgroundColor: "#000",
+                            color: "#fff",
+                          },
+                          mt: 3,
+                          mb: 2,
+                          color: "#000",
+                          backgroundColor: "#fff",
+                          borderColor: "#000",
+                          border: "2px solid #000",
+                          transition: "background-color 0.2s ease",
+                          height: "2em",
+                        },
+                      ]}
+                    >
+                      Unfollow
+                    </Button>
+                  ) : (
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      onClick={() => {
+                        followRequest(
+                          post?.user?._id,
+                          post?._id,
+                          allPosts,
+                          "follow"
+                        );
+                      }}
+                      sx={[
+                        {
+                          "&:hover": {
+                            backgroundColor: "#000",
+                            color: "#fff",
+                          },
+                          mt: 3,
+                          mb: 2,
+                          color: "#000",
+                          backgroundColor: "#fff",
+                          borderColor: "#000",
+                          border: "2px solid #000",
+                          transition: "background-color 0.2s ease",
+                          height: "2em",
+                        },
+                      ]}
+                    >
+                      Follow
+                    </Button>
+                  )}
                 </div>
               </div>
               <div className="home__container__image">
