@@ -4,7 +4,7 @@ const ErrorResponse = require("../utils/errorResponse");
 const getAllPosts = async (req, res, next) => {
   try {
     const posts = await Post.find({})
-      .populate("user", "_id username followers following")
+      .populate("user", "_id username followers following profilePhoto")
       .populate("comments.user", "_id username");
     res.status(200).json({ posts });
   } catch (error) {

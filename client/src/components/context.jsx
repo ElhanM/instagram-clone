@@ -4,7 +4,7 @@ import reducer from "./reducer";
 
 const AppContext = React.createContext();
 
-const initialState = { userInfo: null, allPosts: [], loading: true };
+const initialState = { userInfo: null, allPosts: [], loading: true,  };
 
 const baseURL = "http://localhost:5000";
 const postsURL = `${baseURL}/api/posts`;
@@ -171,6 +171,7 @@ const AppProvider = ({ children }) => {
         deleteComment,
         editComment,
         followRequest,
+        authURL
       }}
     >
       {children}

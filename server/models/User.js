@@ -31,6 +31,9 @@ const UserSchema = new mongoose.Schema(
     },
     followers: [{ type: ObjectId, ref: "User" }],
     following: [{ type: ObjectId, ref: "User" }],
+    profilePhoto: {
+      type: String,
+    },
   },
   {
     collection: "users",

@@ -11,22 +11,31 @@ import { useParams } from "react-router-dom";
 const Profile = () => {
   const { userId } = useParams();
   console.log(userId);
-  const URL = `http://localhost:5000/api/posts/user-posts/${userId}`;
-  const {
-    userDispatch,
-    userInfo,
-    allPosts,
-    loading,
-    updatePostsDispatch,
-    likeURL,
-    unlikeURL,
-    commentURL,
-    handleSubmit,
-  } = useGlobalContext();
+  const { userDispatch, allPosts, loading, authURL } = useGlobalContext();
   const history = useNavigate();
   const [posts, setPosts] = useState([]);
+  const [user, setUser] = useState([]);
+  const axiosGetUser = async () => {
+    try {
+      // dispatch({ type: "LOADING" });
+      const response = await axios(`${authURL}/${userId}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const {
+        data: { user },
+      } = response;
+      setUser(user);
+      // dispatch({ type: "GET_POSTS", payload: posts });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
+    axiosGetUser();
     userDispatch(user);
     setPosts(
       allPosts?.filter((post) => {
@@ -38,8 +47,8 @@ const Profile = () => {
     }
   }, [allPosts, userId]);
   useEffect(() => {
-    console.log(posts);
-  }, [posts]);
+    console.log("user", user);
+  }, [user]);
 
   return (
     <>
@@ -53,15 +62,18 @@ const Profile = () => {
             <div className="profile-container__header">
               <div className="profile-container__header__profile-photo">
                 <Avatar
-                  alt={posts[0]?.user?.username}
-                  src="https://img.freepik.com/free-photo/pleasant-looking-serious-man-stands-profile-has-confident-expression-wears-casual-white-t-shirt_273609-16959.jpg?w=2000"
+                  alt={user[0]?.username}
+                  src={
+                    posts[0]?.user?.profilePhoto ||
+                    "https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg"
+                  }
                   sx={{ width: "13rem", height: "13rem" }}
                 />
               </div>
               <div className="profile-container__header__user-info">
                 <div className="profile-container__header__user-info__name">
                   <Typography variant="h5" sx={{ fontSize: "2.6rem" }}>
-                    {posts[0]?.user?.username}
+                    {user[0]?.username}
                   </Typography>
                 </div>
                 <div className="profile-container__header__user-info__stats">

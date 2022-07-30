@@ -155,7 +155,10 @@ const ExplorePage = () => {
                     <Link to={`/profile/${post?.user?._id}`}>
                       <Avatar
                         alt={post?.user?.username}
-                        src="https://img.freepik.com/free-photo/pleasant-looking-serious-man-stands-profile-has-confident-expression-wears-casual-white-t-shirt_273609-16959.jpg?w=2000"
+                        src={
+                          post?.user?.profilePhoto ||
+                          "https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg"
+                        }
                         sx={{ width: "3rem", height: "3rem" }}
                       />
                     </Link>

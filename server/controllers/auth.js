@@ -2,11 +2,20 @@ const User = require("../models/User");
 const ErrorResponse = require("../utils/errorResponse");
 
 const register = async (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, profilePhoto } = req.body;
   try {
-    const user = await User.create({ username, email, password });
+    const user = await User.create({ username, email, password, profilePhoto });
     sendToken(user, 201, res);
     res.status(201).json({ msg: "User created successfully", user });
+  } catch (error) {
+    next(error);
+  }
+};
+const getUser = async (req, res, next) => {
+  const { userId } = req.params;
+  try {
+    const user = await User.find({ _id: userId });
+    res.status(201).json({ user });
   } catch (error) {
     next(error);
   }
@@ -101,4 +110,5 @@ module.exports = {
   resetPassword,
   followUser,
   unfollowUser,
+  getUser
 };

@@ -9,6 +9,7 @@ const {
   resetPassword,
   followUser,
   unfollowUser,
+  getUser
 } = require("../controllers/auth");
 
 router.route("/register").post(register);
@@ -17,5 +18,6 @@ router.route("/forgotpassword").post(forgotPassword);
 router.route("/resetpassword/:resetToken").put(resetPassword);
 router.route("/follow").put(protect, followUser);
 router.route("/unfollow").put(protect, unfollowUser);
+router.route("/:userId").get(getUser);
 
 module.exports = router;
