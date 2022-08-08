@@ -9,13 +9,17 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
 
-const CLOUDINARYURL =
-  "https://api.cloudinary.com/v1_1/instagram-clone-web-app/image/upload";
 const URL = "http://localhost:5000/api/posts";
 
 const CreatePost = () => {
   const history = useNavigate();
-  const { userDispatch, userInfo, updatePostsDispatch, allPosts } = useGlobalContext();
+  const {
+    userDispatch,
+    userInfo,
+    updatePostsDispatch,
+    allPosts,
+    cloudinaryRequest,
+  } = useGlobalContext();
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     userDispatch(user);
@@ -36,20 +40,6 @@ const CreatePost = () => {
     });
   };
 
-  const cloudinaryRequest = async () => {
-    try {
-      const data = new FormData();
-      data.append("file", image);
-      data.append("upload_preset", "instagram-clone");
-      data.append("cloud_name", "instagram-clone-web-app");
-
-      const response = await axios.post(CLOUDINARYURL, data);
-      setImageUrl(response.data.url);
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
   const postRequest = async () => {
     try {
       const response = await axios.post(
@@ -79,7 +69,7 @@ const CreatePost = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    cloudinaryRequest();
+    cloudinaryRequest(image, setImageUrl);
   };
 
   return (

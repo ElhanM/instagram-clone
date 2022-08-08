@@ -21,9 +21,6 @@ const Routing = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     userDispatch(user);
     console.log("app.jsx useEffect");
-    if (!user) {
-      history("/login");
-    }
   }, []);
   return (
     <Routes>

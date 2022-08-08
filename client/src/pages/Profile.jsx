@@ -64,7 +64,7 @@ const Profile = () => {
                 <Avatar
                   alt={user[0]?.username}
                   src={
-                    posts[0]?.user?.profilePhoto ||
+                    user[0]?.profilePhoto ||
                     "https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg"
                   }
                   sx={{ width: "13rem", height: "13rem" }}

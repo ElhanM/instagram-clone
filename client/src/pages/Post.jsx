@@ -37,7 +37,7 @@ const Post = () => {
     commentURL,
     handleSubmit,
     deleteComment,
-    editComment
+    editComment,
   } = useGlobalContext();
   const history = useNavigate();
   const { userId, postId } = useParams();
@@ -183,11 +183,18 @@ const Post = () => {
       console.log(error);
     }
   };
-  
+
   useEffect(() => {
     getPost();
   }, [allPosts]);
-
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    userDispatch(user);
+    console.log("app.jsx useEffect");
+    if (!user) {
+      history("/login");
+    }
+  }, []);
   return (
     <div>
       <Modal
@@ -517,7 +524,7 @@ const Post = () => {
                     }}
                     onSubmit={(e) => {
                       e.preventDefault();
-                      editComment(postId,inputs,allPosts);
+                      editComment(postId, inputs, allPosts);
                       setEditCommentMode((prev) => !prev);
                     }}
                   >

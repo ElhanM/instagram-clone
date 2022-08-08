@@ -4,7 +4,10 @@ import reducer from "./reducer";
 
 const AppContext = React.createContext();
 
-const initialState = { userInfo: null, allPosts: [], loading: true,  };
+const initialState = { userInfo: null, allPosts: [], loading: true };
+
+const CLOUDINARYURL =
+  "https://api.cloudinary.com/v1_1/instagram-clone-web-app/image/upload";
 
 const baseURL = "http://localhost:5000";
 const postsURL = `${baseURL}/api/posts`;
@@ -151,6 +154,20 @@ const AppProvider = ({ children }) => {
       console.log(error);
     }
   };
+  const cloudinaryRequest = async (image, setImageUrl) => {
+    try {
+      const data = new FormData();
+      data.append("file", image);
+      data.append("upload_preset", "instagram-clone");
+      data.append("cloud_name", "instagram-clone-web-app");
+
+      const response = await axios.post(CLOUDINARYURL, data);
+      setImageUrl(response.data.url);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     axiosGetPosts();
   }, []);
@@ -171,7 +188,8 @@ const AppProvider = ({ children }) => {
         deleteComment,
         editComment,
         followRequest,
-        authURL
+        authURL,
+        cloudinaryRequest,
       }}
     >
       {children}

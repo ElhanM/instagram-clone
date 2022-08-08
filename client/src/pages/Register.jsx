@@ -8,14 +8,18 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useGlobalContext } from "../components/context";
 
 const URL = "http://localhost:5000/api/auth/register";
 
 const Register = () => {
   const history = useNavigate();
+  const { cloudinaryRequest } = useGlobalContext();
+  const [image, setImage] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [inputs, setInputs] = useState({
     username: "",
     email: "",
@@ -31,7 +35,7 @@ const Register = () => {
     try {
       const response = await axios.post(
         URL,
-        { ...inputs },
+        { ...inputs, profilePhoto: imageUrl },
         {
           headers: {
             "Content-Type": "application/json",
@@ -46,10 +50,16 @@ const Register = () => {
       console.log(error.response.data.message);
     }
   };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    postRequest();
+    cloudinaryRequest(image, setImageUrl);
   };
+  useEffect(() => {
+    if (imageUrl) {
+      postRequest();
+    }
+  }, [imageUrl]);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -102,6 +112,33 @@ const Register = () => {
             autoComplete="new-password"
             value={inputs.password}
             onChange={handleChange}
+            sx={{
+              marginBottom: "1em",
+            }}
+          />
+          <label htmlFor="photo">Choose profile picture: (optional)</label>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="photo"
+            id="photo"
+            type="file"
+            autoComplete="off"
+            onChange={(e) => setImage(e.target.files[0])}
+            sx={[
+              {
+                "& label.Mui-focused": {
+                  color: "#000",
+                },
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#000",
+                  },
+                },
+                marginTop: "0.3em",
+              },
+            ]}
           />
           <Button
             type="submit"
