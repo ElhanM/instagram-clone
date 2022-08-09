@@ -20,12 +20,12 @@ a :hover {
 .profile {
   width: 100vw;
 }
-.profile-container {
+.profile__container {
   margin: 0 auto;
   width: 100vw;
   max-width: 1000px;
 }
-.profile-container__header {
+.profile__container__header {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -39,45 +39,72 @@ a :hover {
       -ms-flex-align: center;
           align-items: center;
 }
-.profile-container__header__profile-photo {
+.profile__container__header__profile-photo {
   margin-top: 2em;
   margin-right: 10em;
+  position: relative;
 }
-.profile-container__header__user-info__name {
+.profile__container__header__profile-photo__overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0);
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  color: rgba(255, 255, 255, 0);
+  font-weight: bold;
+}
+.profile__container__header__profile-photo__overlay:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: rgb(255, 255, 255);
+}
+.profile__container__header__profile-photo__overlay__text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
+.profile__container__header__user-info__name {
   font-size: 3rem;
   margin: 0.1em 0;
 }
 @media (max-width: 1056px) {
-  .profile-container__header {
+  .profile__container__header {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
     -webkit-flex-direction: column;
         -ms-flex-direction: column;
             flex-direction: column;
   }
-  .profile-container__header__profile-photo {
+  .profile__container__header__profile-photo {
     margin-top: 2em;
     margin-right: 0;
   }
 }
-.profile-container__hr {
+.profile__container__hr {
   border: 1px solid black;
   margin: 1rem auto;
   max-width: 80%;
 }
-.profile-container__posts {
+.profile__container__posts {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1em;
 }
-.profile-container__posts img {
+.profile__container__posts img {
   width: 318px;
   height: 318px;
   -o-object-fit: cover;
      object-fit: cover;
 }
 @media (max-width: 1056px) {
-  .profile-container__posts {
+  .profile__container__posts {
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -96,7 +123,7 @@ a :hover {
         -ms-flex-direction: column;
             flex-direction: column;
   }
-  .profile-container__posts img {
+  .profile__container__posts img {
     width: 70vw;
   }
 }

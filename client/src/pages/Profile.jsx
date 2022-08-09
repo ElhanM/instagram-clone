@@ -58,9 +58,9 @@ const Profile = () => {
         ) : posts === [] ? (
           <h1>No posts to display </h1>
         ) : (
-          <div className="profile-container">
-            <div className="profile-container__header">
-              <div className="profile-container__header__profile-photo">
+          <div className="profile__container">
+            <div className="profile__container__header">
+              <div className="profile__container__header__profile-photo">
                 <Avatar
                   alt={user[0]?.username}
                   src={
@@ -69,14 +69,22 @@ const Profile = () => {
                   }
                   sx={{ width: "13rem", height: "13rem" }}
                 />
+                {user[0]?._id ===
+                JSON.parse(localStorage.getItem("user"))._id ? (
+                  <div className="profile__container__header__profile-photo__overlay">
+                    <span className="profile__container__header__profile-photo__overlay__text">
+                      Change photo
+                    </span>
+                  </div>
+                ) : null}
               </div>
-              <div className="profile-container__header__user-info">
-                <div className="profile-container__header__user-info__name">
+              <div className="profile__container__header__user-info">
+                <div className="profile__container__header__user-info__name">
                   <Typography variant="h5" sx={{ fontSize: "2.6rem" }}>
                     {user[0]?.username}
                   </Typography>
                 </div>
-                <div className="profile-container__header__user-info__stats">
+                <div className="profile__container__header__user-info__stats">
                   <Typography variant="p" sx={{ marginRight: "0.8em" }}>
                     {posts?.length} posts
                   </Typography>
@@ -89,8 +97,8 @@ const Profile = () => {
                 </div>
               </div>
             </div>
-            <div className="profile-container__hr"></div>
-            <div className="profile-container__posts">
+            <div className="profile__container__hr"></div>
+            <div className="profile__container__posts">
               {posts
                 ?.slice(0)
                 .reverse()

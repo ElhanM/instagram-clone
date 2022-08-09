@@ -1,6 +1,6 @@
 .profile {
   width: 100vw;
-  &-container {
+  &__container {
     @include home-container-width;
 
     &__header {
@@ -8,6 +8,31 @@
       &__profile-photo {
         margin-top: 2em;
         margin-right: 10em;
+        position: relative;
+
+        &__overlay {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: rgb(0, 0, 0, 0);
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          transition: all 0.3s ease;
+          color: rgba(255, 255, 255, 0);
+          font-weight: bold;
+          &:hover {
+            background-color: rgb(0, 0, 0, 0.5);
+            color: rgba(255, 255, 255);
+          }
+          &__text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
+        }
       }
       &__user-info__name {
         font-size: 3rem;
