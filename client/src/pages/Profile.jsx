@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { TextField, Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -25,10 +25,20 @@ const style = {
 
 const Profile = () => {
   const { userId } = useParams();
-  const { userDispatch, allPosts, loading, authURL } = useGlobalContext();
+  const {
+    userDispatch,
+    allPosts,
+    loading,
+    authURL,
+    userInfo,
+    updatePostsDispatch,
+    cloudinaryRequest,
+  } = useGlobalContext();
   const history = useNavigate();
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState([]);
+  const [image, setImage] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [showChangePhoto, setShowChangePhoto] = useState(false);
   const handleOpen = () => setShowChangePhoto(true);
   const handleClose = () => setShowChangePhoto(false);
@@ -49,7 +59,39 @@ const Profile = () => {
       console.log(error);
     }
   };
-
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    cloudinaryRequest(image, setImageUrl);
+  };
+  const changeProfilePictureRequest = async () => {
+    try {
+      const response = await axios.patch(
+        authURL,
+        { profilePhoto: imageUrl },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      const tempPosts = [...allPosts, response.data.changeProfilePhoto];
+      updatePostsDispatch(tempPosts);
+      userDispatch(response.data.changeProfilePhoto);
+      localStorage.setItem(
+        "user",
+        JSON.stringify(response.data.changeProfilePhoto)
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    if (imageUrl) {
+      changeProfilePictureRequest();
+    }
+    handleClose();
+  }, [imageUrl]);
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     axiosGetUser();
@@ -142,12 +184,59 @@ const Profile = () => {
           aria-describedbyF="modal-modal-description"
         >
           <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Text in a modal
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </Typography>
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              noValidate
+              sx={{ mt: 1 }}
+            >
+              <label htmlFor="photo">Choose profile picture: (optional)</label>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="photo"
+                id="photo"
+                type="file"
+                autoComplete="off"
+                onChange={(e) => setImage(e.target.files[0])}
+                sx={[
+                  {
+                    "& label.Mui-focused": {
+                      color: "#000",
+                    },
+                    "& .MuiOutlinedInput-root": {
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#000",
+                      },
+                    },
+                    marginTop: "0.3em",
+                  },
+                ]}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={[
+                  {
+                    "&:hover": {
+                      backgroundColor: "#000",
+                      color: "#fff",
+                    },
+                    mt: 3,
+                    mb: 2,
+                    color: "#000",
+                    backgroundColor: "#fff",
+                    borderColor: "#000",
+                    border: "2px solid #000",
+                    transition: "background-color 0.2s ease",
+                  },
+                ]}
+              >
+                Save
+              </Button>
+            </Box>
           </Box>
         </Modal>
       </div>
