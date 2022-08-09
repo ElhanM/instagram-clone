@@ -9,15 +9,17 @@ const {
   resetPassword,
   followUser,
   unfollowUser,
-  getUser
+  getUser,
+  changeProfilePhoto,
 } = require("../controllers/auth");
 
+router.route("/").patch(protect, changeProfilePhoto);
 router.route("/register").post(register);
 router.route("/login").post(login);
 router.route("/forgotpassword").post(forgotPassword);
 router.route("/resetpassword/:resetToken").put(resetPassword);
 router.route("/follow").put(protect, followUser);
 router.route("/unfollow").put(protect, unfollowUser);
-router.route("/:userId").get(getUser);
+router.route("/:userId").get(getUser).patch(protect, changeProfilePhoto);
 
 module.exports = router;

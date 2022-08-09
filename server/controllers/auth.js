@@ -103,6 +103,22 @@ const unfollowUser = async (req, res, next) => {
   }
 };
 
+const changeProfilePhoto = async (req, res, next) => {
+  const { profilePhoto } = req.body;
+  try {
+    const changeProfilePhoto = await User.findOneAndUpdate(
+      { _id: req.user._id },
+      { profilePhoto },
+      { new: true }
+    );
+    res
+      .status(201)
+      .json({ msg: "Profile photo updated successfully", changeProfilePhoto });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -110,5 +126,6 @@ module.exports = {
   resetPassword,
   followUser,
   unfollowUser,
-  getUser
+  getUser,
+  changeProfilePhoto
 };
