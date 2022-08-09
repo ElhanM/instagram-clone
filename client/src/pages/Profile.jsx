@@ -7,14 +7,31 @@ import axios from "axios";
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 const Profile = () => {
   const { userId } = useParams();
-  console.log(userId);
   const { userDispatch, allPosts, loading, authURL } = useGlobalContext();
   const history = useNavigate();
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState([]);
+  const [showChangePhoto, setShowChangePhoto] = useState(false);
+  const handleOpen = () => setShowChangePhoto(true);
+  const handleClose = () => setShowChangePhoto(false);
   const axiosGetUser = async () => {
     try {
       // dispatch({ type: "LOADING" });
@@ -46,9 +63,6 @@ const Profile = () => {
       history("/login");
     }
   }, [allPosts, userId]);
-  useEffect(() => {
-    console.log("user", user);
-  }, [user]);
 
   return (
     <>
@@ -71,7 +85,13 @@ const Profile = () => {
                 />
                 {user[0]?._id ===
                 JSON.parse(localStorage.getItem("user"))._id ? (
-                  <div className="profile__container__header__profile-photo__overlay">
+                  <div
+                    className="profile__container__header__profile-photo__overlay"
+                    onClick={() => {
+                      console.log("showChangePhoto", showChangePhoto);
+                      handleOpen();
+                    }}
+                  >
                     <span className="profile__container__header__profile-photo__overlay__text">
                       Change photo
                     </span>
@@ -113,6 +133,23 @@ const Profile = () => {
             </div>
           </div>
         )}
+      </div>
+      <div>
+        <Modal
+          open={showChangePhoto}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedbyF="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Text in a modal
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            </Typography>
+          </Box>
+        </Modal>
       </div>
       <Outlet />
     </>

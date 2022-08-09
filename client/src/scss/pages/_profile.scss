@@ -25,12 +25,16 @@
           &:hover {
             background-color: rgb(0, 0, 0, 0.5);
             color: rgba(255, 255, 255);
+            cursor: pointer;
           }
           &__text {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            &:hover {
+              cursor: pointer;
+            }
           }
         }
       }

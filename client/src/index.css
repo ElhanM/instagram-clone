@@ -62,6 +62,7 @@ a :hover {
 .profile__container__header__profile-photo__overlay:hover {
   background-color: rgba(0, 0, 0, 0.5);
   color: rgb(255, 255, 255);
+  cursor: pointer;
 }
 .profile__container__header__profile-photo__overlay__text {
   position: absolute;
@@ -69,6 +70,9 @@ a :hover {
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
+}
+.profile__container__header__profile-photo__overlay__text:hover {
+  cursor: pointer;
 }
 .profile__container__header__user-info__name {
   font-size: 3rem;
