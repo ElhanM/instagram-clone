@@ -23,6 +23,7 @@ const style = {
   border: "2px solid #000",
   boxShadow: 24,
   overflow: "auto",
+  maxHeight: "90vh",
 };
 
 const Post = () => {

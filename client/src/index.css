@@ -303,6 +303,7 @@ a :hover {
 @media screen and (max-width: 1200px) {
   .post__image img {
     width: 90vw;
+    height: 78vh;
   }
 }
 @media screen and (max-height: 600px) {
@@ -394,6 +395,10 @@ a :hover {
   -webkit-justify-content: space-between;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  overflow: scroll;
+}
+.comments-flex-post:last-child {
+  padding-bottom: 0.8em;
 }
 .comments-flex-post__item-left {
   margin: 0 0.5em;

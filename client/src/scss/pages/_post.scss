@@ -17,6 +17,7 @@
       margin-bottom: -0.3em;
       @media screen and (max-width: 1200px) {
         width: 90vw;
+        height: 78vh;
       }
       @media screen and (max-height: 600px) {
         width: 100%;
@@ -47,8 +48,8 @@
         }
       }
     }
-    &__stats{
-      &__likes{
+    &__stats {
+      &__likes {
         @include flex-center;
         justify-content: flex-start;
       }
@@ -60,6 +61,12 @@
   // ! make this a mixin after adding delete and edit to home and explore
   @include flex-center;
   justify-content: space-between;
+  // add overflow
+  overflow: scroll;
+
+  &:last-child {
+    padding-bottom: 0.8em;
+  }
   &__item-left {
     margin: 0 0.5em;
   }

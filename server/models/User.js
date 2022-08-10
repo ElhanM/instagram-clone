@@ -9,6 +9,8 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: [true, "Username is required"],
       unique: [true, "Duplicate username"],
+      minlength: [1, "Username must be at least 1 character long"],
+      maxlength: [10, "Username must be at most 10 characters"],
       match: [
         /^[a-z0-9-_.]+$/,
         "Username can only contain lowercase letters, numbers, dash, underscore and dot, and can not contain spaces",
