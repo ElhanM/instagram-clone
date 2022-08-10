@@ -655,6 +655,23 @@ const Post = () => {
                                 }
                               />
                             </>
+                          ) : JSON.parse(localStorage.getItem("user"))._id ===
+                            userId ? (
+                            <DeleteIcon
+                              sx={[
+                                {
+                                  "&:hover": {
+                                    cursor: "pointer",
+                                    scale: "1.2",
+                                  },
+                                  fontSize: "1.9rem",
+                                  color: "red",
+                                },
+                              ]}
+                              onClick={() =>
+                                deleteComment(postId, comment._id, allPosts)
+                              }
+                            />
                           ) : null}
                         </div>
                       </div>
