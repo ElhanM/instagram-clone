@@ -117,7 +117,6 @@ const Register = () => {
           <label htmlFor="photo">Choose profile picture: (optional)</label>
           <TextField
             margin="normal"
-            required
             fullWidth
             name="photo"
             id="photo"
