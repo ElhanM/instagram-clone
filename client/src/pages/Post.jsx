@@ -276,7 +276,7 @@ const Post = () => {
               </div>
 
               <div className="post__info__stats">
-                <div className="home__container__footer__likes">
+                <div className="post__info__stats__likes">
                   {post?.likes?.includes(
                     JSON.parse(localStorage.getItem("user"))._id
                   ) ? (

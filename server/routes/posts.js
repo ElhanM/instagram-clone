@@ -27,7 +27,7 @@ router
   .get(getPost)
   .patch(protect, editPost)
   .delete(protect, deletePost)
-  .put(protect, editComment);
+router.route("/post/:postId").put(protect, editComment);
 router.route("/like").put(protect, likePost);
 router.route("/unlike").put(protect, unlikePost);
 router.route("/add/comment").put(protect, comment);

@@ -47,6 +47,12 @@
         }
       }
     }
+    &__stats{
+      &__likes{
+        @include flex-center;
+        justify-content: flex-start;
+      }
+    }
   }
 }
 

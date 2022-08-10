@@ -2,11 +2,8 @@ import { Button, FormControl, TextField, Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
-import axios from "axios";
-import { useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
@@ -22,14 +19,8 @@ const ShowPosts = ({
   handleChange,
 }) => {
   const {
-    userDispatch,
     userInfo,
     allPosts,
-    loading,
-    updatePostsDispatch,
-    likeURL,
-    unlikeURL,
-    commentURL,
     handleSubmit,
     deleteComment,
     editComment,

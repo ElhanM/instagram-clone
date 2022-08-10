@@ -95,7 +95,7 @@ const AppProvider = ({ children }) => {
   const editComment = async (postId, inputs, posts) => {
     try {
       const response = await axios.put(
-        `${postsURL}/${postId}`,
+        `${postsURL}/post/${postId}`,
         {
           commentId: inputs.editCommentId,
           commentText: inputs.editComment,
