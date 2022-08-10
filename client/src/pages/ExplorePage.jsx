@@ -4,6 +4,7 @@ import { useGlobalContext } from "../components/context";
 import axios from "axios";
 import { useState } from "react";
 import Posts from "../components/ShowPosts";
+import { Typography } from "@mui/material";
 
 const ExplorePage = () => {
   const {
@@ -154,6 +155,24 @@ const ExplorePage = () => {
             />
           ))
       )}
+
+      <Typography
+        variant="h6"
+        noWrap
+        component="a"
+        sx={{
+          mr: 2,
+          display: "flex",
+          fontFamily: "monospace",
+          fontWeight: 700,
+          color: "inherit",
+          textDecoration: "none",
+          margin: "1em 0",
+          justifyContent: "center",
+        }}
+      >
+        To find more posts navigate to the explore page using the navbar
+      </Typography>
     </div>
   );
 };
