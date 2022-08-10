@@ -165,7 +165,9 @@ const Navbar = () => {
                 textDecoration: "none",
               }}
             >
-              INSTAGRAM
+              <Link to="/" onClick={() => setValue()} className="navbar-link">
+                INSTAGRAM
+              </Link>
             </Typography>
             <Tabs
               sx={{ ml: "auto", display: { xs: "none", md: "flex" } }}
