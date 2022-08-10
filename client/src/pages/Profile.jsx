@@ -151,10 +151,10 @@ const Profile = () => {
                     {posts?.length} posts
                   </Typography>
                   <Typography variant="p" sx={{ marginRight: "0.8em" }}>
-                    10 followers
+                    {user[0]?.followers?.length} followers
                   </Typography>
                   <Typography variant="p" sx={{ marginRight: "0.8em" }}>
-                    12 following
+                    {user[0]?.following?.length} following
                   </Typography>
                 </div>
               </div>

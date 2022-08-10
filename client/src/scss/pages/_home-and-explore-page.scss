@@ -1,5 +1,4 @@
-.home,
-.explore-page {
+.main-page {
   width: 100vw;
   padding-top: 2em;
   a {
@@ -40,8 +39,7 @@
   }
 }
 
-.home-page,
-.explore-page {
+.main-page {
   &__container__header {
     @include flex-center;
     justify-content: space-between;
@@ -60,8 +58,6 @@
   // ! make this a mixin after adding delete and edit to home and explore
   @include flex-center;
   justify-content: space-between;
-  // &__item-left {
-  // }
   &__item-right {
     @include flex-center;
   }

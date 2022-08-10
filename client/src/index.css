@@ -132,18 +132,15 @@ a :hover {
   }
 }
 
-.home,
-.explore-page {
+.main-page {
   width: 100vw;
   padding-top: 2em;
 }
-.home a,
-.explore-page a {
+.main-page a {
   text-decoration: none;
   color: #000;
 }
-.home__container,
-.explore-page__container {
+.main-page__container {
   margin: 0 auto;
   width: 100vw;
   max-width: 1000px;
@@ -152,8 +149,7 @@ a :hover {
   border-radius: 0.5em;
   margin-bottom: 1em;
 }
-.home__container__header,
-.explore-page__container__header {
+.main-page__container__header {
   margin: 1em 0;
   display: -webkit-box;
   display: -webkit-flex;
@@ -165,16 +161,13 @@ a :hover {
           align-items: center;
   padding: 0 1em;
 }
-.home__container__header__photo,
-.explore-page__container__header__photo {
+.main-page__container__header__photo {
   margin-right: 0.5em;
 }
-.home__container__footer,
-.explore-page__container__footer {
+.main-page__container__footer {
   padding: 0.5em 1em;
 }
-.home__container__footer__likes,
-.explore-page__container__footer__likes {
+.main-page__container__footer__likes {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -192,8 +185,7 @@ a :hover {
       -ms-flex-pack: start;
           justify-content: flex-start;
 }
-.home__container__image img,
-.explore-page__container__image img {
+.main-page__container__image img {
   width: 100vw;
   max-width: 600px;
   -o-object-fit: cover;
@@ -201,8 +193,7 @@ a :hover {
   max-height: 750px;
 }
 
-.home-page__container__header,
-.explore-page__container__header {
+.main-page__container__header {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -221,8 +212,7 @@ a :hover {
           justify-content: space-between;
   margin: 0.35em 0;
 }
-.home-page__container__header__left,
-.explore-page__container__header__left {
+.main-page__container__header__left {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -232,8 +222,7 @@ a :hover {
       -ms-flex-align: center;
           align-items: center;
 }
-.home-page__container__header__left__photo,
-.explore-page__container__header__left__photo {
+.main-page__container__header__left__photo {
   margin-right: 0.5em;
 }
 
@@ -283,6 +272,10 @@ a :hover {
     -webkit-flex-direction: column;
         -ms-flex-direction: column;
             flex-direction: column;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
   }
 }
 .post__edit-comment-flex {
@@ -305,6 +298,7 @@ a :hover {
   max-height: 90vh;
   -o-object-fit: cover;
      object-fit: cover;
+  margin-bottom: -0.3em;
 }
 @media screen and (max-width: 1200px) {
   .post__image img {
@@ -322,6 +316,11 @@ a :hover {
 @media screen and (max-height: 600px) {
   .post__info {
     width: 45%;
+  }
+}
+@media screen and (max-width: 1200px) {
+  .post__info {
+    width: 70vw;
   }
 }
 .post__info__user {

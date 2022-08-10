@@ -3,6 +3,7 @@
 
   @media screen and (max-width: 1200px) {
     flex-direction: column;
+    align-items: center;
   }
   &__edit-comment-flex {
     @include flex-center;
@@ -13,6 +14,7 @@
       height: 47vw;
       max-height: 90vh;
       object-fit: cover;
+      margin-bottom: -0.3em;
       @media screen and (max-width: 1200px) {
         width: 90vw;
       }
@@ -26,6 +28,9 @@
     width: 30vw;
     @media screen and (max-height: 600px) {
       width: 45%;
+    }
+    @media screen and (max-width: 1200px) {
+      width: 70vw;
     }
     &__user {
       @include flex-center;

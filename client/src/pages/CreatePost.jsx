@@ -17,7 +17,7 @@ const CreatePost = () => {
     updatePostsDispatch,
     allPosts,
     cloudinaryRequest,
-    postsURL
+    postsURL,
   } = useGlobalContext();
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -88,7 +88,6 @@ const CreatePost = () => {
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
-            required
             fullWidth
             name="title"
             label="Title"
@@ -112,7 +111,6 @@ const CreatePost = () => {
           />
           <TextField
             margin="normal"
-            required
             fullWidth
             name="description"
             label="Description"

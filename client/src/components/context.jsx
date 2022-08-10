@@ -9,8 +9,8 @@ const initialState = { userInfo: null, allPosts: [], loading: true };
 const CLOUDINARYURL =
   "https://api.cloudinary.com/v1_1/instagram-clone-web-app/image/upload";
 
-// const baseURL = "http://localhost:5000";
-const baseURL = "https://instagram-clone-by-elco.herokuapp.com";
+const baseURL = "http://localhost:5000";
+// const baseURL = "https://instagram-clone-by-elco.herokuapp.com";
 const postsURL = `${baseURL}/api/posts`;
 const authURL = `${baseURL}/api/auth`;
 
@@ -183,19 +183,22 @@ const AppProvider = ({ children }) => {
     <AppContext.Provider
       value={{
         ...state,
-        userDispatch,
-        updatePostsDispatch,
+        baseURL,
+        postsURL,
+        authURL,
         likeURL,
         unlikeURL,
         commentURL,
+        loginURL,
+        registerURL,
+        postsURL,
+        userDispatch,
+        updatePostsDispatch,
         handleSubmit,
         deleteComment,
         editComment,
         followRequest,
-        authURL,
         cloudinaryRequest,
-        loginURL,
-        registerURL,
       }}
     >
       {children}
