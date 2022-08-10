@@ -175,7 +175,7 @@ const ExplorePage = () => {
           wordWrap: "break-word",
         }}
       >
-        To find more posts navigate to the explore page using the navbar
+        To find more posts navigate to the home page using the navbar
       </Typography>
     </div>
   );
