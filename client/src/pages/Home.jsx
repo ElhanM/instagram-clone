@@ -167,8 +167,12 @@ const Home = () => {
           fontWeight: 700,
           color: "inherit",
           textDecoration: "none",
-          margin: "1em 0",
+          margin: "1em auto",
+          padding: "0 1em",
           justifyContent: "center",
+          // enable text wrap
+          whiteSpace: "normal",
+          wordWrap: "break-word",
         }}
       >
         To find more posts navigate to the explore page using the navbar
