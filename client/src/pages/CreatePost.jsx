@@ -9,8 +9,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
 
-const URL = "http://localhost:5000/api/posts";
-
 const CreatePost = () => {
   const history = useNavigate();
   const {
@@ -19,6 +17,7 @@ const CreatePost = () => {
     updatePostsDispatch,
     allPosts,
     cloudinaryRequest,
+    postsURL
   } = useGlobalContext();
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -43,7 +42,7 @@ const CreatePost = () => {
   const postRequest = async () => {
     try {
       const response = await axios.post(
-        URL,
+        postsURL,
         { ...inputs, photo: imageUrl },
         {
           headers: {

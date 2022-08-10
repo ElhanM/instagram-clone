@@ -38,6 +38,7 @@ const Post = () => {
     handleSubmit,
     deleteComment,
     editComment,
+    postsURL,
   } = useGlobalContext();
   const history = useNavigate();
   const { userId, postId } = useParams();
@@ -65,14 +66,11 @@ const Post = () => {
   };
   const getPost = async () => {
     try {
-      const response = await axios(
-        `http://localhost:5000/api/posts/${postId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios(`${postsURL}/${postId}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       setPost(response.data.post);
       setInputs({
         ...inputs,
@@ -134,15 +132,12 @@ const Post = () => {
   };
   const deletePost = async () => {
     try {
-      const response = await axios.delete(
-        `http://localhost:5000/api/posts/${postId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-          },
-        }
-      );
+      const response = await axios.delete(`${postsURL}/${postId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      });
       const updatedPosts = allPosts?.map((post) => {
         if (post?._id === postId) {
           return;
@@ -159,7 +154,7 @@ const Post = () => {
   const editPost = async () => {
     try {
       const response = await axios.patch(
-        `http://localhost:5000/api/posts/${postId}`,
+        `${postsURL}/${postId}`,
         {
           title: inputs.title,
           description: inputs.description,

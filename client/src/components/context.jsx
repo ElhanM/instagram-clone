@@ -17,6 +17,9 @@ const likeURL = `${postsURL}/like`;
 const unlikeURL = `${postsURL}/unlike`;
 const commentURL = `${postsURL}/add/comment`;
 
+const loginURL = `${authURL}/login`;
+const registerURL = `${authURL}/register`;
+
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const userDispatch = (userData) => {
@@ -190,6 +193,8 @@ const AppProvider = ({ children }) => {
         followRequest,
         authURL,
         cloudinaryRequest,
+        loginURL,
+        registerURL,
       }}
     >
       {children}

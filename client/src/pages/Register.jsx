@@ -13,11 +13,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
 
-const URL = "http://localhost:5000/api/auth/register";
-
 const Register = () => {
   const history = useNavigate();
-  const { cloudinaryRequest } = useGlobalContext();
+  const { cloudinaryRequest, registerURL } = useGlobalContext();
   const [image, setImage] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [inputs, setInputs] = useState({
@@ -34,7 +32,7 @@ const Register = () => {
   const postRequest = async () => {
     try {
       const response = await axios.post(
-        URL,
+        registerURL,
         { ...inputs, profilePhoto: imageUrl },
         {
           headers: {

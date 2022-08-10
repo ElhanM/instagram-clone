@@ -14,10 +14,8 @@ import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
 import { useEffect } from "react";
 
-const URL = "http://localhost:5000/api/auth/login";
-
 const Login = () => {
-  const { userDispatch } = useGlobalContext();
+  const { userDispatch, loginURL } = useGlobalContext();
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     userDispatch(user);
@@ -36,7 +34,7 @@ const Login = () => {
   const postRequest = async () => {
     try {
       const response = await axios.post(
-        URL,
+        loginURL,
         { ...inputs },
         {
           headers: {
