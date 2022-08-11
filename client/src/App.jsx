@@ -21,6 +21,10 @@ const Routing = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     userDispatch(user);
     console.log("app.jsx useEffect");
+    console.log(
+      "process.env.REACT_APP_LOCAL_URL",
+      process.env.REACT_APP_LOCAL_URL
+    );
   }, []);
   return (
     <Routes>
