@@ -147,7 +147,7 @@ const editPost = async (req, res, next) => {
     const post = await Post.findOneAndUpdate({ _id: postId }, req.body, {
       new: true,
       runValidators: true,
-    });
+    }).populate("user", "username");
     res.status(200).json({ post });
   } catch (error) {
     res.status(404).json({ msg: `No post with id : ${postId}`, status: 404 });
