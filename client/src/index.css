@@ -17,6 +17,42 @@ a :hover {
   cursor: pointer;
 }
 
+.navbar-modal {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: start;
+  -webkit-align-items: flex-start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+}
+.navbar-modal a {
+  height: 2em;
+  width: 100%;
+  padding: 0.5em 1em;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.navbar-modal a:hover {
+  background-color: #f0f0f0;
+}
+
 .profile {
   width: 100vw;
 }
@@ -148,6 +184,13 @@ a :hover {
   border: 1px solid #dbdbdb;
   border-radius: 0.5em;
   margin-bottom: 1em;
+}
+@media (max-width: 600px) {
+  .main-page__container {
+    border: none;
+    border-top: 1px solid #dbdbdb;
+    border-bottom: 1px solid #dbdbdb;
+  }
 }
 .main-page__container__header {
   margin: 1em 0;

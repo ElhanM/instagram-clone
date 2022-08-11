@@ -9,6 +9,11 @@
   &__container {
     @include home-container-width;
     max-width: 600px;
+    @media (max-width: 600px) {
+      border: none;
+      border-top: 1px solid #dbdbdb;
+      border-bottom: 1px solid #dbdbdb;
+    }
     border: 1px solid #dbdbdb;
     border-radius: 0.5em;
     margin-bottom: 1em;

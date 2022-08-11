@@ -3,3 +3,21 @@
   color: inherit;
   cursor: pointer;
 }
+
+.navbar-modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  a {
+    height: 2em;
+    width: 100%;
+    padding: 0.5em 1em;
+    display: flex;
+    align-items: center;
+    &:hover {
+      background-color: #f0f0f0;
+    }
+  }
+}

@@ -104,46 +104,31 @@ const Navbar = () => {
                   display: { xs: "block", md: "none" },
                 }}
               >
-                <MenuItem
-                  onClick={handleCloseNavMenu}
-                  sx={[
-                    {
-                      "&:hover": {
-                        backgroundColor: "#f0f0f0",
-                      },
-                      transition: "background-color 0.2s ease",
-                    },
-                  ]}
-                >
+                <div className="navbar-modal">
                   <NavLink
                     to="/create-post"
                     textAlign="center"
                     className="navbar-link"
-                    onClick={() => setValue(0)}
+                    onClick={() => {
+                      setValue(0);
+                      handleCloseNavMenu();
+                    }}
                   >
                     Create Post
                   </NavLink>
-                </MenuItem>
-                <MenuItem
-                  onClick={handleCloseNavMenu}
-                  sx={[
-                    {
-                      "&:hover": {
-                        backgroundColor: "#f0f0f0",
-                      },
-                      transition: "background-color 0.2s ease",
-                    },
-                  ]}
-                >
+
                   <NavLink
                     to="/explore"
                     textAlign="center"
                     className="navbar-link"
-                    onClick={() => setValue(1)}
+                    onClick={() => {
+                      setValue(1);
+                      handleCloseNavMenu();
+                    }}
                   >
                     Explore
                   </NavLink>
-                </MenuItem>
+                </div>
               </Menu>
             </Box>
             <InstagramIcon
@@ -221,77 +206,45 @@ const Navbar = () => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                <MenuItem
-                  onClick={handleCloseUserMenu}
-                  sx={[
-                    {
-                      "&:hover": {
-                        backgroundColor: "#f0f0f0",
-                      },
-                      transition: "background-color 0.2s ease",
-                    },
-                  ]}
-                >
+                <div className="navbar-modal">
                   <NavLink
                     to={`/profile/${
                       JSON.parse(localStorage.getItem("user"))._id
                     }`}
                     textAlign="center"
                     className="navbar-link"
-                    onClick={() => setValue()}
+                    onClick={() => {
+                      setValue();
+                      handleCloseUserMenu();
+                    }}
                   >
                     Profile
                   </NavLink>
-                </MenuItem>
-                <MenuItem
-                  onClick={handleCloseUserMenu}
-                  sx={[
-                    {
-                      "&:hover": {
-                        backgroundColor: "#f0f0f0",
-                      },
-                      transition: "background-color 0.2s ease",
-                    },
-                  ]}
-                >
                   <NavLink
                     to="/login"
                     textAlign="center"
                     className="navbar-link"
-                    onClick={() => setValue()}
+                    onClick={() => {
+                      setValue();
+                      handleCloseUserMenu();
+                    }}
                   >
                     Switch Account
                   </NavLink>
-                </MenuItem>
-                <MenuItem
-                  onClick={handleCloseUserMenu}
-                  sx={[
-                    {
-                      "&:hover": {
-                        backgroundColor: "#f0f0f0",
-                      },
-                      transition: "background-color 0.2s ease",
-                    },
-                  ]}
-                >
-                  <Typography
-                    textAlign="center"
+                  <Link
+                    to="/login"
                     onClick={() => {
-                      // remove authToken and user from localStorage
+                      setValue();
+                      handleCloseUserMenu();
                       localStorage.removeItem("authToken");
                       localStorage.removeItem("user");
                       userDispatch(null);
                     }}
+                    className="navbar-link"
                   >
-                    <Link
-                      to="/login"
-                      onClick={() => setValue()}
-                      className="navbar-link"
-                    >
-                      Log out
-                    </Link>
-                  </Typography>
-                </MenuItem>
+                    Log out
+                  </Link>
+                </div>
               </Menu>
             </Box>
           </Toolbar>
