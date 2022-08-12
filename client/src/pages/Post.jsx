@@ -22,8 +22,8 @@ const style = {
   bgcolor: "#fafafa",
   border: "2px solid #000",
   boxShadow: 24,
-  overflow: "auto",
   maxHeight: "90vh",
+  overflow: "auto",
 };
 
 const Post = () => {
@@ -48,6 +48,7 @@ const Post = () => {
   const [post, setPost] = useState({});
   const [editPostMode, setEditPostMode] = useState(false);
   const [editCommentMode, setEditCommentMode] = useState(false);
+  const [allowLike, setAllowLike] = useState(true);
   const [inputs, setInputs] = useState({
     title: "",
     description: "",
@@ -210,7 +211,7 @@ const Post = () => {
                   <div className="post__info__user__user-info__item">
                     <Avatar
                       alt={post?.user?.username}
-                      src="https://img.freepik.com/free-photo/pleasant-looking-serious-man-stands-profile-has-confident-expression-wears-casual-white-t-shirt_273609-16959.jpg?w=2000"
+                      src={post?.user?.profilePhoto}
                       sx={{ width: "4rem", height: "4rem" }}
                     />
                   </div>
@@ -283,7 +284,8 @@ const Post = () => {
                   ) ? (
                     <FavoriteIcon
                       onClick={() => {
-                        unlikeRequest(postId);
+                        setAllowLike(true);
+                        unlikeRequest(post?._id);
                       }}
                       sx={[
                         {
@@ -301,7 +303,10 @@ const Post = () => {
                     (
                       <FavoriteBorderIcon
                         onClick={() => {
-                          likeRequest(postId);
+                          if (allowLike) {
+                            setAllowLike(false);
+                            likeRequest(post?._id);
+                          }
                         }}
                         sx={[
                           {

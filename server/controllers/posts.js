@@ -123,7 +123,7 @@ const getPost = async (req, res, next) => {
   try {
     const { postId } = req.params;
     const post = await Post.findOne({ _id: postId })
-      .populate("user", "username")
+      .populate("user", "username profilePhoto")
       .populate("comments.user", "username");
     res.status(200).json({ post });
   } catch (error) {

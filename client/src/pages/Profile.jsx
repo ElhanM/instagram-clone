@@ -119,10 +119,7 @@ const Profile = () => {
               <div className="profile__container__header__profile-photo">
                 <Avatar
                   alt={user[0]?.username}
-                  src={
-                    user[0]?.profilePhoto ||
-                    "https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg"
-                  }
+                  src={user[0]?.profilePhoto}
                   sx={{ width: "13rem", height: "13rem" }}
                 />
                 {user[0]?._id ===

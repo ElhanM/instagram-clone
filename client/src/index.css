@@ -321,6 +321,19 @@ a :hover {
             align-items: center;
   }
 }
+@media screen and (max-height: 600px) {
+  .post {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
+}
 .post__edit-comment-flex {
   display: -webkit-box;
   display: -webkit-flex;
@@ -341,7 +354,7 @@ a :hover {
   max-height: 90vh;
   -o-object-fit: cover;
      object-fit: cover;
-  margin-bottom: -0.3em;
+  margin-bottom: -0.4em;
 }
 @media screen and (max-width: 1200px) {
   .post__image img {
@@ -351,7 +364,7 @@ a :hover {
 }
 @media screen and (max-height: 600px) {
   .post__image img {
-    width: 100%;
+    height: 110%;
   }
 }
 .post__info {

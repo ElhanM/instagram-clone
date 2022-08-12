@@ -99,11 +99,11 @@ const Home = () => {
         allPosts?.filter((post) => {
           return (
             // return post if post?.user?._id !== user?._id and if initial render is true make !post?.user?.followers?.includes(JSON.parse(localStorage.getItem("user"))._id) second condition
-            post?.user?._id !== JSON.parse(localStorage.getItem("user"))._id &&
-            (!initialRender ||
-              post?.user?.followers?.includes(
-                JSON.parse(localStorage.getItem("user"))._id
-              ))
+            post?.user?._id === JSON.parse(localStorage.getItem("user"))._id ||
+            !initialRender ||
+            post?.user?.followers?.includes(
+              JSON.parse(localStorage.getItem("user"))._id
+            )
           );
         })
       );
@@ -111,14 +111,14 @@ const Home = () => {
       // fixing bug where posts from people the user was following showed up in explore page
       const tempAllPosts = allPosts?.filter((post) => {
         return (
-          post?.user?._id !== JSON.parse(localStorage.getItem("user"))._id &&
-          (!initialRender ||
-            post?.user?.followers?.includes(
-              JSON.parse(localStorage.getItem("user"))._id
-            ))
+          post?.user?._id === JSON.parse(localStorage.getItem("user"))._id ||
+          !initialRender ||
+          post?.user?.followers?.includes(
+            JSON.parse(localStorage.getItem("user"))._id
+          )
         );
       });
-      // if homePosts does not contain post from tempHomePosts then remove it
+      // if homePosts does not contain post from tempAllPosts then remove it
       const temphomePosts = tempAllPosts?.filter((post) => {
         return homePosts.find((explorePost) => post?._id === explorePost?._id);
       });

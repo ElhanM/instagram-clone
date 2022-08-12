@@ -30,6 +30,10 @@ const Register = () => {
     });
   };
   const postRequest = async () => {
+    setInputs({
+      ...inputs,
+      username: inputs?.username?.replace(/\s/g, "").toLowerCase(),
+    });
     try {
       const response = await axios.post(
         registerURL,
@@ -51,7 +55,13 @@ const Register = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    cloudinaryRequest(image, setImageUrl);
+    if (image) {
+      cloudinaryRequest(image, setImageUrl);
+    } else {
+      setImageUrl(
+        "https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg"
+      );
+    }
   };
   useEffect(() => {
     if (imageUrl) {
