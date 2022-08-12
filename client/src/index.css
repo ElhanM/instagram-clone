@@ -367,6 +367,13 @@ a :hover {
     height: 110%;
   }
 }
+.post__image__close-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  -webkit-transform: translate(-10px, 10px);
+          transform: translate(-10px, 10px);
+}
 .post__info {
   width: 30vw;
 }

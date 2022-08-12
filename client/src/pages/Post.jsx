@@ -204,6 +204,21 @@ const Post = () => {
           <div className="post">
             <div className="post__image">
               <img src={post.photo} alt={post?.description || post?.title} />
+              <CloseIcon
+                className="post__image__close-icon"
+                sx={[
+                  {
+                    "&:hover": {
+                      cursor: "pointer",
+                      scale: "1.2",
+                    },
+                    fontSize: "2.5rem",
+                  },
+                ]}
+                onClick={() => {
+                  handleClose();
+                }}
+              />
             </div>
             <div className="post__info">
               <div className="post__info__user">

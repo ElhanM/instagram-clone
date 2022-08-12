@@ -27,6 +27,13 @@
         height: 110%;
       }
     }
+    &__close-icon {
+      // move to top right corner
+      position: absolute;
+      top: 0;
+      right: 0;
+      transform: translate(-10px, 10px);
+    }
   }
   &__info {
     // @include flex-center;
