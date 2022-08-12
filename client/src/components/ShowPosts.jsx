@@ -7,6 +7,7 @@ import { useGlobalContext } from "../components/context";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
+import { useState } from "react";
 
 const ShowPosts = ({
   post,
@@ -26,6 +27,7 @@ const ShowPosts = ({
     editComment,
     followRequest,
   } = useGlobalContext();
+  const [allowLike, setAllowLike] = useState(true);
   return (
     <div className="main-page__container">
       <div className="main-page__container__header">
@@ -34,10 +36,7 @@ const ShowPosts = ({
             <Link to={`/profile/${post?.user?._id}`}>
               <Avatar
                 alt={post?.user?.username}
-                src={
-                  post?.user?.profilePhoto ||
-                  "https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg"
-                }
+                src={post?.user?.profilePhoto}
                 sx={{ width: "3rem", height: "3rem" }}
               />
             </Link>
@@ -118,6 +117,7 @@ const ShowPosts = ({
           {post?.likes?.includes(userInfo?._id) ? (
             <FavoriteIcon
               onClick={() => {
+                setAllowLike(true);
                 unlikeRequest(post?._id);
               }}
               sx={[
@@ -133,7 +133,10 @@ const ShowPosts = ({
           ) : (
             <FavoriteBorderIcon
               onClick={() => {
-                likeRequest(post?._id);
+                if (allowLike) {
+                  setAllowLike(false);
+                  likeRequest(post?._id);
+                }
               }}
               sx={[
                 {
