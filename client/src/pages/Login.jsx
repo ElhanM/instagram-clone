@@ -16,6 +16,8 @@ import { useEffect } from "react";
 
 const Login = () => {
   const { userDispatch, loginURL } = useGlobalContext();
+  const [errorMsg, setErrorMsg] = useState("");
+
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     userDispatch(user);
@@ -49,6 +51,7 @@ const Login = () => {
       history("/");
     } catch (error) {
       console.log(error.response.data.message);
+      setErrorMsg(error.response.data.message);
     }
   };
   const handleSubmit = (event) => {
@@ -72,6 +75,18 @@ const Login = () => {
         </Avatar>
         <Typography component="h1" variant="h5">
           Login
+        </Typography>
+        <Typography variant="h6" sx={{ marginTop: "1em" }}>
+          {/* turn errorMsg string into array on , and display ever item*/}
+          {errorMsg &&
+            errorMsg?.split(",").map((error) => (
+              <Typography
+                variant="h6"
+                sx={{ fontWeight: "400", fontSize: "1rem" }}
+              >
+                {error}
+              </Typography>
+            ))}
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
