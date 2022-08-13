@@ -127,5 +127,5 @@ module.exports = {
   followUser,
   unfollowUser,
   getUser,
-  changeProfilePhoto
+  changeProfilePhoto,
 };

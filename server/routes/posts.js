@@ -14,19 +14,21 @@ const {
   getPost,
   deleteComment,
   editComment,
+  deleteAllPostsByUser,
 } = require("../controllers/posts");
 
 router
   .route("/")
   .get(getAllPosts)
   .post(protect, createPost)
-  .put(protect, deleteComment);
+  .put(protect, deleteComment)
+  .delete(protect, deleteAllPostsByUser);
 router.route("/user-posts/:user").get(getAllPostsByUser);
 router
   .route("/:postId")
   .get(getPost)
   .patch(protect, editPost)
-  .delete(protect, deletePost)
+  .delete(protect, deletePost);
 router.route("/post/:postId").put(protect, editComment);
 router.route("/like").put(protect, likePost);
 router.route("/unlike").put(protect, unlikePost);
