@@ -18,6 +18,7 @@ const Register = () => {
   const { cloudinaryRequest, registerURL } = useGlobalContext();
   const [image, setImage] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const [inputs, setInputs] = useState({
     username: "",
     email: "",
@@ -45,11 +46,14 @@ const Register = () => {
         }
       );
       console.log(response.data);
+      setImageUrl("");
       localStorage.setItem("authToken", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user));
       history("/");
     } catch (error) {
       console.log(error.response.data.message);
+      setErrorMsg(error.response.data.message);
+      setImageUrl("");
     }
   };
 
@@ -68,7 +72,7 @@ const Register = () => {
       postRequest();
     }
   }, [imageUrl]);
-
+  useEffect(() => {}, []);
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -85,6 +89,18 @@ const Register = () => {
         </Avatar>
         <Typography component="h1" variant="h5">
           Register
+        </Typography>
+        <Typography variant="h6" sx={{ marginTop: "1em" }}>
+          {/* turn errorMsg string into array on , and display ever item*/}          
+          {errorMsg &&
+            errorMsg?.split(",").map((error) => 
+              <Typography
+                variant="h6"
+                sx={{ fontWeight: "400", fontSize: "1rem" }}
+              >
+                {error}
+              </Typography>
+            )}
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
