@@ -141,6 +141,16 @@ const deletePost = async (req, res, next) => {
   }
 };
 
+const deleteAllPostsByUser = async (req, res, next) => {
+  try {
+    const { userId } = req.body;
+    const posts = await Post.deleteMany({ user: userId });
+    res.status(200).json({ posts });
+  } catch (error) {
+    return next(new ErrorResponse(`No posts with userId : ${userId}`, 404));
+  }
+};
+
 const editPost = async (req, res, next) => {
   try {
     const { postId } = req.params;
@@ -166,4 +176,5 @@ module.exports = {
   getPost,
   deleteComment,
   editComment,
+  deleteAllPostsByUser,
 };
