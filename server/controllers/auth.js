@@ -43,12 +43,6 @@ const login = async (req, res, next) => {
     });
   }
 };
-const forgotPassword = async (req, res, next) => {
-  res.send("forgotpassword");
-};
-const resetPassword = async (req, res, next) => {
-  res.send("resetpassword");
-};
 
 const sendToken = (user, statusCode, res) => {
   const token = user.getSignedToken();
@@ -119,6 +113,24 @@ const changeProfilePhoto = async (req, res, next) => {
   }
 };
 
+const deleteUserAccount = async (req, res, next) => {
+  try {
+    const { userId } = req.body;
+    const user = await User.findByIdAndDelete({ _id: userId });
+    res.status(200).json({ user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const forgotPassword = async (req, res, next) => {
+  res.send("forgotpassword");
+};
+
+const resetPassword = async (req, res, next) => {
+  res.send("resetpassword");
+};
+
 module.exports = {
   register,
   login,
@@ -128,4 +140,5 @@ module.exports = {
   unfollowUser,
   getUser,
   changeProfilePhoto,
+  deleteUserAccount,
 };
