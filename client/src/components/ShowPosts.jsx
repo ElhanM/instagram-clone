@@ -50,60 +50,70 @@ const ShowPosts = ({
           </div>
         </div>
         <div className="main-page__container__header__right">
-          {post?.user?.followers?.includes(
-            JSON.parse(localStorage.getItem("user"))._id
-          ) ? (
-            <Button
-              fullWidth
-              variant="contained"
-              onClick={() => {
-                followRequest(post?.user?._id, post?._id, allPosts);
-              }}
-              sx={[
-                {
-                  "&:hover": {
-                    backgroundColor: "#000",
-                    color: "#fff",
-                  },
-                  mt: 3,
-                  mb: 2,
-                  color: "#000",
-                  backgroundColor: "#fff",
-                  borderColor: "#000",
-                  border: "2px solid #000",
-                  transition: "background-color 0.2s ease",
-                  height: "2em",
-                },
-              ]}
-            >
-              Unfollow
-            </Button>
-          ) : (
-            <Button
-              fullWidth
-              variant="contained"
-              onClick={() => {
-                followRequest(post?.user?._id, post?._id, allPosts, "follow");
-              }}
-              sx={[
-                {
-                  "&:hover": {
-                    backgroundColor: "#000",
-                    color: "#fff",
-                  },
-                  mt: 3,
-                  mb: 2,
-                  color: "#000",
-                  backgroundColor: "#fff",
-                  borderColor: "#000",
-                  border: "2px solid #000",
-                  transition: "background-color 0.2s ease",
-                  height: "2em",
-                },
-              ]}
-            >
-              Follow
-            </Button>
+          {JSON.parse(localStorage.getItem("user"))._id !== post?.user?._id && (
+            <>
+              {" "}
+              {post?.user?.followers?.includes(
+                JSON.parse(localStorage.getItem("user"))._id
+              ) ? (
+                <Button
+                  fullWidth
+                  variant="contained"
+                  onClick={() => {
+                    followRequest(post?.user?._id, post?._id, allPosts);
+                  }}
+                  sx={[
+                    {
+                      "&:hover": {
+                        backgroundColor: "#000",
+                        color: "#fff",
+                      },
+                      mt: 3,
+                      mb: 2,
+                      color: "#000",
+                      backgroundColor: "#fff",
+                      borderColor: "#000",
+                      border: "2px solid #000",
+                      transition: "background-color 0.2s ease",
+                      height: "2em",
+                    },
+                  ]}
+                >
+                  Unfollow
+                </Button>
+              ) : (
+                <Button
+                  fullWidth
+                  variant="contained"
+                  onClick={() => {
+                    followRequest(
+                      post?.user?._id,
+                      post?._id,
+                      allPosts,
+                      "follow"
+                    );
+                  }}
+                  sx={[
+                    {
+                      "&:hover": {
+                        backgroundColor: "#000",
+                        color: "#fff",
+                      },
+                      mt: 3,
+                      mb: 2,
+                      color: "#000",
+                      backgroundColor: "#fff",
+                      borderColor: "#000",
+                      border: "2px solid #000",
+                      transition: "background-color 0.2s ease",
+                      height: "2em",
+                    },
+                  ]}
+                >
+                  Follow
+                </Button>
+              )}
+            </>
           )}
         </div>
       </div>
