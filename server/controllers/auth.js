@@ -42,12 +42,6 @@ const login = async (req, res, next) => {
     });
   }
 };
-const forgotPassword = async (req, res, next) => {
-  res.send("forgotpassword");
-};
-const resetPassword = async (req, res, next) => {
-  res.send("resetpassword");
-};
 
 const sendToken = (user, statusCode, res) => {
   const token = user.getSignedToken();
@@ -126,5 +120,5 @@ module.exports = {
   followUser,
   unfollowUser,
   getUser,
-  changeProfilePhoto
+  changeProfilePhoto,
 };
