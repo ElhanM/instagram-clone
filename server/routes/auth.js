@@ -9,9 +9,13 @@ const {
   unfollowUser,
   getUser,
   changeProfilePhoto,
+  deleteUserAccount,
 } = require("../controllers/auth");
 
-router.route("/").patch(protect, changeProfilePhoto);
+router
+  .route("/")
+  .patch(protect, changeProfilePhoto)
+  .delete(protect, deleteUserAccount);
 router.route("/register").post(register);
 router.route("/login").post(login);
 router.route("/follow").put(protect, followUser);
