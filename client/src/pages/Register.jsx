@@ -172,11 +172,6 @@ const Register = () => {
             Register
           </Button>
           <Grid container>
-            <Grid item xs>
-              <Link to="#" variant="body2" className="login-link">
-                Forgot password?
-              </Link>
-            </Grid>
             <Grid item>
               <Link to="/login" variant="body2" className="login-link">
                 Already have an account? Login

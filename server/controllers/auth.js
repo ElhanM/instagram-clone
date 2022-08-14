@@ -115,8 +115,6 @@ const changeProfilePhoto = async (req, res, next) => {
 module.exports = {
   register,
   login,
-  forgotPassword,
-  resetPassword,
   followUser,
   unfollowUser,
   getUser,

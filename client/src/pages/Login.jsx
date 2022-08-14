@@ -121,11 +121,6 @@ const Login = () => {
             Login
           </Button>
           <Grid container>
-            <Grid item xs>
-              <Link to="#" variant="body2" className="login-link">
-                Forgot password?
-              </Link>
-            </Grid>
             <Grid item>
               <Link to="/register" variant="body2" className="login-link">
                 Don't have an account? Register
