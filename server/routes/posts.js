@@ -23,11 +23,11 @@ router
   .put(protect, deleteComment);
 router.route("/user-posts/:user").get(getAllPostsByUser);
 router
-  .route("/:postId")
+  .route("/post/:postId")
+  .put(protect, editComment)
   .get(getPost)
   .patch(protect, editPost)
-  .delete(protect, deletePost)
-router.route("/post/:postId").put(protect, editComment);
+  .delete(protect, deletePost);
 router.route("/like").put(protect, likePost);
 router.route("/unlike").put(protect, unlikePost);
 router.route("/add/comment").put(protect, comment);

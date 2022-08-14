@@ -68,7 +68,7 @@ const Post = () => {
   };
   const getPost = async () => {
     try {
-      const response = await axios(`${postsURL}/${postId}`, {
+      const response = await axios(`${postsURL}/post/${postId}`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -134,7 +134,7 @@ const Post = () => {
   };
   const deletePost = async () => {
     try {
-      const response = await axios.delete(`${postsURL}/${postId}`, {
+      const response = await axios.delete(`${postsURL}/post/${postId}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -156,7 +156,7 @@ const Post = () => {
   const editPost = async () => {
     try {
       const response = await axios.patch(
-        `${postsURL}/${postId}`,
+        `${postsURL}/post/${postId}`,
         {
           title: inputs.title,
           description: inputs.description,

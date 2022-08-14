@@ -20,6 +20,6 @@ router.route("/forgotpassword").post(forgotPassword);
 router.route("/resetpassword/:resetToken").put(resetPassword);
 router.route("/follow").put(protect, followUser);
 router.route("/unfollow").put(protect, unfollowUser);
-router.route("/:userId").get(getUser).patch(protect, changeProfilePhoto);
+router.route("/user/:userId").get(getUser);
 
 module.exports = router;

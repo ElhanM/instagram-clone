@@ -6,7 +6,6 @@ const register = async (req, res, next) => {
   try {
     const user = await User.create({ username, email, password, profilePhoto });
     sendToken(user, 201, res);
-    res.status(201).json({ msg: "User created successfully", user });
   } catch (error) {
     next(error);
   }
