@@ -53,6 +53,37 @@ a :hover {
   background-color: #f0f0f0;
 }
 
+.delete-acc-modal {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-justify-content: space-around;
+      -ms-flex-pack: distribute;
+          justify-content: space-around;
+}
+.delete-acc-modal__footer span {
+  margin: 0 2em;
+  font-size: 1.3rem;
+}
+.delete-acc-modal__footer span:hover {
+  cursor: pointer;
+  border-bottom: 1px solid #000;
+}
+
 .profile {
   width: 100vw;
 }
