@@ -5,8 +5,6 @@ const protect = require("../middleware/auth");
 const {
   register,
   login,
-  forgotPassword,
-  resetPassword,
   followUser,
   unfollowUser,
   getUser,
@@ -16,8 +14,6 @@ const {
 router.route("/").patch(protect, changeProfilePhoto);
 router.route("/register").post(register);
 router.route("/login").post(login);
-router.route("/forgotpassword").post(forgotPassword);
-router.route("/resetpassword/:resetToken").put(resetPassword);
 router.route("/follow").put(protect, followUser);
 router.route("/unfollow").put(protect, unfollowUser);
 router.route("/user/:userId").get(getUser);
