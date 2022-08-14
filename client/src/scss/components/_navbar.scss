@@ -21,3 +21,19 @@
     }
   }
 }
+
+.delete-acc-modal {
+  @include flex-center;
+  flex-direction: column;
+  justify-content: space-around;
+  &__footer {
+    span {
+      margin: 0 2em;
+      font-size: 1.3rem;
+      &:hover {
+        cursor: pointer;
+        border-bottom: 1px solid #000;
+      }
+    }
+  }
+}

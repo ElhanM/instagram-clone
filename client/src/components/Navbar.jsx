@@ -8,7 +8,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
 import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/system";
 import { Link, NavLink } from "react-router-dom";
@@ -17,6 +16,8 @@ import { useState } from "react";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import { useGlobalContext } from "../components/context";
 import Modal from "@mui/material/Modal";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -44,7 +45,7 @@ const theme = createTheme({
 });
 
 const Navbar = () => {
-  const { userDispatch, userInfo } = useGlobalContext();
+  const { userDispatch, userInfo, postsURL, authURL } = useGlobalContext();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [value, setValue] = useState();
@@ -66,6 +67,30 @@ const Navbar = () => {
   const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
   const handleOpen = () => setShowDeleteAccountModal(true);
   const handleClose = () => setShowDeleteAccountModal(false);
+
+  const history = useNavigate();
+
+  const handleDeleteAccount = async () => {
+    try {
+      const deletePosts = await axios.delete(`${postsURL}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      });
+      const deleteUser = await axios.delete(`${authURL}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      });
+      userDispatch(null);
+      handleClose();
+      history(`/register`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -286,7 +311,17 @@ const Navbar = () => {
           aria-labelledby="modal-modal-title"
           aria-describedbyF="modal-modal-description"
         >
-          <Box sx={style}></Box>
+          <Box sx={style}>
+            <div className="delete-acc-modal">
+              <div className="delete-acc-modal__header">
+                <h2>Are you sure you want to delete your acc?</h2>
+              </div>
+              <div className="delete-acc-modal__footer">
+                <span onClick={handleDeleteAccount}>Yes</span>
+                <span onClick={handleClose}>No</span>
+              </div>
+            </div>
+          </Box>
         </Modal>
       </div>
     </>

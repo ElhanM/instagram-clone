@@ -143,11 +143,12 @@ const deletePost = async (req, res, next) => {
 
 const deleteAllPostsByUser = async (req, res, next) => {
   try {
-    const { userId } = req.body;
-    const posts = await Post.deleteMany({ user: userId });
+    const posts = await Post.deleteMany({ user: req.user._id });
     res.status(200).json({ posts });
   } catch (error) {
-    return next(new ErrorResponse(`No posts with userId : ${userId}`, 404));
+    return next(
+      new ErrorResponse(`No posts with userId : ${req.user._id}`, 404)
+    );
   }
 };
 
