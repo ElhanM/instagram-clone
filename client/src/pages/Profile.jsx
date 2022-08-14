@@ -47,7 +47,7 @@ const Profile = () => {
   const axiosGetUser = async () => {
     try {
       // dispatch({ type: "LOADING" });
-      const response = await axios(`${authURL}/${userId}`, {
+      const response = await axios(`${authURL}/user/${userId}`, {
         headers: {
           "Content-Type": "application/json",
         },
