@@ -210,7 +210,6 @@ const Post = () => {
                   {
                     "&:hover": {
                       cursor: "pointer",
-                      scale: "1.2",
                     },
                     fontSize: "2.5rem",
                   },
