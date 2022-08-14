@@ -25,7 +25,8 @@ router
   .delete(protect, deleteAllPostsByUser);
 router.route("/user-posts/:user").get(getAllPostsByUser);
 router
-  .route("/:postId")
+  .route("/post/:postId")
+  .put(protect, editComment)
   .get(getPost)
   .patch(protect, editPost)
   .delete(protect, deletePost);

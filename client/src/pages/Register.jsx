@@ -91,16 +91,16 @@ const Register = () => {
           Register
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "1em" }}>
-          {/* turn errorMsg string into array on , and display ever item*/}          
+          {/* turn errorMsg string into array on , and display ever item*/}
           {errorMsg &&
-            errorMsg?.split(",").map((error) => 
+            errorMsg?.split(",").map((error) => (
               <Typography
                 variant="h6"
                 sx={{ fontWeight: "400", fontSize: "1rem" }}
               >
                 {error}
               </Typography>
-            )}
+            ))}
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
