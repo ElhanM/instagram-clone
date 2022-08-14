@@ -15,6 +15,10 @@ const UserSchema = new mongoose.Schema(
         /^[a-zA-Z0-9_.-]+$/,
         "Username can only contain letters, numbers, dash, underscore and dot",
       ],
+      // lowercase all usernames
+      set: function (val) {
+        return val.toLowerCase();
+      }
     },
     email: {
       type: String,
