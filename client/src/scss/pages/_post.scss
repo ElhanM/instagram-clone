@@ -31,8 +31,11 @@
       // move to top right corner
       position: absolute;
       top: 0;
-      right: 0;
-      transform: translate(-10px, 10px);
+      left: 0;
+      transform: translate(10px, 10px);
+      background-color: red;
+      border-radius: 50%;
+      border: 2px solid white;
     }
   }
   &__info {

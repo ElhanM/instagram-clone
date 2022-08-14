@@ -370,9 +370,12 @@ a :hover {
 .post__image__close-icon {
   position: absolute;
   top: 0;
-  right: 0;
-  -webkit-transform: translate(-10px, 10px);
-          transform: translate(-10px, 10px);
+  left: 0;
+  -webkit-transform: translate(10px, 10px);
+          transform: translate(10px, 10px);
+  background-color: red;
+  border-radius: 50%;
+  border: 2px solid white;
 }
 .post__info {
   width: 30vw;
