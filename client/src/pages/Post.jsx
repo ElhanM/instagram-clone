@@ -23,7 +23,10 @@ const style = {
   border: "2px solid #000",
   boxShadow: 24,
   maxHeight: "90vh",
-  overflow: "auto",
+  // add media screen
+  "@media (max-width: 1200px)": {
+    overflow: "auto",
+  },
 };
 
 const Post = () => {
@@ -519,7 +522,7 @@ const Post = () => {
                         border: "2px solid #000",
                         transition: "background-color 0.2s ease",
                         width: "3em",
-                        marginRight: "auto",
+                        marginRight: "1em",
                       },
                     ]}
                   >
@@ -567,7 +570,7 @@ const Post = () => {
                                 borderColor: "#000",
                               },
                             },
-                            width: "30em",
+                            width: "100%",
                             marginTop: "1em",
                           },
                         ]}
@@ -613,10 +616,10 @@ const Post = () => {
                     </Button>
                   </FormControl>
                 ) : (
-                  <>
+                  <div className={`comments ${editPostMode && "small"}`}>
                     {post?.comments?.map((comment) => (
-                      <div className="comments-flex-post">
-                        <div className="comments-flex-post__item-left">
+                      <div className="comments__flex-post">
+                        <div className="comments__flex-post__item-left">
                           <Typography
                             variant="span"
                             sx={{ fontSize: "1.2rem", paddingTop: "0.2em" }}
@@ -636,7 +639,7 @@ const Post = () => {
                           </Typography>
                         </div>
 
-                        <div className="comments-flex-post__item-right">
+                        <div className="comments__flex-post__item-right">
                           {JSON.parse(localStorage.getItem("user"))._id ===
                           comment?.user?._id ? (
                             <>
@@ -698,7 +701,7 @@ const Post = () => {
                         </div>
                       </div>
                     ))}
-                  </>
+                  </div>
                 )}
               </div>
             </div>
