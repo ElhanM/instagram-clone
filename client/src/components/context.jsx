@@ -120,7 +120,7 @@ const AppProvider = ({ children }) => {
       console.log(error);
     }
   };
-  const followRequest = async (userId, postId, posts, url = "unfollow") => {
+  const followRequest = async (userId, posts, url = "unfollow") => {
     try {
       const response = await axios.put(
         `${authURL}/${url === "follow" ? "follow" : "unfollow"}`,

@@ -33,9 +33,9 @@
       top: 0;
       left: 0;
       transform: translate(10px, 10px);
-      background-color: red;
+      background-color: $danger;
       border-radius: 50%;
-      border: 2px solid white;
+      border: 2px solid $white;
     }
   }
   &__info {

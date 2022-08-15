@@ -9,20 +9,13 @@ import { Typography } from "@mui/material";
 const Home = () => {
   const {
     userDispatch,
-    userInfo,
     allPosts,
     loading,
     updatePostsDispatch,
     likeURL,
     unlikeURL,
-    commentURL,
-    handleSubmit,
-    deleteComment,
-    editComment,
-    followRequest,
   } = useGlobalContext();
   const [homePosts, setHomePosts] = useState([]);
-  const [addComment, setAddComment] = useState("");
   const [editCommentMode, setEditCommentMode] = useState(false);
   const [initialRender, setInitialRender] = useState(true);
 

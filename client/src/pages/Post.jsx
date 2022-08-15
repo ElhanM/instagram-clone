@@ -236,7 +236,7 @@ const Post = () => {
                   </div>
                 </div>
                 <div className="post__info__user__options">
-                  {JSON.parse(localStorage.getItem("user"))._id === userId ? (
+                  {JSON.parse(localStorage.getItem("user"))._id === userId && (
                     <>
                       {editPostMode ? (
                         <CloseIcon
@@ -287,7 +287,7 @@ const Post = () => {
                         onClick={deletePost}
                       />
                     </>
-                  ) : null}
+                  )}
                 </div>
               </div>
 
@@ -675,24 +675,26 @@ const Post = () => {
                                 }
                               />
                             </>
-                          ) : JSON.parse(localStorage.getItem("user"))._id ===
-                            userId ? (
-                            <DeleteIcon
-                              sx={[
-                                {
-                                  "&:hover": {
-                                    cursor: "pointer",
-                                    scale: "1.2",
+                          ) : (
+                            JSON.parse(localStorage.getItem("user"))._id ===
+                              userId && (
+                              <DeleteIcon
+                                sx={[
+                                  {
+                                    "&:hover": {
+                                      cursor: "pointer",
+                                      scale: "1.2",
+                                    },
+                                    fontSize: "1.9rem",
+                                    color: "red",
                                   },
-                                  fontSize: "1.9rem",
-                                  color: "red",
-                                },
-                              ]}
-                              onClick={() =>
-                                deleteComment(postId, comment._id, allPosts)
-                              }
-                            />
-                          ) : null}
+                                ]}
+                                onClick={() =>
+                                  deleteComment(postId, comment._id, allPosts)
+                                }
+                              />
+                            )
+                          )}
                         </div>
                       </div>
                     ))}

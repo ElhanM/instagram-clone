@@ -63,7 +63,7 @@ const Register = () => {
       cloudinaryRequest(image, setImageUrl);
     } else {
       setImageUrl(
-        "https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg"
+        "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
       );
     }
   };

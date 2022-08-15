@@ -60,7 +60,7 @@ const ShowPosts = ({
                   fullWidth
                   variant="contained"
                   onClick={() => {
-                    followRequest(post?.user?._id, post?._id, allPosts);
+                    followRequest(post?.user?._id, allPosts);
                   }}
                   sx={[
                     {
@@ -88,7 +88,6 @@ const ShowPosts = ({
                   onClick={() => {
                     followRequest(
                       post?.user?._id,
-                      post?._id,
                       allPosts,
                       "follow"
                     );
@@ -352,7 +351,7 @@ const ShowPosts = ({
 
                 <div className="comments-flex-post__item-right">
                   {JSON.parse(localStorage.getItem("user"))._id ===
-                  comment?.user?._id ? (
+                  comment?.user?._id && (
                     <>
                       <EditIcon
                         sx={[
@@ -390,7 +389,7 @@ const ShowPosts = ({
                         }
                       />
                     </>
-                  ) : null}
+                  )}
                 </div>
               </div>
             ))}
