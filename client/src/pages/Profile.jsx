@@ -125,7 +125,7 @@ const Profile = () => {
                   sx={{ width: "13rem", height: "13rem" }}
                 />
                 {user[0]?._id ===
-                JSON.parse(localStorage.getItem("user"))._id ? (
+                  JSON.parse(localStorage.getItem("user"))._id && (
                   <div
                     className="profile__container__header__profile-photo__overlay"
                     onClick={() => {
@@ -137,7 +137,7 @@ const Profile = () => {
                       Change photo
                     </span>
                   </div>
-                ) : null}
+                )}
               </div>
               <div className="profile__container__header__user-info">
                 <div className="profile__container__header__user-info__name">
@@ -159,19 +159,31 @@ const Profile = () => {
               </div>
             </div>
             <div className="profile__container__hr"></div>
-            <div className="profile__container__posts">
-              {posts
-                ?.slice(0)
-                .reverse()
-                .map((post) => (
-                  <Link to={`/profile/${post?.user?._id}/${post?._id}`}>
-                    <img
-                      src={post?.photo}
-                      alt={post?.description || post?.title}
-                    />
-                  </Link>
-                ))}
-            </div>
+            {posts.length > 0 ? (
+              <div className="profile__container__posts">
+                {posts
+                  ?.slice(0)
+                  .reverse()
+                  .map((post) => (
+                    <Link to={`/profile/${post?.user?._id}/${post?._id}`}>
+                      <img
+                        src={post?.photo}
+                        alt={post?.description || post?.title}
+                      />
+                    </Link>
+                  ))}
+              </div>
+            ) : (
+              <Typography
+                variant="h3"
+                sx={{
+                  // center
+                  textAlign: "center",
+                }}
+              >
+                No posts to display
+              </Typography>
+            )}
           </div>
         )}
       </div>

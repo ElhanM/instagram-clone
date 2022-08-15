@@ -127,8 +127,8 @@ a :hover {
   font-weight: bold;
 }
 .profile__container__header__profile-photo__overlay:hover {
-  background-color: rgba(0, 0, 0, 0.5);
-  color: rgb(255, 255, 255);
+  background-color: rgba(0, 0, 0, 0.5019607843);
+  color: #ffffff;
   cursor: pointer;
 }
 .profile__container__header__profile-photo__overlay__text {
@@ -159,7 +159,7 @@ a :hover {
   }
 }
 .profile__container__hr {
-  border: 1px solid black;
+  border: 1px solid #000;
   margin: 1rem auto;
   max-width: 80%;
 }
@@ -404,9 +404,9 @@ a :hover {
   left: 0;
   -webkit-transform: translate(10px, 10px);
           transform: translate(10px, 10px);
-  background-color: red;
+  background-color: #ff0000;
   border-radius: 50%;
-  border: 2px solid white;
+  border: 2px solid #fff;
 }
 .post__info {
   width: 30vw;
