@@ -138,6 +138,7 @@ const Home = () => {
           .reverse()
           .map((post, index) => (
             <Posts
+              key={post?._id}
               post={post}
               unlikeRequest={unlikeRequest}
               likeRequest={likeRequest}

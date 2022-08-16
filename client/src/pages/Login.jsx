@@ -79,8 +79,9 @@ const Login = () => {
         <Typography variant="h6" sx={{ marginTop: "1em" }}>
           {/* turn errorMsg string into array on , and display ever item*/}
           {errorMsg &&
-            errorMsg?.split(",").map((error) => (
+            errorMsg?.split(",").map((error, index) => (
               <Typography
+                key={index}
                 variant="h6"
                 sx={{ fontWeight: "400", fontSize: "1rem" }}
               >

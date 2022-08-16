@@ -164,8 +164,11 @@ const Profile = () => {
                 {posts
                   ?.slice(0)
                   .reverse()
-                  .map((post) => (
-                    <Link to={`/profile/${post?.user?._id}/${post?._id}`}>
+                  .map((post, index) => (
+                    <Link
+                      key={index}
+                      to={`/profile/${post?.user?._id}/${post?._id}`}
+                    >
                       <img
                         src={post?.photo}
                         alt={post?.description || post?.title}

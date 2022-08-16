@@ -12,6 +12,7 @@ import { useGlobalContext } from "../components/context";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
+import PostComments from "../components/PostComments";
 
 const style = {
   position: "absolute",
@@ -618,88 +619,19 @@ const Post = () => {
                 ) : (
                   <div className={`comments ${editPostMode && "small"}`}>
                     {post?.comments?.map((comment) => (
-                      <div className="comments__flex-post">
-                        <div className="comments__flex-post__item-left">
-                          <Typography
-                            variant="span"
-                            sx={{ fontSize: "1.2rem", paddingTop: "0.2em" }}
-                          >
-                            {comment?.user?.username}:
-                          </Typography>
-                          <Typography
-                            variant="span"
-                            sx={{
-                              fontSize: "1.2rem",
-                              paddingTop: "0.2em",
-                              ml: "0.2em",
-                              fontWeight: "light",
-                            }}
-                          >
-                            {comment?.text}
-                          </Typography>
-                        </div>
-
-                        <div className="comments__flex-post__item-right">
-                          {JSON.parse(localStorage.getItem("user"))._id ===
-                          comment?.user?._id ? (
-                            <>
-                              <EditIcon
-                                sx={[
-                                  {
-                                    "&:hover": {
-                                      cursor: "pointer",
-                                      scale: "1.2",
-                                    },
-                                    fontSize: "1.9rem",
-                                  },
-                                ]}
-                                onClick={() => {
-                                  setEditCommentMode((prev) => !prev);
-                                  setInputs({
-                                    ...inputs,
-                                    editComment: comment?.text,
-                                    editCommentId: comment?._id,
-                                  });
-                                }}
-                              />
-                              <DeleteIcon
-                                sx={[
-                                  {
-                                    "&:hover": {
-                                      cursor: "pointer",
-                                      scale: "1.2",
-                                    },
-                                    fontSize: "1.9rem",
-                                    color: "red",
-                                  },
-                                ]}
-                                onClick={() =>
-                                  deleteComment(postId, comment._id, allPosts)
-                                }
-                              />
-                            </>
-                          ) : (
-                            JSON.parse(localStorage.getItem("user"))._id ===
-                              userId && (
-                              <DeleteIcon
-                                sx={[
-                                  {
-                                    "&:hover": {
-                                      cursor: "pointer",
-                                      scale: "1.2",
-                                    },
-                                    fontSize: "1.9rem",
-                                    color: "red",
-                                  },
-                                ]}
-                                onClick={() =>
-                                  deleteComment(postId, comment._id, allPosts)
-                                }
-                              />
-                            )
-                          )}
-                        </div>
-                      </div>
+                      <PostComments
+                        key={comment?._id}
+                        comment={comment}
+                        unlikeRequest={unlikeRequest}
+                        likeRequest={likeRequest}
+                        editCommentMode={editCommentMode}
+                        inputs={inputs}
+                        setInputs={setInputs}
+                        setEditCommentMode={setEditCommentMode}
+                        handleChange={handleChange}
+                        postId={postId}
+                        userId={userId}
+                      />
                     ))}
                   </div>
                 )}
