@@ -10,10 +10,12 @@ const {
   getUser,
   changeProfilePhoto,
   deleteUserAccount,
+  getAllUsers,
 } = require("../controllers/auth");
 
 router
   .route("/")
+  .get(getAllUsers)
   .patch(protect, changeProfilePhoto)
   .delete(protect, deleteUserAccount);
 router.route("/register").post(register);
