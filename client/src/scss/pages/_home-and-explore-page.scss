@@ -59,11 +59,23 @@
   }
 }
 
-.comments-flex {
-  // ! make this a mixin after adding delete and edit to home and explore
-  @include flex-center;
-  justify-content: space-between;
-  &__item-right {
+.comments-main-page {
+  // add overflow and do not let div stretch
+  overflow: auto;
+  max-height: 30vh;
+  &__flex-post {
+    // ! make this a mixin after adding delete and edit to home and explore
     @include flex-center;
+    justify-content: space-between;
+    &:last-child {
+      padding-bottom: 0.8em;
+    }
+    &__item-left {
+      margin: 0 0.5em;
+    }
+    &__item-right {
+      @include flex-center;
+      margin: 0 0.5em;
+    }
   }
 }

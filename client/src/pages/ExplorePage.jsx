@@ -135,8 +135,9 @@ const ExplorePage = () => {
         explorePosts
           ?.slice(0)
           .reverse()
-          .map((post, index) => (
+          .map((post) => (
             <Posts
+              key={post?._id}
               post={post}
               unlikeRequest={unlikeRequest}
               likeRequest={likeRequest}

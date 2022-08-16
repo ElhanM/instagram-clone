@@ -7,8 +7,6 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import CreatePost from "./pages/CreatePost";
 import Error from "./pages/Error";
-import Reset from "./pages/Reset";
-import NewPassword from "./pages/NewPassword";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "./components/context";
@@ -36,8 +34,6 @@ const Routing = () => {
         </Route>
         <Route path="create-post" element={<CreatePost />} />
         <Route path="explore" element={<ExplorePage />} />
-        <Route path="reset" element={<Reset />} />
-        <Route path="reset/:token" element={<NewPassword />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="*" element={<Error />} />

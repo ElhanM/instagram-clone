@@ -4,10 +4,9 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Link, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
+import ShowPostsComments from "./ShowPostsComments";
 
 const ShowPosts = ({
   post,
@@ -86,11 +85,7 @@ const ShowPosts = ({
                   fullWidth
                   variant="contained"
                   onClick={() => {
-                    followRequest(
-                      post?.user?._id,
-                      allPosts,
-                      "follow"
-                    );
+                    followRequest(post?.user?._id, allPosts, "follow");
                   }}
                   sx={[
                     {
@@ -326,74 +321,20 @@ const ShowPosts = ({
             </Button>
           </FormControl>
         ) : (
-          <>
+          <div className="comments-main-page">
             {post?.comments?.map((comment) => (
-              <div className="comments-flex-post">
-                <div className="comments-flex-post__item-left">
-                  <Typography
-                    variant="span"
-                    sx={{ fontSize: "1.2rem", paddingTop: "0.2em" }}
-                  >
-                    {comment?.user?.username}:
-                  </Typography>
-                  <Typography
-                    variant="span"
-                    sx={{
-                      fontSize: "1.2rem",
-                      paddingTop: "0.2em",
-                      ml: "0.2em",
-                      fontWeight: "light",
-                    }}
-                  >
-                    {comment?.text}
-                  </Typography>
-                </div>
-
-                <div className="comments-flex-post__item-right">
-                  {JSON.parse(localStorage.getItem("user"))._id ===
-                  comment?.user?._id && (
-                    <>
-                      <EditIcon
-                        sx={[
-                          {
-                            "&:hover": {
-                              cursor: "pointer",
-                              scale: "1.2",
-                            },
-                            fontSize: "1.9rem",
-                          },
-                        ]}
-                        onClick={() => {
-                          setEditCommentMode((prev) => !prev);
-                          setInputs({
-                            ...inputs,
-                            editComment: comment?.text,
-                            editCommentId: comment?._id,
-                            editCommentPostId: post?._id,
-                          });
-                        }}
-                      />
-                      <DeleteIcon
-                        sx={[
-                          {
-                            "&:hover": {
-                              cursor: "pointer",
-                              scale: "1.2",
-                            },
-                            fontSize: "1.9rem",
-                            color: "red",
-                          },
-                        ]}
-                        onClick={() =>
-                          deleteComment(post?._id, comment?._id, allPosts)
-                        }
-                      />
-                    </>
-                  )}
-                </div>
-              </div>
+              <ShowPostsComments
+                key={comment?._id}
+                comment={comment}
+                setEditCommentMode={setEditCommentMode}
+                inputs={inputs}
+                setInputs={setInputs}
+                post={post}
+                deleteComment={deleteComment}
+                allPosts={allPosts}
+              />
             ))}
-          </>
+          </div>
         )}
       </div>
     </div>
