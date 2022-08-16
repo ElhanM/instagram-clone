@@ -14,6 +14,7 @@ const Home = () => {
     updatePostsDispatch,
     likeURL,
     unlikeURL,
+    setValue,
   } = useGlobalContext();
   const [homePosts, setHomePosts] = useState([]);
   const [editCommentMode, setEditCommentMode] = useState(false);
@@ -124,6 +125,10 @@ const Home = () => {
       setInitialRender(false);
     }
   }, [homePosts, initialRender]);
+
+  useEffect(() => {
+    setValue();
+  }, []);
 
   return (
     <div className="main-page">

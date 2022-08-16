@@ -14,6 +14,7 @@ const ExplorePage = () => {
     updatePostsDispatch,
     likeURL,
     unlikeURL,
+    setValue,
   } = useGlobalContext();
   const [explorePosts, setExplorePosts] = useState([]);
   const [editCommentMode, setEditCommentMode] = useState(false);
@@ -119,12 +120,18 @@ const ExplorePage = () => {
       setExplorePosts(tempExplorePosts);
     }
   }, [allPosts]);
+
   useEffect(() => {
     console.log("initialrender", initialRender);
     if (explorePosts.length > 0) {
       setInitialRender(false);
     }
   }, [explorePosts, initialRender]);
+
+  useEffect(() => {
+    setValue(1);
+  }, []);
+
   return (
     <div className="main-page">
       {loading ? (

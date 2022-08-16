@@ -35,6 +35,7 @@ const Profile = () => {
     userInfo,
     updatePostsDispatch,
     cloudinaryRequest,
+    setValue,
   } = useGlobalContext();
   const history = useNavigate();
   const [posts, setPosts] = useState([]);
@@ -107,7 +108,9 @@ const Profile = () => {
       history("/login");
     }
   }, [allPosts, userId]);
-
+  useEffect(() => {
+    setValue();
+  }, []);
   return (
     <>
       <div className="profile">
