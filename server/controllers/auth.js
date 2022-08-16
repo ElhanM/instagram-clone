@@ -10,6 +10,16 @@ const register = async (req, res, next) => {
     next(error);
   }
 };
+
+const getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.find({});
+    res.status(200).json({ users });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getUser = async (req, res, next) => {
   const { userId } = req.params;
   try {
@@ -129,4 +139,5 @@ module.exports = {
   getUser,
   changeProfilePhoto,
   deleteUserAccount,
+  getAllUsers
 };

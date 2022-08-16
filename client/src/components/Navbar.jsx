@@ -18,8 +18,25 @@ import { useGlobalContext } from "../components/context";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import SearchIcon from "@mui/icons-material/Search";
+import { styled, alpha } from "@mui/material/styles";
+import InputBase from "@mui/material/InputBase";
 
-const style = {
+const styleDelete = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+  width: "80vw",
+  maxWidth: "500px",
+};
+
+const styleSearch = {
   position: "absolute",
   top: "50%",
   left: "50%",
@@ -44,6 +61,48 @@ const theme = createTheme({
   },
 });
 
+const Search = styled("div")(({ theme }) => ({
+  position: "relative",
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: "#fafafa",
+  "&:hover": {
+    backgroundColor: "#f0f0f0",
+  },
+  marginLeft: 0,
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
+    marginLeft: theme.spacing(1),
+    width: "auto",
+  },
+}));
+
+const SearchIconWrapper = styled("div")(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: "#000",
+  "& .MuiInputBase-input": {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
+      width: "12ch",
+      "&:focus": {
+        width: "20ch",
+      },
+    },
+  },
+}));
+
 const Navbar = () => {
   const { userDispatch, userInfo, postsURL, authURL, value, setValue } =
     useGlobalContext();
@@ -65,8 +124,13 @@ const Navbar = () => {
     setAnchorElUser(null);
   };
   const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
-  const handleOpen = () => setShowDeleteAccountModal(true);
-  const handleClose = () => setShowDeleteAccountModal(false);
+  const handleDeleteOpen = () => setShowDeleteAccountModal(true);
+  const handleDeleteClose = () => setShowDeleteAccountModal(false);
+
+  const [searchValue, setSearchValue] = useState("");
+  const [showSearchModal, setShowSearchModal] = useState(false);
+  const handleSearchOpen = () => setShowSearchModal(true);
+  const handleSearchClose = () => setShowSearchModal(false);
 
   const history = useNavigate();
 
@@ -85,7 +149,7 @@ const Navbar = () => {
         },
       });
       userDispatch(null);
-      handleClose();
+      handleDeleteClose();
       history(`/register`);
     } catch (error) {
       console.log(error);
@@ -198,6 +262,36 @@ const Navbar = () => {
                   INSTAGRAM
                 </Link>
               </Typography>
+              <Search
+                onClick={() => {
+                  handleSearchOpen();
+                }}
+              >
+                <SearchIconWrapper>
+                  <SearchIcon />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  // value={searchValue}
+                  // onChange={(e) => setSearchValue(e.target.value)}
+                  placeholder="Search…"
+                  inputProps={{ "aria-label": "search" }}
+                />
+              </Search>
+              <Modal
+                sx={[
+                  {
+                    // "& .MuiBackdrop-root": {
+                    //   backgroundColor: "transparent",
+                    // },
+                  },
+                ]}
+                open={showSearchModal}
+                onClose={handleSearchClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedbyF="modal-modal-description"
+              >
+                <Box sx={styleSearch}></Box>
+              </Modal>
               <Tabs
                 sx={{ ml: "auto", display: { xs: "none", md: "flex" } }}
                 textColor="secondary"
@@ -292,7 +386,7 @@ const Navbar = () => {
                       onClick={() => {
                         setValue();
                         handleCloseUserMenu();
-                        handleOpen();
+                        handleDeleteOpen();
                       }}
                     >
                       Delete Account
@@ -304,26 +398,24 @@ const Navbar = () => {
           </Container>
         </AppBar>
       </ThemeProvider>
-      <div>
-        <Modal
-          open={showDeleteAccountModal}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedbyF="modal-modal-description"
-        >
-          <Box sx={style}>
-            <div className="delete-acc-modal">
-              <div className="delete-acc-modal__header">
-                <h2>Are you sure you want to delete your acc?</h2>
-              </div>
-              <div className="delete-acc-modal__footer">
-                <span onClick={handleDeleteAccount}>Yes</span>
-                <span onClick={handleClose}>No</span>
-              </div>
+      <Modal
+        open={showDeleteAccountModal}
+        onClose={handleDeleteClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedbyF="modal-modal-description"
+      >
+        <Box sx={styleDelete}>
+          <div className="delete-acc-modal">
+            <div className="delete-acc-modal__header">
+              <h2>Are you sure you want to delete your acc?</h2>
             </div>
-          </Box>
-        </Modal>
-      </div>
+            <div className="delete-acc-modal__footer">
+              <span onClick={handleDeleteAccount}>Yes</span>
+              <span onClick={handleDeleteClose}>No</span>
+            </div>
+          </div>
+        </Box>
+      </Modal>
     </>
   );
 };
