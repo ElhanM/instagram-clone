@@ -12,7 +12,7 @@ import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/system";
 import { Link, NavLink } from "react-router-dom";
 import { Tabs, Tab } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import { useGlobalContext } from "../components/context";
 import Modal from "@mui/material/Modal";
@@ -41,7 +41,6 @@ const styleSearch = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -69,11 +68,7 @@ const Search = styled("div")(({ theme }) => ({
     backgroundColor: "#f0f0f0",
   },
   marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(1),
-    width: "auto",
-  },
+  width: "auto",
 }));
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
@@ -134,6 +129,8 @@ const Navbar = () => {
 
   const history = useNavigate();
 
+  const [users, setUsers] = useState([]);
+
   const handleDeleteAccount = async () => {
     try {
       const deletePosts = await axios.delete(`${postsURL}`, {
@@ -156,22 +153,43 @@ const Navbar = () => {
     }
   };
 
+  useEffect(() => {
+    const getAllUsers = async () => {
+      try {
+        const response = await axios(`${authURL}`, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        setUsers(response?.data?.users);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getAllUsers();
+  }, []);
+
   return (
     <>
       <ThemeProvider theme={theme}>
         <AppBar position="sticky" sx={{ borderBottom: "1px solid #dbdbdb" }}>
           <Container maxWidth="xl">
             <Toolbar disableGutters>
-              <InstagramIcon
-                sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-              />
+              <Link to="/" onClick={() => setValue()} className="navbar-link">
+                <InstagramIcon
+                  sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+                />
+              </Link>
+
               <Typography
-                variant="h6"
+                variant="h5"
                 noWrap
                 component="a"
                 sx={{
                   mr: 2,
                   display: { xs: "none", md: "flex" },
+                  flexGrow: 1,
+
                   fontFamily: "monospace",
                   fontWeight: 700,
                   letterSpacing: ".3rem",
@@ -239,9 +257,18 @@ const Navbar = () => {
                   </div>
                 </Menu>
               </Box>
-              <InstagramIcon
-                sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
-              />
+              <Link to="/" onClick={() => setValue()} className="navbar-link">
+                <InstagramIcon
+                  sx={{
+                    display: { xs: "flex", md: "none" },
+                    mr: 1,
+                    "@media (max-width: 600px)": {
+                      marginRight: "30vw",
+                    },
+                  }}
+                />
+              </Link>
+
               <Typography
                 variant="h5"
                 noWrap
@@ -250,6 +277,9 @@ const Navbar = () => {
                 sx={{
                   mr: 2,
                   display: { xs: "flex", md: "none" },
+                  "@media (max-width: 600px)": {
+                    display: "none",
+                  },
                   flexGrow: 1,
                   fontFamily: "monospace",
                   fontWeight: 700,
@@ -290,7 +320,15 @@ const Navbar = () => {
                 aria-labelledby="modal-modal-title"
                 aria-describedbyF="modal-modal-description"
               >
-                <Box sx={styleSearch}></Box>
+                <Box sx={styleSearch}>
+                  <div className="navbar-search">
+                    {users?.map((user) => (
+                      <div key={user?._id} className="navbar-search__user">
+                        user
+                      </div>
+                    ))}
+                  </div>
+                </Box>
               </Modal>
               <Tabs
                 sx={{ ml: "auto", display: { xs: "none", md: "flex" } }}
