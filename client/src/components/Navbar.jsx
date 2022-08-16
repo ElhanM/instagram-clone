@@ -45,10 +45,10 @@ const theme = createTheme({
 });
 
 const Navbar = () => {
-  const { userDispatch, userInfo, postsURL, authURL } = useGlobalContext();
+  const { userDispatch, userInfo, postsURL, authURL, value, setValue } =
+    useGlobalContext();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const [value, setValue] = useState();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);

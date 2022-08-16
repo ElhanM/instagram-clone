@@ -44,6 +44,7 @@ const Post = () => {
     deleteComment,
     editComment,
     postsURL,
+    setValue,
   } = useGlobalContext();
   const history = useNavigate();
   const { userId, postId } = useParams();
@@ -195,6 +196,9 @@ const Post = () => {
     if (!user) {
       history("/login");
     }
+  }, []);
+  useEffect(() => {
+    setValue();
   }, []);
   return (
     <div>

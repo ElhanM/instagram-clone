@@ -15,7 +15,7 @@ import { useGlobalContext } from "../components/context";
 
 const Register = () => {
   const history = useNavigate();
-  const { cloudinaryRequest, registerURL } = useGlobalContext();
+  const { cloudinaryRequest, registerURL, setValue } = useGlobalContext();
   const [image, setImage] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
@@ -72,7 +72,9 @@ const Register = () => {
       postRequest();
     }
   }, [imageUrl]);
-  useEffect(() => {}, []);
+  useEffect(() => {
+    setValue();
+  }, []);
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />

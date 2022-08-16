@@ -15,7 +15,7 @@ import { useGlobalContext } from "../components/context";
 import { useEffect } from "react";
 
 const Login = () => {
-  const { userDispatch, loginURL } = useGlobalContext();
+  const { userDispatch, loginURL, setValue } = useGlobalContext();
   const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
@@ -58,6 +58,10 @@ const Login = () => {
     event.preventDefault();
     postRequest();
   };
+
+  useEffect(() => {
+    setValue();
+  }, []);
 
   return (
     <Container component="main" maxWidth="xs">

@@ -23,6 +23,8 @@ const loginURL = `${authURL}/login`;
 const registerURL = `${authURL}/register`;
 
 const AppProvider = ({ children }) => {
+  const [value, setValue] = useState();
+
   const [state, dispatch] = useReducer(reducer, initialState);
   const userDispatch = (userData) => {
     dispatch({ type: "USER", payload: userData });
@@ -200,6 +202,8 @@ const AppProvider = ({ children }) => {
         editComment,
         followRequest,
         cloudinaryRequest,
+        value,
+        setValue
       }}
     >
       {children}

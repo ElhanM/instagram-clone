@@ -18,6 +18,7 @@ const CreatePost = () => {
     allPosts,
     cloudinaryRequest,
     postsURL,
+    setValue,
   } = useGlobalContext();
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -55,6 +56,7 @@ const CreatePost = () => {
       console.log(response.data);
       updatePostsDispatch(tempPosts);
       history("/");
+      setValue()
     } catch (error) {
       console.log(error);
     }
@@ -65,6 +67,10 @@ const CreatePost = () => {
       postRequest();
     }
   }, [imageUrl]);
+  
+  useEffect(() => {
+    setValue(0)
+  }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
