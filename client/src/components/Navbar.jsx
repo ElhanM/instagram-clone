@@ -21,6 +21,7 @@ import { useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
+import SearchUsers from "./SearchUsers";
 
 const styleDelete = {
   position: "absolute",
@@ -361,57 +362,7 @@ const Navbar = () => {
                       ]}
                     />
                     {users?.map((user) => (
-                      <div key={user?._id} className="navbar-search__user">
-                        <div className="navbar-search__user__container__header">
-                          {searchValue ? (
-                            user?.username?.includes(searchValue) && (
-                              <div className="navbar-search__user__container__header__left">
-                                <div className="navbar-search__user__container__header__left__photo">
-                                  <Link to={`/profile/${user?._id}`}>
-                                    <Avatar
-                                      alt={user?.username}
-                                      src={user?.profilePhoto}
-                                      sx={{ width: "3rem", height: "3rem" }}
-                                    />
-                                  </Link>
-                                </div>
-                                <div className="navbar-search__user__container__header__left__user">
-                                  <Link to={`/profile/${user?._id}`}>
-                                    <Typography
-                                      variant="h3"
-                                      sx={{ fontSize: "2rem" }}
-                                    >
-                                      @{user?.username}
-                                    </Typography>
-                                  </Link>
-                                </div>
-                              </div>
-                            )
-                          ) : (
-                            <div className="navbar-search__user__container__header__left">
-                              <div className="navbar-search__user__container__header__left__photo">
-                                <Link to={`/profile/${user?._id}`}>
-                                  <Avatar
-                                    alt={user?.username}
-                                    src={user?.profilePhoto}
-                                    sx={{ width: "3rem", height: "3rem" }}
-                                  />
-                                </Link>
-                              </div>
-                              <div className="navbar-search__user__container__header__left__user">
-                                <Link to={`/profile/${user?._id}`}>
-                                  <Typography
-                                    variant="h3"
-                                    sx={{ fontSize: "2rem" }}
-                                  >
-                                    @{user?.username}
-                                  </Typography>
-                                </Link>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
+                      <SearchUsers key={user?._id} searchValue={searchValue} user={user} />
                     ))}
                   </div>
                 </Box>

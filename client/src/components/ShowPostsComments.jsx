@@ -1,6 +1,7 @@
 import { Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import { Link } from "react-router-dom";
 
 const ShowPostsComments = ({
   comment,
@@ -14,12 +15,18 @@ const ShowPostsComments = ({
   return (
     <div className="comments-main-page__flex-post">
       <div className="comments-main-page__flex-post__item-left">
-        <Typography
-          variant="span"
-          sx={{ fontSize: "1.2rem", paddingTop: "0.2em" }}
+        <Link
+          to={`/profile/${comment?.user?._id}`}
+          style={{ textDecoration: "none" }}
         >
-          @{comment?.user?.username}:
-        </Typography>
+          <Typography
+            variant="span"
+            sx={{ fontSize: "1.2rem", paddingTop: "0.2em" }}
+          >
+            @{comment?.user?.username}:
+          </Typography>
+        </Link>
+
         <Typography
           variant="span"
           sx={{
