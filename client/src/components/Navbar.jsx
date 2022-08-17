@@ -22,6 +22,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchUsers from "./SearchUsers";
+import CloseIcon from "@mui/icons-material/Close";
 
 const styleDelete = {
   position: "absolute",
@@ -309,10 +310,12 @@ const Navbar = () => {
                 </SearchIconWrapper>
                 <StyledInputBase
                   value={""}
-                  // onChange={(e) => setSearchValue(e.target.value)}
                   placeholder="Search…"
                   inputProps={{ "aria-label": "search" }}
-                  // disable focus
+                  // disabled={true}
+                  style={{
+                    caretColor: "transparent",
+                  }}
                 />
               </Search>
               <Modal
@@ -330,39 +333,59 @@ const Navbar = () => {
               >
                 <Box sx={styleSearch}>
                   <div className="navbar-search">
-                    <TextField
-                      variant="standard"
-                      required
-                      name="search"
-                      label="Search users"
-                      id="search"
-                      autoComplete="off"
-                      autoFocus
-                      value={searchValue}
-                      onChange={(e) => {
-                        setSearchValue(e.target.value);
-                      }}
-                      sx={[
-                        {
-                          "& .MuiInput-underline:after": {
-                            borderBottomColor: "#000",
-                          },
-                          "& label.Mui-focused": {
-                            color: "#000",
-                          },
-                          "& .MuiOutlinedInput-root": {
-                            "&.Mui-focused fieldset": {
-                              borderColor: "#000",
+                    <div className="navbar-search__header">
+                      <TextField
+                        variant="standard"
+                        required
+                        name="search"
+                        label="Search users"
+                        id="search"
+                        autoComplete="off"
+                        autoFocus
+                        value={searchValue}
+                        onChange={(e) => {
+                          setSearchValue(e.target.value);
+                        }}
+                        sx={[
+                          {
+                            "& .MuiInput-underline:after": {
+                              borderBottomColor: "#000",
                             },
+                            "& label.Mui-focused": {
+                              color: "#000",
+                            },
+                            "& .MuiOutlinedInput-root": {
+                              "&.Mui-focused fieldset": {
+                                borderColor: "#000",
+                              },
+                            },
+                            width: "90%",
+                            marginRight: "0.5em",
+                            marginBottom: "1em",
                           },
-                          width: "90%",
-                          marginRight: "0.5em",
-                          marginBottom: "1em",
-                        },
-                      ]}
-                    />
+                        ]}
+                      />
+                      <CloseIcon
+                        className="navbar-search__header__close-icon"
+                        sx={[
+                          {
+                            "&:hover": {
+                              cursor: "pointer",
+                            },
+                            fontSize: "2.5rem",
+                          },
+                        ]}
+                        onClick={() => {
+                          handleSearchClose();
+                        }}
+                      />
+                    </div>
                     {users?.map((user) => (
-                      <SearchUsers key={user?._id} searchValue={searchValue} user={user} />
+                      <SearchUsers
+                        key={user?._id}
+                        searchValue={searchValue}
+                        user={user}
+                      />
                     ))}
                   </div>
                 </Box>

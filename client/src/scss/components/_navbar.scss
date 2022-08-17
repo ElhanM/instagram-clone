@@ -38,21 +38,26 @@
   }
 }
 
-.navbar-search__user {
-  a {
-    text-decoration: none;
-    color: $black;
-  }
-  &__container__header {
+.navbar-search {
+  &__header {
     @include flex-center;
-    justify-content: space-between;
-    &__left {
-      display: flex;
-      align-items: center;
-      margin-bottom: 1em;
+  }
+  &__user {
+    a {
+      text-decoration: none;
+      color: $black;
+    }
+    &__container__header {
+      @include flex-center;
+      justify-content: space-between;
+      &__left {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1em;
 
-      &__photo {
-        margin-right: 0.5em;
+        &__photo {
+          margin-right: 0.5em;
+        }
       }
     }
   }
