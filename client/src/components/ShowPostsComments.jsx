@@ -18,7 +18,7 @@ const ShowPostsComments = ({
           variant="span"
           sx={{ fontSize: "1.2rem", paddingTop: "0.2em" }}
         >
-          {comment?.user?.username}:
+          @{comment?.user?.username}:
         </Typography>
         <Typography
           variant="span"

@@ -145,7 +145,7 @@ const Profile = () => {
               <div className="profile__container__header__user-info">
                 <div className="profile__container__header__user-info__name">
                   <Typography variant="h5" sx={{ fontSize: "2.6rem" }}>
-                    {user[0]?.username}
+                    @{user[0]?.username}
                   </Typography>
                 </div>
                 <div className="profile__container__header__user-info__stats">

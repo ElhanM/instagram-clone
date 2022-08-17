@@ -11,7 +11,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/system";
 import { Link, NavLink } from "react-router-dom";
-import { Tabs, Tab } from "@mui/material";
+import { Tabs, Tab, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import { useGlobalContext } from "../components/context";
@@ -47,6 +47,8 @@ const styleSearch = {
   p: 4,
   width: "80vw",
   maxWidth: "500px",
+  maxHeight: "80vh",
+  overflow: "auto",
 };
 
 const theme = createTheme({
@@ -91,9 +93,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     width: "100%",
     [theme.breakpoints.up("sm")]: {
       width: "12ch",
-      "&:focus": {
-        width: "20ch",
-      },
+      // "&:focus": {
+      //   width: "20ch",
+      // },
     },
   },
 }));
@@ -130,6 +132,10 @@ const Navbar = () => {
   const history = useNavigate();
 
   const [users, setUsers] = useState([]);
+  const [tempUsers, setTempUsers] = useState([]);
+  useEffect(() => {
+    setTempUsers(users);
+  }, [users]);
 
   const handleDeleteAccount = async () => {
     try {
@@ -301,10 +307,11 @@ const Navbar = () => {
                   <SearchIcon />
                 </SearchIconWrapper>
                 <StyledInputBase
-                  // value={searchValue}
+                  value={""}
                   // onChange={(e) => setSearchValue(e.target.value)}
                   placeholder="Search…"
                   inputProps={{ "aria-label": "search" }}
+                  // disable focus
                 />
               </Search>
               <Modal
@@ -322,9 +329,88 @@ const Navbar = () => {
               >
                 <Box sx={styleSearch}>
                   <div className="navbar-search">
+                    <TextField
+                      variant="standard"
+                      required
+                      name="search"
+                      label="Search users"
+                      id="search"
+                      autoComplete="off"
+                      autoFocus
+                      value={searchValue}
+                      onChange={(e) => {
+                        setSearchValue(e.target.value);
+                      }}
+                      sx={[
+                        {
+                          "& .MuiInput-underline:after": {
+                            borderBottomColor: "#000",
+                          },
+                          "& label.Mui-focused": {
+                            color: "#000",
+                          },
+                          "& .MuiOutlinedInput-root": {
+                            "&.Mui-focused fieldset": {
+                              borderColor: "#000",
+                            },
+                          },
+                          width: "90%",
+                          marginRight: "0.5em",
+                          marginBottom: "1em",
+                        },
+                      ]}
+                    />
                     {users?.map((user) => (
                       <div key={user?._id} className="navbar-search__user">
-                        user
+                        <div className="navbar-search__user__container__header">
+                          {searchValue ? (
+                            user?.username?.includes(searchValue) && (
+                              <div className="navbar-search__user__container__header__left">
+                                <div className="navbar-search__user__container__header__left__photo">
+                                  <Link to={`/profile/${user?._id}`}>
+                                    <Avatar
+                                      alt={user?.username}
+                                      src={user?.profilePhoto}
+                                      sx={{ width: "3rem", height: "3rem" }}
+                                    />
+                                  </Link>
+                                </div>
+                                <div className="navbar-search__user__container__header__left__user">
+                                  <Link to={`/profile/${user?._id}`}>
+                                    <Typography
+                                      variant="h3"
+                                      sx={{ fontSize: "2rem" }}
+                                    >
+                                      @{user?.username}
+                                    </Typography>
+                                  </Link>
+                                </div>
+                              </div>
+                            )
+                          ) : (
+                            <div className="navbar-search__user__container__header__left">
+                              <div className="navbar-search__user__container__header__left__photo">
+                                <Link to={`/profile/${user?._id}`}>
+                                  <Avatar
+                                    alt={user?.username}
+                                    src={user?.profilePhoto}
+                                    sx={{ width: "3rem", height: "3rem" }}
+                                  />
+                                </Link>
+                              </div>
+                              <div className="navbar-search__user__container__header__left__user">
+                                <Link to={`/profile/${user?._id}`}>
+                                  <Typography
+                                    variant="h3"
+                                    sx={{ fontSize: "2rem" }}
+                                  >
+                                    @{user?.username}
+                                  </Typography>
+                                </Link>
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     ))}
                   </div>

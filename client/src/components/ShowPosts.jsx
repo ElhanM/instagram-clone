@@ -43,7 +43,7 @@ const ShowPosts = ({
           <div className="main-page__container__header__left__user">
             <Link to={`/profile/${post?.user?._id}`}>
               <Typography variant="h3" sx={{ fontSize: "2rem" }}>
-                {post?.user?.username}
+                @{post?.user?.username}
               </Typography>
             </Link>
           </div>

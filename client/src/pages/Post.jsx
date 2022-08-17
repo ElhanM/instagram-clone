@@ -239,7 +239,7 @@ const Post = () => {
                   </div>
                   <div className="post__info__user__user-info__item">
                     <Typography variant="h2" sx={{ fontSize: "2rem" }}>
-                      {post?.user?.username}
+                      @{post?.user?.username}
                     </Typography>
                   </div>
                 </div>
