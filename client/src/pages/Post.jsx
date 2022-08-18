@@ -35,7 +35,6 @@ const Post = () => {
     userDispatch,
     userInfo,
     allPosts,
-    loading,
     updatePostsDispatch,
     likeURL,
     unlikeURL,
@@ -54,6 +53,7 @@ const Post = () => {
   const [editPostMode, setEditPostMode] = useState(false);
   const [editCommentMode, setEditCommentMode] = useState(false);
   const [allowLike, setAllowLike] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [inputs, setInputs] = useState({
     title: "",
     description: "",
@@ -84,6 +84,7 @@ const Post = () => {
         title: response.data.post.title,
         description: response.data.post.description,
       });
+      setLoading(false);
       console.log(response.data.post);
     } catch (error) {
       console.log(error);
@@ -201,365 +202,303 @@ const Post = () => {
     setValue();
   }, []);
   return (
-    <div>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <div className="post">
-            <div className="post__image">
-              <img src={post.photo} alt={post?.description || post?.title} />
-              <CloseIcon
-                className="post__image__close-icon"
-                sx={[
-                  {
-                    "&:hover": {
-                      cursor: "pointer",
-                    },
-                    fontSize: "2.5rem",
-                  },
-                ]}
-                onClick={() => {
-                  handleClose();
-                }}
-              />
-            </div>
-            <div className="post__info">
-              <div className="post__info__user">
-                <div className="post__info__user__user-info">
-                  <div className="post__info__user__user-info__item">
-                    <Avatar
-                      alt={post?.user?.username}
-                      src={post?.user?.profilePhoto}
-                      sx={{ width: "4rem", height: "4rem" }}
-                    />
-                  </div>
-                  <div className="post__info__user__user-info__item">
-                    <Typography variant="h2" sx={{ fontSize: "2rem" }}>
-                      @{post?.user?.username}
-                    </Typography>
-                  </div>
-                </div>
-                <div className="post__info__user__options">
-                  {JSON.parse(localStorage.getItem("user"))._id === userId && (
-                    <>
-                      {editPostMode ? (
-                        <CloseIcon
-                          sx={[
-                            {
-                              "&:hover": {
-                                cursor: "pointer",
-                                scale: "1.2",
-                              },
-                              fontSize: "1.9rem",
-                            },
-                          ]}
-                          onClick={() => {
-                            setEditPostMode((prev) => !prev);
-                            setInputs({
-                              ...inputs,
-                              title: post.title,
-                              description: post.description,
-                            });
-                          }}
-                        />
-                      ) : (
-                        <EditIcon
-                          sx={[
-                            {
-                              "&:hover": {
-                                cursor: "pointer",
-                                scale: "1.2",
-                              },
-                              fontSize: "1.9rem",
-                            },
-                          ]}
-                          onClick={() => setEditPostMode((prev) => !prev)}
-                        />
-                      )}
-
-                      <DeleteIcon
-                        sx={[
-                          {
-                            "&:hover": {
-                              cursor: "pointer",
-                              scale: "1.2",
-                            },
-                            fontSize: "1.9rem",
-                            color: "red",
-                          },
-                        ]}
-                        onClick={deletePost}
-                      />
-                    </>
-                  )}
-                </div>
-              </div>
-
-              <div className="post__info__stats">
-                <div className="post__info__stats__likes">
-                  {post?.likes?.includes(
-                    JSON.parse(localStorage.getItem("user"))._id
-                  ) ? (
-                    <FavoriteIcon
-                      onClick={() => {
-                        setAllowLike(true);
-                        unlikeRequest(post?._id);
-                      }}
-                      sx={[
-                        {
-                          "&:hover": {
-                            cursor: "pointer",
-                            scale: "1.2",
-                          },
-                          color: "red",
-                          marginLeft: "0.5em",
-                        },
-                      ]}
-                    />
-                  ) : (
-                    ("Post",
-                    (
-                      <FavoriteBorderIcon
-                        onClick={() => {
-                          if (allowLike) {
-                            setAllowLike(false);
-                            likeRequest(post?._id);
-                          }
-                        }}
-                        sx={[
-                          {
-                            "&:hover": {
-                              cursor: "pointer",
-                              scale: "1.2",
-                            },
-                            marginLeft: "0.5em",
-                          },
-                        ]}
-                      />
-                    ))
-                  )}
-                  <Typography
-                    variant="h6"
-                    sx={{ fontSize: "1.2rem", marginLeft: "0.2em" }}
-                  >
-                    {post?.likes?.length === 1
-                      ? `${post?.likes?.length} like`
-                      : `${post?.likes?.length} likes`}
-                  </Typography>
-                </div>
-                {editPostMode ? (
-                  <FormControl
-                    component="form"
-                    variant="standard"
-                    sx={{
-                      paddingBottom: "0.4em",
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      editPost();
-                      setEditPostMode((prev) => !prev);
-                    }}
-                  >
-                    <TextField
-                      variant="standard"
-                      name="title"
-                      label="Edit title"
-                      id="title"
-                      autoComplete="off"
-                      value={inputs.title}
-                      onChange={handleChange}
-                      autoFocus
-                      sx={[
-                        {
-                          "& .MuiInput-underline:after": {
-                            borderBottomColor: "#000",
-                          },
-                          "& label.Mui-focused": {
-                            color: "#000",
-                          },
-                          "& .MuiOutlinedInput-root": {
-                            "&.Mui-focused fieldset": {
-                              borderColor: "#000",
-                            },
-                          },
-                          width: "80%",
-                          marginTop: "1em",
-                        },
-                      ]}
-                    />
-                    <TextField
-                      variant="standard"
-                      name="description"
-                      label="Edit description"
-                      id="description"
-                      autoComplete="off"
-                      value={inputs.description}
-                      onChange={handleChange}
-                      sx={[
-                        {
-                          "& .MuiInput-underline:after": {
-                            borderBottomColor: "#000",
-                          },
-                          "& label.Mui-focused": {
-                            color: "#000",
-                          },
-                          "& .MuiOutlinedInput-root": {
-                            "&.Mui-focused fieldset": {
-                              borderColor: "#000",
-                            },
-                          },
-                          width: "80%",
-                          marginTop: "1em",
-                        },
-                      ]}
-                    />
-                    <Button
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                      sx={[
-                        {
-                          "&:hover": {
-                            backgroundColor: "#000",
-                            color: "#fff",
-                          },
-                          mt: 3,
-                          mb: 2,
-                          color: "#000",
-                          backgroundColor: "#fff",
-                          borderColor: "#000",
-                          border: "2px solid #000",
-                          transition: "background-color 0.2s ease",
-                          width: "8em",
-                          // marginRight: "auto",
-                        },
-                      ]}
-                    >
-                      Save changes
-                    </Button>
-                  </FormControl>
-                ) : (
-                  <>
-                    <Typography
-                      variant="h1"
-                      sx={{ fontSize: "1.7rem", marginLeft: ".5em" }}
-                    >
-                      {post.title}
-                    </Typography>
-                    <Typography
-                      variant="h1"
-                      sx={{ fontSize: "1.4rem", marginLeft: ".5em" }}
-                    >
-                      {post.description}
-                    </Typography>
-                  </>
-                )}
-
-                <FormControl
-                  component="form"
-                  variant="standard"
-                  sx={{
-                    paddingBottom: "0.4em",
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "flex-start",
-                  }}
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    handleSubmit(postId, inputs.comment, allPosts);
-                    inputs.comment = "";
-                  }}
-                >
-                  <TextField
-                    variant="standard"
-                    required
-                    name="comment"
-                    label="Add comment"
-                    id="comment"
-                    autoComplete="off"
-                    value={inputs.comment}
-                    onChange={handleChange}
-                    sx={[
-                      {
-                        "& .MuiInput-underline:after": {
-                          borderBottomColor: "#000",
-                        },
-                        "& label.Mui-focused": {
-                          color: "#000",
-                        },
-                        "& .MuiOutlinedInput-root": {
-                          "&.Mui-focused fieldset": {
-                            borderColor: "#000",
-                          },
-                        },
-                        width: "80%",
-                        marginLeft: "0.5em",
-                        marginRight: "1em",
-                      },
-                    ]}
+    <>
+      <div>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            {loading ? (
+              <h1>Loading...</h1>
+            ) : allPosts === [] ? (
+              <h1>No allPosts to display </h1>
+            ) : (
+              <div className="post">
+                <div className="post__image">
+                  <img
+                    src={post.photo}
+                    alt={post?.description || post?.title}
                   />
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
+                  <CloseIcon
+                    className="post__image__close-icon"
                     sx={[
                       {
                         "&:hover": {
-                          backgroundColor: "#000",
-                          color: "#fff",
+                          cursor: "pointer",
                         },
-                        mt: 3,
-                        mb: 2,
-                        color: "#000",
-                        backgroundColor: "#fff",
-                        borderColor: "#000",
-                        border: "2px solid #000",
-                        transition: "background-color 0.2s ease",
-                        width: "3em",
-                        marginRight: "1em",
+                        fontSize: "2.5rem",
                       },
                     ]}
-                  >
-                    Post
-                  </Button>
-                </FormControl>
-                {editCommentMode ? (
-                  <FormControl
-                    component="form"
-                    variant="standard"
-                    sx={{
-                      paddingBottom: "0.4em",
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "center",
+                    onClick={() => {
+                      handleClose();
                     }}
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      editComment(postId, inputs, allPosts);
-                      setEditCommentMode((prev) => !prev);
-                    }}
-                  >
-                    <div className="post__edit-comment-flex">
+                  />
+                </div>
+                <div className="post__info">
+                  <div className="post__info__user">
+                    <div className="post__info__user__user-info">
+                      <div className="post__info__user__user-info__item">
+                        <Avatar
+                          alt={post?.user?.username}
+                          src={post?.user?.profilePhoto}
+                          sx={{ width: "4rem", height: "4rem" }}
+                        />
+                      </div>
+                      <div className="post__info__user__user-info__item">
+                        <Typography variant="h2" sx={{ fontSize: "2rem" }}>
+                          @{post?.user?.username}
+                        </Typography>
+                      </div>
+                    </div>
+                    <div className="post__info__user__options">
+                      {JSON.parse(localStorage.getItem("user"))._id ===
+                        userId && (
+                        <>
+                          {editPostMode ? (
+                            <CloseIcon
+                              sx={[
+                                {
+                                  "&:hover": {
+                                    cursor: "pointer",
+                                    scale: "1.2",
+                                  },
+                                  fontSize: "1.9rem",
+                                },
+                              ]}
+                              onClick={() => {
+                                setEditPostMode((prev) => !prev);
+                                setInputs({
+                                  ...inputs,
+                                  title: post.title,
+                                  description: post.description,
+                                });
+                              }}
+                            />
+                          ) : (
+                            <EditIcon
+                              sx={[
+                                {
+                                  "&:hover": {
+                                    cursor: "pointer",
+                                    scale: "1.2",
+                                  },
+                                  fontSize: "1.9rem",
+                                },
+                              ]}
+                              onClick={() => setEditPostMode((prev) => !prev)}
+                            />
+                          )}
+
+                          <DeleteIcon
+                            sx={[
+                              {
+                                "&:hover": {
+                                  cursor: "pointer",
+                                  scale: "1.2",
+                                },
+                                fontSize: "1.9rem",
+                                color: "red",
+                              },
+                            ]}
+                            onClick={deletePost}
+                          />
+                        </>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="post__info__stats">
+                    <div className="post__info__stats__likes">
+                      {post?.likes?.includes(
+                        JSON.parse(localStorage.getItem("user"))._id
+                      ) ? (
+                        <FavoriteIcon
+                          onClick={() => {
+                            setAllowLike(true);
+                            unlikeRequest(post?._id);
+                          }}
+                          sx={[
+                            {
+                              "&:hover": {
+                                cursor: "pointer",
+                                scale: "1.2",
+                              },
+                              color: "red",
+                              marginLeft: "0.5em",
+                            },
+                          ]}
+                        />
+                      ) : (
+                        ("Post",
+                        (
+                          <FavoriteBorderIcon
+                            onClick={() => {
+                              if (allowLike) {
+                                setAllowLike(false);
+                                likeRequest(post?._id);
+                              }
+                            }}
+                            sx={[
+                              {
+                                "&:hover": {
+                                  cursor: "pointer",
+                                  scale: "1.2",
+                                },
+                                marginLeft: "0.5em",
+                              },
+                            ]}
+                          />
+                        ))
+                      )}
+                      <Typography
+                        variant="h6"
+                        sx={{ fontSize: "1.2rem", marginLeft: "0.2em" }}
+                      >
+                        {post?.likes?.length === 1
+                          ? `${post?.likes?.length} like`
+                          : `${post?.likes?.length} likes`}
+                      </Typography>
+                    </div>
+                    {editPostMode ? (
+                      <FormControl
+                        component="form"
+                        variant="standard"
+                        sx={{
+                          paddingBottom: "0.4em",
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          editPost();
+                          setEditPostMode((prev) => !prev);
+                        }}
+                      >
+                        <TextField
+                          variant="standard"
+                          name="title"
+                          label="Edit title"
+                          id="title"
+                          autoComplete="off"
+                          value={inputs.title}
+                          onChange={handleChange}
+                          autoFocus
+                          sx={[
+                            {
+                              "& .MuiInput-underline:after": {
+                                borderBottomColor: "#000",
+                              },
+                              "& label.Mui-focused": {
+                                color: "#000",
+                              },
+                              "& .MuiOutlinedInput-root": {
+                                "&.Mui-focused fieldset": {
+                                  borderColor: "#000",
+                                },
+                              },
+                              width: "80%",
+                              marginTop: "1em",
+                            },
+                          ]}
+                        />
+                        <TextField
+                          variant="standard"
+                          name="description"
+                          label="Edit description"
+                          id="description"
+                          autoComplete="off"
+                          value={inputs.description}
+                          onChange={handleChange}
+                          sx={[
+                            {
+                              "& .MuiInput-underline:after": {
+                                borderBottomColor: "#000",
+                              },
+                              "& label.Mui-focused": {
+                                color: "#000",
+                              },
+                              "& .MuiOutlinedInput-root": {
+                                "&.Mui-focused fieldset": {
+                                  borderColor: "#000",
+                                },
+                              },
+                              width: "80%",
+                              marginTop: "1em",
+                            },
+                          ]}
+                        />
+                        <Button
+                          type="submit"
+                          fullWidth
+                          variant="contained"
+                          sx={[
+                            {
+                              "&:hover": {
+                                backgroundColor: "#000",
+                                color: "#fff",
+                              },
+                              mt: 3,
+                              mb: 2,
+                              color: "#000",
+                              backgroundColor: "#fff",
+                              borderColor: "#000",
+                              border: "2px solid #000",
+                              transition: "background-color 0.2s ease",
+                              width: "8em",
+                              // marginRight: "auto",
+                            },
+                          ]}
+                        >
+                          Save changes
+                        </Button>
+                      </FormControl>
+                    ) : (
+                      <>
+                        <Typography
+                          variant="h1"
+                          sx={{ fontSize: "1.7rem", marginLeft: ".5em" }}
+                        >
+                          {post.title}
+                        </Typography>
+                        <Typography
+                          variant="h1"
+                          sx={{ fontSize: "1.4rem", marginLeft: ".5em" }}
+                        >
+                          {post.description}
+                        </Typography>
+                      </>
+                    )}
+
+                    <FormControl
+                      component="form"
+                      variant="standard"
+                      sx={{
+                        paddingBottom: "0.4em",
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                      }}
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        handleSubmit(postId, inputs.comment, allPosts);
+                        inputs.comment = "";
+                      }}
+                    >
                       <TextField
                         variant="standard"
                         required
-                        name="editComment"
-                        label="Edit comment"
-                        id="editComment"
+                        name="comment"
+                        label="Add comment"
+                        id="comment"
                         autoComplete="off"
-                        value={inputs.editComment}
+                        value={inputs.comment}
                         onChange={handleChange}
-                        autoFocus
                         sx={[
                           {
                             "& .MuiInput-underline:after": {
@@ -573,76 +512,150 @@ const Post = () => {
                                 borderColor: "#000",
                               },
                             },
-                            width: "100%",
-                            marginTop: "1em",
+                            width: "80%",
+                            marginLeft: "0.5em",
+                            marginRight: "1em",
                           },
                         ]}
                       />
-                      <CloseIcon
+                      <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
                         sx={[
                           {
                             "&:hover": {
-                              cursor: "pointer",
-                              scale: "1.2",
+                              backgroundColor: "#000",
+                              color: "#fff",
                             },
-                            fontSize: "1.9rem",
-                            marginTop: "1em",
+                            mt: 3,
+                            mb: 2,
+                            color: "#000",
+                            backgroundColor: "#fff",
+                            borderColor: "#000",
+                            border: "2px solid #000",
+                            transition: "background-color 0.2s ease",
+                            width: "3em",
+                            marginRight: "1em",
                           },
                         ]}
-                        onClick={() => {
+                      >
+                        Post
+                      </Button>
+                    </FormControl>
+                    {editCommentMode ? (
+                      <FormControl
+                        component="form"
+                        variant="standard"
+                        sx={{
+                          paddingBottom: "0.4em",
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          editComment(postId, inputs, allPosts);
                           setEditCommentMode((prev) => !prev);
                         }}
-                      />
-                    </div>
-                    <Button
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                      sx={[
-                        {
-                          "&:hover": {
-                            backgroundColor: "#000",
-                            color: "#fff",
-                          },
-                          mt: 3,
-                          mb: 2,
-                          color: "#000",
-                          backgroundColor: "#fff",
-                          borderColor: "#000",
-                          border: "2px solid #000",
-                          transition: "background-color 0.2s ease",
-                          width: "8em",
-                        },
-                      ]}
-                    >
-                      Save changes
-                    </Button>
-                  </FormControl>
-                ) : (
-                  <div className={`comments ${editPostMode && "small"}`}>
-                    {post?.comments?.map((comment) => (
-                      <PostComments
-                        key={comment?._id}
-                        comment={comment}
-                        unlikeRequest={unlikeRequest}
-                        likeRequest={likeRequest}
-                        editCommentMode={editCommentMode}
-                        inputs={inputs}
-                        setInputs={setInputs}
-                        setEditCommentMode={setEditCommentMode}
-                        handleChange={handleChange}
-                        postId={postId}
-                        userId={userId}
-                      />
-                    ))}
+                      >
+                        <div className="post__edit-comment-flex">
+                          <TextField
+                            variant="standard"
+                            required
+                            name="editComment"
+                            label="Edit comment"
+                            id="editComment"
+                            autoComplete="off"
+                            value={inputs.editComment}
+                            onChange={handleChange}
+                            autoFocus
+                            sx={[
+                              {
+                                "& .MuiInput-underline:after": {
+                                  borderBottomColor: "#000",
+                                },
+                                "& label.Mui-focused": {
+                                  color: "#000",
+                                },
+                                "& .MuiOutlinedInput-root": {
+                                  "&.Mui-focused fieldset": {
+                                    borderColor: "#000",
+                                  },
+                                },
+                                width: "100%",
+                                marginTop: "1em",
+                              },
+                            ]}
+                          />
+                          <CloseIcon
+                            sx={[
+                              {
+                                "&:hover": {
+                                  cursor: "pointer",
+                                  scale: "1.2",
+                                },
+                                fontSize: "1.9rem",
+                                marginTop: "1em",
+                              },
+                            ]}
+                            onClick={() => {
+                              setEditCommentMode((prev) => !prev);
+                            }}
+                          />
+                        </div>
+                        <Button
+                          type="submit"
+                          fullWidth
+                          variant="contained"
+                          sx={[
+                            {
+                              "&:hover": {
+                                backgroundColor: "#000",
+                                color: "#fff",
+                              },
+                              mt: 3,
+                              mb: 2,
+                              color: "#000",
+                              backgroundColor: "#fff",
+                              borderColor: "#000",
+                              border: "2px solid #000",
+                              transition: "background-color 0.2s ease",
+                              width: "8em",
+                            },
+                          ]}
+                        >
+                          Save changes
+                        </Button>
+                      </FormControl>
+                    ) : (
+                      <div className={`comments ${editPostMode && "small"}`}>
+                        {post?.comments?.map((comment) => (
+                          <PostComments
+                            key={comment?._id}
+                            comment={comment}
+                            unlikeRequest={unlikeRequest}
+                            likeRequest={likeRequest}
+                            editCommentMode={editCommentMode}
+                            inputs={inputs}
+                            setInputs={setInputs}
+                            setEditCommentMode={setEditCommentMode}
+                            handleChange={handleChange}
+                            postId={postId}
+                            userId={userId}
+                          />
+                        ))}
+                      </div>
+                    )}
                   </div>
-                )}
+                </div>
               </div>
-            </div>
-          </div>
-        </Box>
-      </Modal>
-    </div>
+            )}
+          </Box>
+        </Modal>
+      </div>
+    </>
   );
 };
 
