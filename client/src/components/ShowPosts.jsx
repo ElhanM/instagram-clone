@@ -7,6 +7,9 @@ import { useGlobalContext } from "../components/context";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
 import ShowPostsComments from "./ShowPostsComments";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import axios from "axios";
 
 const ShowPosts = ({
   post,
@@ -25,8 +28,62 @@ const ShowPosts = ({
     deleteComment,
     editComment,
     followRequest,
+    postsURL,
+    updatePostsDispatch,
   } = useGlobalContext();
   const [allowLike, setAllowLike] = useState(true);
+  const [editPostMode, setEditPostMode] = useState(false);
+  const history = useNavigate();
+
+  const editPost = async (postId) => {
+    try {
+      const response = await axios.patch(
+        `${postsURL}/post/${postId}`,
+        {
+          title: inputs.title,
+          description: inputs.description,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      const updatedPosts = allPosts?.map((post) => {
+        if (post?._id === postId) {
+          return response.data.post;
+        } else {
+          return post;
+        }
+      });
+      updatePostsDispatch(updatedPosts);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deletePost = async (postId) => {
+    try {
+      const response = await axios.delete(`${postsURL}/post/${postId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      });
+      const updatedPosts = allPosts?.map((post) => {
+        if (post?._id === postId) {
+          return;
+        } else {
+          return post;
+        }
+      });
+      updatePostsDispatch(updatedPosts);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="main-page__container">
       <div className="main-page__container__header">
@@ -49,9 +106,69 @@ const ShowPosts = ({
           </div>
         </div>
         <div className="main-page__container__header__right">
+          {JSON.parse(localStorage.getItem("user"))._id === post?.user?._id && (
+            <>
+              {editPostMode ? (
+                <CloseIcon
+                  sx={[
+                    {
+                      "&:hover": {
+                        cursor: "pointer",
+                        scale: "1.2",
+                      },
+                      fontSize: "1.9rem",
+                    },
+                  ]}
+                  onClick={() => {
+                    setEditPostMode((prev) => !prev);
+                    setInputs({
+                      ...inputs,
+                      title: post.title,
+                      description: post.description,
+                    });
+                  }}
+                />
+              ) : (
+                <EditIcon
+                  sx={[
+                    {
+                      "&:hover": {
+                        cursor: "pointer",
+                        scale: "1.2",
+                      },
+                      fontSize: "1.9rem",
+                    },
+                  ]}
+                  onClick={() => {
+                    setEditPostMode((prev) => !prev);
+                    setInputs({
+                      ...inputs,
+                      title: post.title,
+                      description: post.description,
+                    });
+                  }}
+                />
+              )}
+
+              <DeleteIcon
+                sx={[
+                  {
+                    "&:hover": {
+                      cursor: "pointer",
+                      scale: "1.2",
+                    },
+                    fontSize: "1.9rem",
+                    color: "red",
+                  },
+                ]}
+                onClick={() => {
+                  deletePost(post?._id);
+                }}
+              />
+            </>
+          )}
           {JSON.parse(localStorage.getItem("user"))._id !== post?.user?._id && (
             <>
-              {" "}
               {post?.user?.followers?.includes(
                 JSON.parse(localStorage.getItem("user"))._id
               ) ? (
@@ -67,8 +184,6 @@ const ShowPosts = ({
                         backgroundColor: "#000",
                         color: "#fff",
                       },
-                      mt: 3,
-                      mb: 2,
                       color: "#000",
                       backgroundColor: "#fff",
                       borderColor: "#000",
@@ -93,8 +208,6 @@ const ShowPosts = ({
                         backgroundColor: "#000",
                         color: "#fff",
                       },
-                      mt: 3,
-                      mb: 2,
                       color: "#000",
                       backgroundColor: "#fff",
                       borderColor: "#000",
@@ -161,12 +274,112 @@ const ShowPosts = ({
               : `${post?.likes?.length} likes`}
           </Typography>
         </div>
-        <Typography variant="h1" sx={{ fontSize: "1.7rem" }}>
-          {post?.title}
-        </Typography>
-        <Typography variant="h1" sx={{ fontSize: "1.4rem" }}>
-          {post?.description}
-        </Typography>
+        {editPostMode ? (
+          <FormControl
+            component="form"
+            variant="standard"
+            sx={{
+              paddingBottom: "0.4em",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onSubmit={(e) => {
+              e.preventDefault();
+              editPost(post?._id);
+              setEditPostMode((prev) => !prev);
+            }}
+          >
+            <TextField
+              variant="standard"
+              name="title"
+              label="Edit title"
+              id="title"
+              autoComplete="off"
+              value={inputs.title}
+              onChange={handleChange}
+              autoFocus
+              sx={[
+                {
+                  "& .MuiInput-underline:after": {
+                    borderBottomColor: "#000",
+                  },
+                  "& label.Mui-focused": {
+                    color: "#000",
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#000",
+                    },
+                  },
+                  width: "80%",
+                  marginTop: "1em",
+                },
+              ]}
+            />
+            <TextField
+              variant="standard"
+              name="description"
+              label="Edit description"
+              id="description"
+              autoComplete="off"
+              value={inputs.description}
+              onChange={handleChange}
+              sx={[
+                {
+                  "& .MuiInput-underline:after": {
+                    borderBottomColor: "#000",
+                  },
+                  "& label.Mui-focused": {
+                    color: "#000",
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#000",
+                    },
+                  },
+                  width: "80%",
+                  marginTop: "1em",
+                },
+              ]}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={[
+                {
+                  "&:hover": {
+                    backgroundColor: "#000",
+                    color: "#fff",
+                  },
+                  mt: 3,
+                  mb: 2,
+                  color: "#000",
+                  backgroundColor: "#fff",
+                  borderColor: "#000",
+                  border: "2px solid #000",
+                  transition: "background-color 0.2s ease",
+                  width: "8em",
+                  // marginRight: "auto",
+                },
+              ]}
+            >
+              Save changes
+            </Button>
+          </FormControl>
+        ) : (
+          <>
+            <Typography variant="h1" sx={{ fontSize: "1.7rem" }}>
+              {post?.title}
+            </Typography>
+            <Typography variant="h1" sx={{ fontSize: "1.4rem" }}>
+              {post?.description}
+            </Typography>
+          </>
+        )}
+
         <FormControl
           component="form"
           variant="standard"

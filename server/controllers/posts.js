@@ -14,10 +14,9 @@ const getAllPosts = async (req, res, next) => {
 
 const getAllPostsByUser = async (req, res, next) => {
   try {
-    const posts = await Post.find({ user: req.params.user }).populate(
-      "user",
-      "_id username"
-    );
+    const posts = await Post.find({ user: req.params.user })
+      .populate("user", "_id username followers following profilePhoto")
+      .populate("comments.user", "_id username");
     res.status(200).json({ posts });
   } catch (error) {
     return next(
@@ -72,7 +71,9 @@ const comment = async (req, res, next) => {
         $push: { comments: { text: req.body.text, user: req.user._id } },
       },
       { new: true }
-    ).populate("comments.user", "username");
+    )
+      .populate("user", "_id username followers following profilePhoto")
+      .populate("comments.user", "_id username");
     res.status(201).json({ comment });
   } catch (error) {
     return next(
@@ -89,7 +90,9 @@ const deleteComment = async (req, res, next) => {
         $pull: { comments: { _id: req.body.commentId } },
       },
       { new: true }
-    ).populate("comments.user", "username");
+    )
+      .populate("user", "_id username followers following profilePhoto")
+      .populate("comments.user", "_id username");
     res.status(200).json({ comment });
   } catch (error) {
     return next(
@@ -107,7 +110,9 @@ const editComment = async (req, res, next) => {
       { _id: postId, "comments._id": req.body.commentId },
       { $set: { "comments.$.text": req.body.commentText } },
       { new: true }
-    ).populate("comments.user", "username");
+    )
+      .populate("user", "_id username followers following profilePhoto")
+      .populate("comments.user", "_id username");
     res.status(200).json({ post });
   } catch (error) {
     return next(
@@ -123,8 +128,8 @@ const getPost = async (req, res, next) => {
   try {
     const { postId } = req.params;
     const post = await Post.findOne({ _id: postId })
-      .populate("user", "username profilePhoto")
-      .populate("comments.user", "username");
+      .populate("user", "_id username followers following profilePhoto")
+      .populate("comments.user", "_id username");
     res.status(200).json({ post });
   } catch (error) {
     return next(new ErrorResponse(`No post with id : ${postId}`, 404));
@@ -158,7 +163,9 @@ const editPost = async (req, res, next) => {
     const post = await Post.findOneAndUpdate({ _id: postId }, req.body, {
       new: true,
       runValidators: true,
-    }).populate("user", "username");
+    })
+      .populate("user", "_id username followers following profilePhoto")
+      .populate("comments.user", "_id username");
     res.status(200).json({ post });
   } catch (error) {
     res.status(404).json({ msg: `No post with id : ${postId}`, status: 404 });

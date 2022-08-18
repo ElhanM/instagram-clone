@@ -47,9 +47,9 @@ const Post = () => {
     setValue,
   } = useGlobalContext();
   const history = useNavigate();
+  const handleOpen = () => setOpen(true);
   const { userId, postId } = useParams();
   const [open, setOpen] = useState(true);
-  const handleOpen = () => setOpen(true);
   const [post, setPost] = useState({});
   const [editPostMode, setEditPostMode] = useState(false);
   const [editCommentMode, setEditCommentMode] = useState(false);
@@ -370,7 +370,6 @@ const Post = () => {
                   >
                     <TextField
                       variant="standard"
-                      required
                       name="title"
                       label="Edit title"
                       id="title"
@@ -398,7 +397,6 @@ const Post = () => {
                     />
                     <TextField
                       variant="standard"
-                      required
                       name="description"
                       label="Edit description"
                       id="description"
