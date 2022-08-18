@@ -284,7 +284,7 @@ a :hover {
   -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
-  padding: 0 1em;
+  padding: 0.8em 1em;
 }
 .main-page__container__header__photo {
   margin-right: 0.5em;

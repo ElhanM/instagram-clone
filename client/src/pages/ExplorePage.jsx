@@ -21,6 +21,8 @@ const ExplorePage = () => {
   const [initialRender, setInitialRender] = useState(true);
 
   const [inputs, setInputs] = useState({
+    title: "",
+    description: "",
     editComment: "",
     editCommentId: "",
     editCommentPostId: "",
