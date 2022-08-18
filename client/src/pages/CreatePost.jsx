@@ -33,6 +33,8 @@ const CreatePost = () => {
   });
   const [image, setImage] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+
   const handleChange = (e) => {
     setInputs({
       ...inputs,
@@ -56,9 +58,10 @@ const CreatePost = () => {
       console.log(response.data);
       updatePostsDispatch(tempPosts);
       history("/");
-      setValue()
+      setValue();
     } catch (error) {
       console.log(error);
+      setErrorMsg("Please provide an image");
     }
   };
 
@@ -67,14 +70,18 @@ const CreatePost = () => {
       postRequest();
     }
   }, [imageUrl]);
-  
+
   useEffect(() => {
-    setValue(0)
+    setValue(0);
   }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    cloudinaryRequest(image, setImageUrl);
+    if (image) {
+      cloudinaryRequest(image, setImageUrl);
+    } else {
+      setErrorMsg("Please provide an image");
+    }
   };
 
   return (
@@ -87,9 +94,24 @@ const CreatePost = () => {
           alignItems: "center",
         }}
       >
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h5" sx={{ marginBottom: "1em" }}>
           Create Post
         </Typography>
+        {errorMsg &&
+          errorMsg?.split(",").map((error, index) => (
+            <Typography
+              key={index}
+              variant="h6"
+              sx={{
+                fontWeight: "400",
+                fontSize: "1rem",
+                backgroundColor: "#f6d9d8",
+                padding: "0.5em 1em",
+              }}
+            >
+              {error}
+            </Typography>
+          ))}
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
@@ -144,7 +166,15 @@ const CreatePost = () => {
             id="photo"
             type="file"
             autoComplete="off"
-            onChange={(e) => setImage(e.target.files[0])}
+            // value={image}
+            onChange={(e) => {
+              if (e?.target?.files[0]?.type?.includes("image")) {
+                setImage(e?.target?.files[0]);
+              } else {
+                setErrorMsg("Please provide an image");
+                e.target.value = null;
+              }
+            }}
             sx={[
               {
                 "& label.Mui-focused": {

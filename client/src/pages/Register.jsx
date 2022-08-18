@@ -99,7 +99,12 @@ const Register = () => {
               <Typography
                 key={index}
                 variant="h6"
-                sx={{ fontWeight: "400", fontSize: "1rem" }}
+                sx={{
+                  fontWeight: "400",
+                  fontSize: "1rem",
+                  backgroundColor: "#f6d9d8",
+                  padding: "0.5em 1em",
+                }}
               >
                 {error}
               </Typography>

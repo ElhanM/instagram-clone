@@ -385,6 +385,7 @@ const Navbar = () => {
                         key={user?._id}
                         searchValue={searchValue}
                         user={user}
+                        handleSearchClose={handleSearchClose}
                       />
                     ))}
                   </div>
