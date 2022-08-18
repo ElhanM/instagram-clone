@@ -30,7 +30,6 @@ const Profile = () => {
   const {
     userDispatch,
     allPosts,
-    loading,
     authURL,
     userInfo,
     updatePostsDispatch,
@@ -44,12 +43,12 @@ const Profile = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [showChangePhoto, setShowChangePhoto] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const handleOpen = () => setShowChangePhoto(true);
   const handleClose = () => setShowChangePhoto(false);
   const axiosGetUser = async () => {
     try {
-      // dispatch({ type: "LOADING" });
       const response = await axios(`${authURL}/user/${userId}`, {
         headers: {
           "Content-Type": "application/json",
@@ -59,7 +58,7 @@ const Profile = () => {
         data: { user },
       } = response;
       setUser(user);
-      // dispatch({ type: "GET_POSTS", payload: posts });
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
