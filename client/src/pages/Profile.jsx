@@ -43,6 +43,8 @@ const Profile = () => {
   const [image, setImage] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [showChangePhoto, setShowChangePhoto] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
   const handleOpen = () => setShowChangePhoto(true);
   const handleClose = () => setShowChangePhoto(false);
   const axiosGetUser = async () => {
@@ -64,7 +66,11 @@ const Profile = () => {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    cloudinaryRequest(image, setImageUrl);
+    if (image) {
+      cloudinaryRequest(image, setImageUrl);
+    } else {
+      setErrorMsg("Please provide an image");
+    }
   };
   const changeProfilePictureRequest = async () => {
     try {
@@ -87,6 +93,7 @@ const Profile = () => {
       );
     } catch (error) {
       console.log(error);
+      setErrorMsg("Please provide an image");
     }
   };
   useEffect(() => {
@@ -196,7 +203,10 @@ const Profile = () => {
       <div>
         <Modal
           open={showChangePhoto}
-          onClose={handleClose}
+          onClose={() => {
+            handleClose();
+            setErrorMsg("");
+          }}
           aria-labelledby="modal-modal-title"
           aria-describedbyF="modal-modal-description"
         >
@@ -207,7 +217,23 @@ const Profile = () => {
               noValidate
               sx={{ mt: 1 }}
             >
-              <label htmlFor="photo">Choose profile picture: (optional)</label>
+              {errorMsg &&
+                errorMsg?.split(",").map((error, index) => (
+                  <Typography
+                    key={index}
+                    variant="h6"
+                    sx={{
+                      fontWeight: "400",
+                      fontSize: "1rem",
+                      backgroundColor: "#f6d9d8",
+                      padding: "0.5em 1em",
+                      marginBottom: "1em",
+                    }}
+                  >
+                    {error}
+                  </Typography>
+                ))}
+              <label htmlFor="photo">Choose new profile picture:</label>
               <TextField
                 margin="normal"
                 required
@@ -216,7 +242,15 @@ const Profile = () => {
                 id="photo"
                 type="file"
                 autoComplete="off"
-                onChange={(e) => setImage(e.target.files[0])}
+                // value={image}
+                onChange={(e) => {
+                  if (e?.target?.files[0]?.type?.includes("image")) {
+                    setImage(e?.target?.files[0]);
+                  } else {
+                    setErrorMsg("Please provide an image");
+                    e.target.value = null;
+                  }
+                }}
                 sx={[
                   {
                     "& label.Mui-focused": {
@@ -227,7 +261,6 @@ const Profile = () => {
                         borderColor: "#000",
                       },
                     },
-                    marginTop: "0.3em",
                   },
                 ]}
               />
