@@ -15,8 +15,9 @@ const ExplorePage = () => {
     likeURL,
     unlikeURL,
     setValue,
+    explorePosts,
+    setExplorePosts,
   } = useGlobalContext();
-  const [explorePosts, setExplorePosts] = useState([]);
   const [editCommentMode, setEditCommentMode] = useState(false);
   const [initialRender, setInitialRender] = useState(true);
 
@@ -90,18 +91,19 @@ const ExplorePage = () => {
       history("/login");
     }
     if (initialRender) {
-      setExplorePosts(
-        allPosts?.filter((post) => {
-          return (
-            // return post if post?.user?._id !== user?._id and if initial render is true make !post?.user?.followers?.includes(JSON.parse(localStorage.getItem("user"))._id) second condition
-            post?.user?._id !== JSON.parse(localStorage.getItem("user"))._id &&
-            (!initialRender ||
-              !post?.user?.followers?.includes(
-                JSON.parse(localStorage.getItem("user"))._id
-              ))
-          );
-        })
-      );
+      const tempExplorePosts = allPosts?.filter((post) => {
+        return (
+          // return post if post?.user?._id !== user?._id and if initial render is true make !post?.user?.followers?.includes(JSON.parse(localStorage.getItem("user"))._id) second condition
+          post?.user?._id !== JSON.parse(localStorage.getItem("user"))._id &&
+          (!initialRender ||
+            !post?.user?.followers?.includes(
+              JSON.parse(localStorage.getItem("user"))._id
+            ))
+        );
+      });
+      if (tempExplorePosts !== explorePosts) {
+        setExplorePosts(tempExplorePosts);
+      }
     } else {
       // fixing bug where posts from people the user was following showed up in explore page
       const tempAllPosts = allPosts?.filter((post) => {
@@ -132,6 +134,10 @@ const ExplorePage = () => {
 
   useEffect(() => {
     setValue(1);
+  }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
   }, []);
 
   return (

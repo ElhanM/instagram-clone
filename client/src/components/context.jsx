@@ -24,6 +24,8 @@ const registerURL = `${authURL}/register`;
 
 const AppProvider = ({ children }) => {
   const [value, setValue] = useState();
+  const [homePosts, setHomePosts] = useState([]);
+  const [explorePosts, setExplorePosts] = useState([]);
 
   const [state, dispatch] = useReducer(reducer, initialState);
   const userDispatch = (userData) => {
@@ -203,7 +205,11 @@ const AppProvider = ({ children }) => {
         followRequest,
         cloudinaryRequest,
         value,
-        setValue
+        setValue,
+        homePosts,
+        setHomePosts,
+        explorePosts,
+        setExplorePosts,
       }}
     >
       {children}

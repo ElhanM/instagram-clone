@@ -15,8 +15,9 @@ const Home = () => {
     likeURL,
     unlikeURL,
     setValue,
+    homePosts,
+    setHomePosts,
   } = useGlobalContext();
-  const [homePosts, setHomePosts] = useState([]);
   const [editCommentMode, setEditCommentMode] = useState(false);
   const [initialRender, setInitialRender] = useState(true);
 
@@ -91,18 +92,19 @@ const Home = () => {
       history("/login");
     }
     if (initialRender) {
-      setHomePosts(
-        allPosts?.filter((post) => {
-          return (
-            // return post if post?.user?._id !== user?._id and if initial render is true make !post?.user?.followers?.includes(JSON.parse(localStorage.getItem("user"))._id) second condition
-            post?.user?._id === JSON.parse(localStorage.getItem("user"))._id ||
-            !initialRender ||
-            post?.user?.followers?.includes(
-              JSON.parse(localStorage.getItem("user"))._id
-            )
-          );
-        })
-      );
+      const tempHomePosts = allPosts?.filter((post) => {
+        return (
+          // return post if post?.user?._id !== user?._id and if initial render is true make !post?.user?.followers?.includes(JSON.parse(localStorage.getItem("user"))._id) second condition
+          post?.user?._id === JSON.parse(localStorage.getItem("user"))._id ||
+          !initialRender ||
+          post?.user?.followers?.includes(
+            JSON.parse(localStorage.getItem("user"))._id
+          )
+        );
+      });
+      if (tempHomePosts !== homePosts) {
+        setHomePosts(tempHomePosts);
+      }
     } else {
       // fixing bug where posts from people the user was following showed up in explore page
       const tempAllPosts = allPosts?.filter((post) => {
@@ -115,10 +117,10 @@ const Home = () => {
         );
       });
       // if homePosts does not contain post from tempAllPosts then remove it
-      const temphomePosts = tempAllPosts?.filter((post) => {
+      const tempHomePosts = tempAllPosts?.filter((post) => {
         return homePosts.find((explorePost) => post?._id === explorePost?._id);
       });
-      setHomePosts(temphomePosts);
+      setHomePosts(tempHomePosts);
     }
   }, [allPosts]);
   useEffect(() => {
@@ -130,6 +132,10 @@ const Home = () => {
 
   useEffect(() => {
     setValue();
+  }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
   }, []);
 
   return (
