@@ -14,7 +14,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import SearchUsers from "./SearchUsers";
 
-const styleSearch = {
+const styleLikes = {
   position: "absolute",
   top: "50%",
   left: "50%",
@@ -53,6 +53,8 @@ const ShowPosts = ({
   } = useGlobalContext();
   const [allowLike, setAllowLike] = useState(true);
   const [editPostMode, setEditPostMode] = useState(false);
+
+  const [allowFollow, setAllowFollow] = useState(true);
 
   const [showLikes, setShowLikes] = useState(false);
   const handleOpen = () => setShowLikes(true);
@@ -206,6 +208,7 @@ const ShowPosts = ({
                     fullWidth
                     variant="contained"
                     onClick={() => {
+                      setAllowFollow(true);
                       followRequest(post?.user?._id, allPosts);
                     }}
                     sx={[
@@ -230,7 +233,10 @@ const ShowPosts = ({
                     fullWidth
                     variant="contained"
                     onClick={() => {
-                      followRequest(post?.user?._id, allPosts, "follow");
+                      if (allowFollow) {
+                        setAllowFollow(false);
+                        followRequest(post?.user?._id, allPosts, "follow");
+                      }
                     }}
                     sx={[
                       {
@@ -605,7 +611,7 @@ const ShowPosts = ({
         aria-labelledby="modal-modal-title"
         aria-describedbyF="modal-modal-description"
       >
-        <Box sx={styleSearch}>
+        <Box sx={styleLikes}>
           <div className="show-posts-likes">
             <div className="show-posts-likes__header">
               <CloseIcon

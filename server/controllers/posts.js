@@ -63,6 +63,7 @@ const unlikePost = async (req, res, next) => {
     next(error);
   }
 };
+
 const comment = async (req, res, next) => {
   try {
     const comment = await Post.findByIdAndUpdate(
@@ -157,6 +158,21 @@ const deleteAllPostsByUser = async (req, res, next) => {
   }
 };
 
+const unlikeAllPosts = async (req, res, next) => {
+  try {
+    const unfollowAllUsers = await Post.updateMany(
+      // find all users that the user is following remove user from their followers array
+      { likes: req.user._id },
+      { $pull: { likes: req.user._id } },
+      { new: true }
+    );
+
+    res.status(201).json({ unfollowAllUsers });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const editPost = async (req, res, next) => {
   try {
     const { postId } = req.params;
@@ -185,4 +201,5 @@ module.exports = {
   deleteComment,
   editComment,
   deleteAllPostsByUser,
+  unlikeAllPosts,
 };

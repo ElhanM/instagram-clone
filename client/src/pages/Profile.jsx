@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
+import CloseIcon from "@mui/icons-material/Close";
 
 const style = {
   position: "absolute",
@@ -25,6 +26,21 @@ const style = {
   maxWidth: "500px",
 };
 
+const styleFollowersAndFollowing = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+  width: "80vw",
+  maxWidth: "500px",
+  maxHeight: "80vh",
+  overflow: "auto",
+};
+
 const Profile = () => {
   const { userId } = useParams();
   const {
@@ -35,6 +51,8 @@ const Profile = () => {
     updatePostsDispatch,
     cloudinaryRequest,
     setValue,
+    users,
+    setUsers,
   } = useGlobalContext();
   const history = useNavigate();
   const [posts, setPosts] = useState([]);
@@ -45,8 +63,18 @@ const Profile = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const handleOpen = () => setShowChangePhoto(true);
-  const handleClose = () => setShowChangePhoto(false);
+  const handleOpenChangePhoto = () => setShowChangePhoto(true);
+  const handleCloseChangePhoto = () => setShowChangePhoto(false);
+
+  const [showFollowersAndFollowing, setShowFollowersAndFollowing] =
+    useState(false);
+  const handleOpenFollowersAndFollowing = () =>
+    setShowFollowersAndFollowing(true);
+  const handleCloseFollowersAndFollowing = () =>
+    setShowFollowersAndFollowing(false);
+
+  const [followersAndFollowing, setFollowersAndFollowing] = useState([]);
+
   const axiosGetUser = async () => {
     try {
       const response = await axios(`${authURL}/user/${userId}`, {
@@ -99,7 +127,7 @@ const Profile = () => {
     if (imageUrl) {
       changeProfilePictureRequest();
     }
-    handleClose();
+    handleCloseChangePhoto();
   }, [imageUrl]);
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -117,6 +145,9 @@ const Profile = () => {
   useEffect(() => {
     setValue();
   }, []);
+  useEffect(() => {
+    console.log("the FollowersAndFollowing", followersAndFollowing);
+  }, [followersAndFollowing]);
   return (
     <>
       <div className="profile">
@@ -139,7 +170,7 @@ const Profile = () => {
                     className="profile__container__header__profile-photo__overlay"
                     onClick={() => {
                       console.log("showChangePhoto", showChangePhoto);
-                      handleOpen();
+                      handleOpenChangePhoto();
                     }}
                   >
                     <span className="profile__container__header__profile-photo__overlay__text">
@@ -158,10 +189,34 @@ const Profile = () => {
                   <Typography variant="p" sx={{ marginRight: "0.8em" }}>
                     {posts?.length} posts
                   </Typography>
-                  <Typography variant="p" sx={{ marginRight: "0.8em" }}>
+                  <Typography
+                    variant="p"
+                    sx={{ marginRight: "0.8em", cursor: "pointer" }}
+                    onClick={() => {
+                      handleOpenFollowersAndFollowing();
+                      // setFollowersAndFollowing to people accounts that follow user
+                      setFollowersAndFollowing(
+                        users?.filter((user) => {
+                          return user?.following.includes(userId);
+                        })
+                      );
+                    }}
+                  >
                     {user[0]?.followers?.length} followers
                   </Typography>
-                  <Typography variant="p" sx={{ marginRight: "0.8em" }}>
+                  <Typography
+                    variant="p"
+                    sx={{ marginRight: "0.8em", cursor: "pointer" }}
+                    onClick={() => {
+                      handleOpenFollowersAndFollowing();
+                      // setFollowersAndFollowing to people accounts that the user is following
+                      setFollowersAndFollowing(
+                        users?.filter((user) => {
+                          return user?.followers.includes(userId);
+                        })
+                      );
+                    }}
+                  >
                     {user[0]?.following?.length} following
                   </Typography>
                 </div>
@@ -203,7 +258,7 @@ const Profile = () => {
         <Modal
           open={showChangePhoto}
           onClose={() => {
-            handleClose();
+            handleCloseChangePhoto();
             setErrorMsg("");
           }}
           aria-labelledby="modal-modal-title"
@@ -289,6 +344,77 @@ const Profile = () => {
           </Box>
         </Modal>
       </div>
+      <Modal
+        open={showFollowersAndFollowing}
+        onClose={() => {
+          handleCloseFollowersAndFollowing();
+        }}
+        aria-labelledby="modal-modal-title"
+        aria-describedbyF="modal-modal-description"
+      >
+        <Box sx={styleFollowersAndFollowing}>
+          <div className="show-posts-likes">
+            <div className="show-posts-likes__header">
+              <CloseIcon
+                className="show-posts-likes__header__close-icon"
+                sx={[
+                  {
+                    "&:hover": {
+                      cursor: "pointer",
+                    },
+                    fontSize: "2.5rem",
+                  },
+                ]}
+                onClick={() => {
+                  handleCloseFollowersAndFollowing();
+                }}
+              />
+            </div>
+            <Typography
+              variant="h3"
+              sx={{ fontSize: "2rem", marginBottom: "0.5em" }}
+            >
+              Followed by:
+            </Typography>
+            {followersAndFollowing?.map((user) => (
+              <div className="show-posts-likes__user">
+                <div className="show-posts-likes__user__container__header">
+                  {
+                    <div className="show-posts-likes__user__container__header__left">
+                      <div className="show-posts-likes__user__container__header__left__photo">
+                        <Link
+                          to={`/profile/${user?._id}`}
+                          onClick={() => {
+                            handleCloseFollowersAndFollowing();
+                          }}
+                        >
+                          <Avatar
+                            alt={user?.username}
+                            src={user?.profilePhoto}
+                            sx={{ width: "3rem", height: "3rem" }}
+                          />
+                        </Link>
+                      </div>
+                      <div className="show-posts-likes__user__container__header__left__user">
+                        <Link
+                          to={`/profile/${user?._id}`}
+                          onClick={() => {
+                            handleCloseFollowersAndFollowing();
+                          }}
+                        >
+                          <Typography variant="h3" sx={{ fontSize: "2rem" }}>
+                            @{user?.username}
+                          </Typography>
+                        </Link>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+            ))}
+          </div>
+        </Box>
+      </Modal>
       <Outlet />
     </>
   );
