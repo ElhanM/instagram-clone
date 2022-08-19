@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Avatar, FormControl, TextField } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -30,6 +30,21 @@ const style = {
   },
 };
 
+const styleSearch = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+  width: "80vw",
+  maxWidth: "500px",
+  maxHeight: "80vh",
+  overflow: "auto",
+};
+
 const Post = () => {
   const {
     userDispatch,
@@ -44,9 +59,11 @@ const Post = () => {
     editComment,
     postsURL,
     setValue,
+    users,
+    setUsers,
   } = useGlobalContext();
   const history = useNavigate();
-  const handleOpen = () => setOpen(true);
+  const handleOpenEdit = () => setOpen(true);
   const { userId, postId } = useParams();
   const [open, setOpen] = useState(true);
   const [post, setPost] = useState({});
@@ -54,6 +71,13 @@ const Post = () => {
   const [editCommentMode, setEditCommentMode] = useState(false);
   const [allowLike, setAllowLike] = useState(true);
   const [loading, setLoading] = useState(true);
+
+  const [showLikes, setShowLikes] = useState(false);
+  const handleOpen = () => setShowLikes(true);
+  const handleClose = () => setShowLikes(false);
+
+  const [likedUsers, setLikedUsers] = useState([]);
+
   const [inputs, setInputs] = useState({
     title: "",
     description: "",
@@ -67,7 +91,7 @@ const Post = () => {
       [e.target.name]: e.target.value,
     });
   };
-  const handleClose = () => {
+  const handleCloseEdit = () => {
     setOpen(false);
     history(`/profile/${userId}`);
   };
@@ -206,7 +230,7 @@ const Post = () => {
       <div>
         <Modal
           open={open}
-          onClose={handleClose}
+          onClose={handleCloseEdit}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
@@ -233,7 +257,7 @@ const Post = () => {
                       },
                     ]}
                     onClick={() => {
-                      handleClose();
+                      handleCloseEdit();
                     }}
                   />
                 </div>
@@ -355,7 +379,25 @@ const Post = () => {
                       )}
                       <Typography
                         variant="h6"
-                        sx={{ fontSize: "1.2rem", marginLeft: "0.2em" }}
+                        sx={{
+                          fontSize: "1.2rem",
+                          marginLeft: "0.2em",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          handleOpen();
+                          /* // filter users from users with _id of post?.likes
+                           */
+                          setLikedUsers(
+                            post?.likes
+                              ?.map((userId) => {
+                                return users.find(
+                                  (user) => user._id === userId
+                                );
+                              })
+                              .filter((user) => user)
+                          );
+                        }}
                       >
                         {post?.likes?.length === 1
                           ? `${post?.likes?.length} like`
@@ -655,6 +697,77 @@ const Post = () => {
           </Box>
         </Modal>
       </div>
+      <Modal
+        open={showLikes}
+        onClose={() => {
+          handleClose();
+        }}
+        aria-labelledby="modal-modal-title"
+        aria-describedbyF="modal-modal-description"
+      >
+        <Box sx={styleSearch}>
+          <div className="show-posts-likes">
+            <div className="show-posts-likes__header">
+              <CloseIcon
+                className="show-posts-likes__header__close-icon"
+                sx={[
+                  {
+                    "&:hover": {
+                      cursor: "pointer",
+                    },
+                    fontSize: "2.5rem",
+                  },
+                ]}
+                onClick={() => {
+                  handleClose();
+                }}
+              />
+            </div>
+            <Typography
+              variant="h3"
+              sx={{ fontSize: "2rem", marginBottom: "0.5em" }}
+            >
+              Liked by:
+            </Typography>
+            {likedUsers?.map((user) => (
+              <div className="show-posts-likes__user">
+                <div className="show-posts-likes__user__container__header">
+                  {
+                    <div className="show-posts-likes__user__container__header__left">
+                      <div className="show-posts-likes__user__container__header__left__photo">
+                        <Link
+                          to={`/profile/${user?._id}`}
+                          onClick={() => {
+                            handleClose();
+                          }}
+                        >
+                          <Avatar
+                            alt={user?.username}
+                            src={user?.profilePhoto}
+                            sx={{ width: "3rem", height: "3rem" }}
+                          />
+                        </Link>
+                      </div>
+                      <div className="show-posts-likes__user__container__header__left__user">
+                        <Link
+                          to={`/profile/${user?._id}`}
+                          onClick={() => {
+                            handleClose();
+                          }}
+                        >
+                          <Typography variant="h3" sx={{ fontSize: "2rem" }}>
+                            @{user?.username}
+                          </Typography>
+                        </Link>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+            ))}
+          </div>
+        </Box>
+      </Modal>
     </>
   );
 };
