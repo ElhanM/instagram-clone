@@ -26,6 +26,7 @@ const AppProvider = ({ children }) => {
   const [value, setValue] = useState();
   const [homePosts, setHomePosts] = useState([]);
   const [explorePosts, setExplorePosts] = useState([]);
+  const [users, setUsers] = useState([]);
 
   const [state, dispatch] = useReducer(reducer, initialState);
   const userDispatch = (userData) => {
@@ -184,6 +185,23 @@ const AppProvider = ({ children }) => {
     dispatch({ type: "UPDATE_POSTS", payload: postsData });
   };
 
+  useEffect(() => {
+    const getAllUsers = async () => {
+      try {
+        const response = await axios(`${authURL}`, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        setUsers(response?.data?.users);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getAllUsers();
+  }, []);
+
+
   return (
     <AppContext.Provider
       value={{
@@ -210,6 +228,8 @@ const AppProvider = ({ children }) => {
         setHomePosts,
         explorePosts,
         setExplorePosts,
+        users,
+        setUsers,
       }}
     >
       {children}

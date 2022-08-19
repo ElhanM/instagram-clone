@@ -1,0 +1,28 @@
+.show-posts-likes {
+  &__header {
+    // send to top right
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(-10px, 10px);
+  }
+  &__user {
+    a {
+      text-decoration: none;
+      color: $black;
+    }
+    &__container__header {
+      @include flex-center;
+      justify-content: space-between;
+      &__left {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1em;
+
+        &__photo {
+          margin-right: 0.5em;
+        }
+      }
+    }
+  }
+}

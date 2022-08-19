@@ -135,6 +135,50 @@ a :hover {
   margin-right: 0.5em;
 }
 
+.show-posts-likes__header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  -webkit-transform: translate(-10px, 10px);
+          transform: translate(-10px, 10px);
+}
+.show-posts-likes__user a {
+  text-decoration: none;
+  color: #000;
+}
+.show-posts-likes__user__container__header {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.show-posts-likes__user__container__header__left {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 1em;
+}
+.show-posts-likes__user__container__header__left__photo {
+  margin-right: 0.5em;
+}
+
 .profile {
   width: 100vw;
 }
