@@ -13,74 +13,76 @@ const ShowPostsComments = ({
   allPosts,
 }) => {
   return (
-    <div className="comments-main-page__flex-post">
-      <div className="comments-main-page__flex-post__item-left">
-        <Link
-          to={`/profile/${comment?.user?._id}`}
-          style={{ textDecoration: "none" }}
-        >
+    <>
+      <div className="comments-main-page__flex-post">
+        <div className="comments-main-page__flex-post__item-left">
+          <Link
+            to={`/profile/${comment?.user?._id}`}
+            style={{ textDecoration: "none" }}
+          >
+            <Typography
+              variant="span"
+              sx={{ fontSize: "1.2rem", paddingTop: "0.2em" }}
+            >
+              @{comment?.user?.username}:
+            </Typography>
+          </Link>
+
           <Typography
             variant="span"
-            sx={{ fontSize: "1.2rem", paddingTop: "0.2em" }}
+            sx={{
+              fontSize: "1.2rem",
+              paddingTop: "0.2em",
+              ml: "0.2em",
+              fontWeight: "light",
+            }}
           >
-            @{comment?.user?.username}:
+            {comment?.text}
           </Typography>
-        </Link>
+        </div>
 
-        <Typography
-          variant="span"
-          sx={{
-            fontSize: "1.2rem",
-            paddingTop: "0.2em",
-            ml: "0.2em",
-            fontWeight: "light",
-          }}
-        >
-          {comment?.text}
-        </Typography>
-      </div>
-
-      <div className="comments-main-page__flex-post__item-right">
-        {JSON.parse(localStorage.getItem("user"))._id ===
-          comment?.user?._id && (
-          <>
-            <EditIcon
-              sx={[
-                {
-                  "&:hover": {
-                    cursor: "pointer",
-                    scale: "1.2",
+        <div className="comments-main-page__flex-post__item-right">
+          {JSON.parse(localStorage.getItem("user"))._id ===
+            comment?.user?._id && (
+            <>
+              <EditIcon
+                sx={[
+                  {
+                    "&:hover": {
+                      cursor: "pointer",
+                      scale: "1.2",
+                    },
+                    fontSize: "1.9rem",
                   },
-                  fontSize: "1.9rem",
-                },
-              ]}
-              onClick={() => {
-                setEditCommentMode((prev) => !prev);
-                setInputs({
-                  ...inputs,
-                  editComment: comment?.text,
-                  editCommentId: comment?._id,
-                  editCommentPostId: post?._id,
-                });
-              }}
-            />
-            <DeleteIcon
-              sx={[
-                {
-                  "&:hover": {
-                    cursor: "pointer",
-                    scale: "1.2",
+                ]}
+                onClick={() => {
+                  setEditCommentMode((prev) => !prev);
+                  setInputs({
+                    ...inputs,
+                    editComment: comment?.text,
+                    editCommentId: comment?._id,
+                    editCommentPostId: post?._id,
+                  });
+                }}
+              />
+              <DeleteIcon
+                sx={[
+                  {
+                    "&:hover": {
+                      cursor: "pointer",
+                      scale: "1.2",
+                    },
+                    fontSize: "1.9rem",
+                    color: "red",
                   },
-                  fontSize: "1.9rem",
-                  color: "red",
-                },
-              ]}
-              onClick={() => deleteComment(post?._id, comment?._id, allPosts)}
-            />
-          </>
-        )}
+                ]}
+                onClick={() => deleteComment(post?._id, comment?._id, allPosts)}
+              />
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
