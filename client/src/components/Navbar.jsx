@@ -141,18 +141,42 @@ const Navbar = () => {
 
   const handleDeleteAccount = async () => {
     try {
-      const deletePosts = await axios.delete(`${postsURL}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-        },
-      });
-      const deleteUser = await axios.delete(`${authURL}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-        },
-      });
+      const removeFollowing = await axios.put(
+        `${authURL}/unfollow/all`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      const unlikePosts = await axios.put(
+        `${postsURL}/unlike/all`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      try {
+        const deletePosts = await axios.delete(`${postsURL}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        });
+        const deleteUser = await axios.delete(`${authURL}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
       userDispatch(null);
       handleDeleteClose();
       history(`/register`);

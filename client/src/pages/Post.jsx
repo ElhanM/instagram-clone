@@ -30,7 +30,7 @@ const style = {
   },
 };
 
-const styleSearch = {
+const styleLikes = {
   position: "absolute",
   top: "50%",
   left: "50%",
@@ -705,7 +705,7 @@ const Post = () => {
         aria-labelledby="modal-modal-title"
         aria-describedbyF="modal-modal-description"
       >
-        <Box sx={styleSearch}>
+        <Box sx={styleLikes}>
           <div className="show-posts-likes">
             <div className="show-posts-likes__header">
               <CloseIcon

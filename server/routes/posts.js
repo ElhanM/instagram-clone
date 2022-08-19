@@ -15,6 +15,7 @@ const {
   deleteComment,
   editComment,
   deleteAllPostsByUser,
+  unlikeAllPosts,
 } = require("../controllers/posts");
 
 router
@@ -33,6 +34,7 @@ router
 router.route("/post/:postId").put(protect, editComment);
 router.route("/like").put(protect, likePost);
 router.route("/unlike").put(protect, unlikePost);
+router.route("/unlike/all").put(protect, unlikeAllPosts);
 router.route("/add/comment").put(protect, comment);
 
 module.exports = router;

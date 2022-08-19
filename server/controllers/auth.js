@@ -106,6 +106,21 @@ const unfollowUser = async (req, res, next) => {
   }
 };
 
+const unfollowAllUsers = async (req, res, next) => {
+  try {
+    const unfollowAllUsers = await User.updateMany(
+      // find all users that the user is following remove user from their followers array
+      { followers: req.user._id },
+      { $pull: { followers: req.user._id } },
+      { new: true }
+    );
+
+    res.status(201).json({ unfollowAllUsers });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const changeProfilePhoto = async (req, res, next) => {
   const { profilePhoto } = req.body;
   try {
@@ -139,5 +154,6 @@ module.exports = {
   getUser,
   changeProfilePhoto,
   deleteUserAccount,
-  getAllUsers
+  getAllUsers,
+  unfollowAllUsers,
 };
