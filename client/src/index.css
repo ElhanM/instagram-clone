@@ -551,6 +551,9 @@ a :hover {
 .post__info__user__options {
   margin-right: 1em;
 }
+.post__info__user__options__follow {
+  margin-right: 1em;
+}
 .post__info__user__user-info {
   display: -webkit-box;
   display: -webkit-flex;
@@ -565,7 +568,25 @@ a :hover {
 .post__info__user__user-info__item {
   margin-right: 1em;
 }
-.post__info__stats__likes {
+.post__info__stats__flex {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.post__info__stats__flex__likes {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
