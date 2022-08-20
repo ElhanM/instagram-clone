@@ -117,7 +117,7 @@ const CreatePost = () => {
             margin="normal"
             fullWidth
             name="title"
-            label="Title"
+            label="Title (optional)"
             id="title"
             autoFocus
             autoComplete="off"
@@ -140,7 +140,7 @@ const CreatePost = () => {
             margin="normal"
             fullWidth
             name="description"
-            label="Description"
+            label="Description (optional)"
             id="description"
             autoComplete="off"
             value={inputs.description}
