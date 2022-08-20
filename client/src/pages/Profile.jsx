@@ -433,48 +433,62 @@ const Profile = () => {
             >
               {msg}:
             </Typography>
-            {users?.map(
-              (user) =>
-                // if user._id is in followersAndFollowing, then display user
-                followersAndFollowing.includes(user?._id) && (
-                  <div className="show-posts-likes__user">
-                    <div className="show-posts-likes__user__container__header">
-                      {
-                        <div className="show-posts-likes__user__container__header__left">
-                          <div className="show-posts-likes__user__container__header__left__photo">
-                            <Link
-                              to={`/profile/${user?._id}`}
-                              onClick={() => {
-                                handleCloseFollowersAndFollowing();
-                              }}
-                            >
-                              <Avatar
-                                alt={user?.username}
-                                src={user?.profilePhoto}
-                                sx={{ width: "3rem", height: "3rem" }}
-                              />
-                            </Link>
-                          </div>
-                          <div className="show-posts-likes__user__container__header__left__user">
-                            <Link
-                              to={`/profile/${user?._id}`}
-                              onClick={() => {
-                                handleCloseFollowersAndFollowing();
-                              }}
-                            >
-                              <Typography
-                                variant="h3"
-                                sx={{ fontSize: "2rem" }}
+            {followersAndFollowing.length > 0 ? (
+              users?.map(
+                (user, index) =>
+                  // if user._id is in followersAndFollowing, then display user
+                  followersAndFollowing.includes(user?._id) && (
+                    <div className="show-posts-likes__user">
+                      <div className="show-posts-likes__user__container__header">
+                        {
+                          <div className="show-posts-likes__user__container__header__left">
+                            <div className="show-posts-likes__user__container__header__left__photo">
+                              <Link
+                                to={`/profile/${user?._id}`}
+                                onClick={() => {
+                                  handleCloseFollowersAndFollowing();
+                                }}
                               >
-                                @{user?.username}
-                              </Typography>
-                            </Link>
+                                <Avatar
+                                  alt={user?.username}
+                                  src={user?.profilePhoto}
+                                  sx={{ width: "3rem", height: "3rem" }}
+                                />
+                              </Link>
+                            </div>
+                            <div className="show-posts-likes__user__container__header__left__user">
+                              <Link
+                                to={`/profile/${user?._id}`}
+                                onClick={() => {
+                                  handleCloseFollowersAndFollowing();
+                                }}
+                              >
+                                <Typography
+                                  variant="h3"
+                                  sx={{ fontSize: "2rem" }}
+                                >
+                                  @{user?.username}
+                                </Typography>
+                              </Link>
+                            </div>
                           </div>
-                        </div>
-                      }
+                        }
+                      </div>
                     </div>
-                  </div>
-                )
+                  )
+              )
+            ) : (
+              <Typography
+                variant="h3"
+                sx={{
+                  fontSize: "2rem",
+                  textAlign: "center",
+                }}
+              >
+                {msg === "Followers"
+                  ? "User has no followers"
+                  : "User is not following any accounts yet"}
+              </Typography>
             )}
           </div>
         </Box>
