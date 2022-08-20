@@ -240,6 +240,9 @@ a :hover {
   font-size: 3rem;
   margin: 0.1em 0;
 }
+.profile__container__header__user-info__follow {
+  margin-top: 1em;
+}
 @media (max-width: 1056px) {
   .profile__container__header {
     -webkit-box-orient: vertical;
