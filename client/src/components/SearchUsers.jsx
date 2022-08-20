@@ -2,12 +2,12 @@ import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import { Link } from "react-router-dom";
 
-const SearchUsers = ({ user, searchValue, handleSearchClose }) => {
+const SearchUsers = ({ user, searchValue, handleSearchClose, index }) => {
   return (
     <div className="navbar-search__user">
       <div className="navbar-search__user__container__header">
         {searchValue ? (
-          user?.username?.includes(searchValue) && (
+          user?.username?.includes(searchValue) ? (
             <div className="navbar-search__user__container__header__left">
               <div className="navbar-search__user__container__header__left__photo">
                 <Link to={`/profile/${user?._id}`}>
@@ -34,6 +34,15 @@ const SearchUsers = ({ user, searchValue, handleSearchClose }) => {
                 </Link>
               </div>
             </div>
+          ) : (
+            index === 0 && (
+              <Typography
+                variant="h3"
+                sx={{ fontSize: "2rem", margin: "0 auto" }}
+              >
+                No users match the provided username
+              </Typography>
+            )
           )
         ) : (
           <div className="navbar-search__user__container__header__left">

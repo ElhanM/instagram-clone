@@ -801,42 +801,54 @@ const Post = () => {
             >
               Liked by:
             </Typography>
-            {likedUsers?.map((user) => (
-              <div className="show-posts-likes__user">
-                <div className="show-posts-likes__user__container__header">
-                  {
-                    <div className="show-posts-likes__user__container__header__left">
-                      <div className="show-posts-likes__user__container__header__left__photo">
-                        <Link
-                          to={`/profile/${user?._id}`}
-                          onClick={() => {
-                            handleClose();
-                          }}
-                        >
-                          <Avatar
-                            alt={user?.username}
-                            src={user?.profilePhoto}
-                            sx={{ width: "3rem", height: "3rem" }}
-                          />
-                        </Link>
+            {likedUsers.length > 0 ? (
+              likedUsers?.map((user, index) => (
+                <div className="show-posts-likes__user">
+                  <div className="show-posts-likes__user__container__header">
+                    {
+                      <div className="show-posts-likes__user__container__header__left">
+                        <div className="show-posts-likes__user__container__header__left__photo">
+                          <Link
+                            to={`/profile/${user?._id}`}
+                            onClick={() => {
+                              handleClose();
+                            }}
+                          >
+                            <Avatar
+                              alt={user?.username}
+                              src={user?.profilePhoto}
+                              sx={{ width: "3rem", height: "3rem" }}
+                            />
+                          </Link>
+                        </div>
+                        <div className="show-posts-likes__user__container__header__left__user">
+                          <Link
+                            to={`/profile/${user?._id}`}
+                            onClick={() => {
+                              handleClose();
+                            }}
+                          >
+                            <Typography variant="h3" sx={{ fontSize: "2rem" }}>
+                              @{user?.username}
+                            </Typography>
+                          </Link>
+                        </div>
                       </div>
-                      <div className="show-posts-likes__user__container__header__left__user">
-                        <Link
-                          to={`/profile/${user?._id}`}
-                          onClick={() => {
-                            handleClose();
-                          }}
-                        >
-                          <Typography variant="h3" sx={{ fontSize: "2rem" }}>
-                            @{user?.username}
-                          </Typography>
-                        </Link>
-                      </div>
-                    </div>
-                  }
+                    }
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <Typography
+                variant="h3"
+                sx={{
+                  fontSize: "2rem",
+                  textAlign: "center",
+                }}
+              >
+                No users have liked this post yet
+              </Typography>
+            )}
           </div>
         </Box>
       </Modal>
