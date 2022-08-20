@@ -38,9 +38,14 @@
           }
         }
       }
-      &__user-info__name {
-        font-size: 3rem;
-        margin: 0.1em 0;
+      &__user-info {
+        &__name {
+          font-size: 3rem;
+          margin: 0.1em 0;
+        }
+        &__follow{
+          margin-top: 1em;
+        }
       }
       @media (max-width: 1056px) {
         flex-direction: column;

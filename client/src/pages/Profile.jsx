@@ -53,6 +53,7 @@ const Profile = () => {
     setValue,
     users,
     setUsers,
+    followRequest,
   } = useGlobalContext();
   const history = useNavigate();
   const [posts, setPosts] = useState([]);
@@ -62,6 +63,8 @@ const Profile = () => {
   const [showChangePhoto, setShowChangePhoto] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(true);
+
+  const [allowFollow, setAllowFollow] = useState(true);
 
   const handleOpenChangePhoto = () => setShowChangePhoto(true);
   const handleCloseChangePhoto = () => setShowChangePhoto(false);
@@ -212,6 +215,67 @@ const Profile = () => {
                   >
                     {user[0]?.following?.length} following
                   </Typography>
+                </div>
+                <div className="profile__container__header__user-info__follow">
+                  {JSON.parse(localStorage.getItem("user"))._id !== userId && (
+                    <>
+                      {user[0]?.followers?.includes(
+                        JSON.parse(localStorage.getItem("user"))._id
+                      ) ? (
+                        <Button
+                          fullWidth
+                          variant="contained"
+                          onClick={() => {
+                            setAllowFollow(true);
+                            followRequest(user[0]?._id, allPosts);
+                          }}
+                          sx={[
+                            {
+                              "&:hover": {
+                                backgroundColor: "#000",
+                                color: "#fff",
+                              },
+                              color: "#000",
+                              backgroundColor: "#fff",
+                              borderColor: "#000",
+                              border: "2px solid #000",
+                              transition: "background-color 0.2s ease",
+                              height: "2em",
+                            },
+                          ]}
+                        >
+                          Unfollow
+                        </Button>
+                      ) : (
+                        <Button
+                          fullWidth
+                          variant="contained"
+                          onClick={() => {
+                            if (allowFollow) {
+                              setAllowFollow(false);
+                              followRequest(user[0]?._id, allPosts, "follow");
+                            }
+                          }}
+                          sx={[
+                            {
+                              "&:hover": {
+                                backgroundColor: "#000",
+                                color: "#fff",
+                              },
+                              color: "#000",
+                              backgroundColor: "#fff",
+                              borderColor: "#000",
+                              border: "2px solid #000",
+                              transition: "background-color 0.2s ease",
+                              height: "2em",
+                            },
+                          ]}
+                        >
+                          Follow
+                        </Button>
+                      )}
+                    </>
+                  )}
                 </div>
               </div>
             </div>
