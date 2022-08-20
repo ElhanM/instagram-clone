@@ -61,6 +61,7 @@ const Post = () => {
     setValue,
     users,
     setUsers,
+    followRequest,
   } = useGlobalContext();
   const history = useNavigate();
   const handleOpenEdit = () => setOpen(true);
@@ -71,6 +72,8 @@ const Post = () => {
   const [editCommentMode, setEditCommentMode] = useState(false);
   const [allowLike, setAllowLike] = useState(true);
   const [loading, setLoading] = useState(true);
+
+  const [allowFollow, setAllowFollow] = useState(true);
 
   const [showLikes, setShowLikes] = useState(false);
   const handleOpen = () => setShowLikes(true);
@@ -279,7 +282,7 @@ const Post = () => {
                     </div>
                     <div className="post__info__user__options">
                       {JSON.parse(localStorage.getItem("user"))._id ===
-                        userId && (
+                      userId ? (
                         <>
                           {editPostMode ? (
                             <CloseIcon
@@ -330,40 +333,87 @@ const Post = () => {
                             onClick={deletePost}
                           />
                         </>
+                      ) : (
+                        <div className="post__info__user__options__follow">
+                          {JSON.parse(localStorage.getItem("user"))._id !==
+                            post?.user?._id && (
+                            <>
+                              {post?.user?.followers?.includes(
+                                JSON.parse(localStorage.getItem("user"))._id
+                              ) ? (
+                                <Button
+                                  fullWidth
+                                  variant="contained"
+                                  onClick={() => {
+                                    setAllowFollow(true);
+                                    followRequest(post?.user?._id, allPosts);
+                                  }}
+                                  sx={[
+                                    {
+                                      "&:hover": {
+                                        backgroundColor: "#000",
+                                        color: "#fff",
+                                      },
+                                      color: "#000",
+                                      backgroundColor: "#fff",
+                                      borderColor: "#000",
+                                      border: "2px solid #000",
+                                      transition: "background-color 0.2s ease",
+                                      height: "2em",
+                                    },
+                                  ]}
+                                >
+                                  Unfollow
+                                </Button>
+                              ) : (
+                                <Button
+                                  fullWidth
+                                  variant="contained"
+                                  onClick={() => {
+                                    if (allowFollow) {
+                                      setAllowFollow(false);
+                                      followRequest(
+                                        post?.user?._id,
+                                        allPosts,
+                                        "follow"
+                                      );
+                                    }
+                                  }}
+                                  sx={[
+                                    {
+                                      "&:hover": {
+                                        backgroundColor: "#000",
+                                        color: "#fff",
+                                      },
+                                      color: "#000",
+                                      backgroundColor: "#fff",
+                                      borderColor: "#000",
+                                      border: "2px solid #000",
+                                      transition: "background-color 0.2s ease",
+                                      height: "2em",
+                                    },
+                                  ]}
+                                >
+                                  Follow
+                                </Button>
+                              )}
+                            </>
+                          )}
+                        </div>
                       )}
                     </div>
                   </div>
 
                   <div className="post__info__stats">
-                    <div className="post__info__stats__likes">
-                      {post?.likes?.includes(
-                        JSON.parse(localStorage.getItem("user"))._id
-                      ) ? (
-                        <FavoriteIcon
-                          onClick={() => {
-                            setAllowLike(true);
-                            unlikeRequest(post?._id);
-                          }}
-                          sx={[
-                            {
-                              "&:hover": {
-                                cursor: "pointer",
-                                scale: "1.2",
-                              },
-                              color: "red",
-                              marginLeft: "0.5em",
-                            },
-                          ]}
-                        />
-                      ) : (
-                        ("Post",
-                        (
-                          <FavoriteBorderIcon
+                    <div className="post__info__stats__flex">
+                      <div className="post__info__stats__flex__likes">
+                        {post?.likes?.includes(
+                          JSON.parse(localStorage.getItem("user"))._id
+                        ) ? (
+                          <FavoriteIcon
                             onClick={() => {
-                              if (allowLike) {
-                                setAllowLike(false);
-                                likeRequest(post?._id);
-                              }
+                              setAllowLike(true);
+                              unlikeRequest(post?._id);
                             }}
                             sx={[
                               {
@@ -371,38 +421,60 @@ const Post = () => {
                                   cursor: "pointer",
                                   scale: "1.2",
                                 },
+                                color: "red",
                                 marginLeft: "0.5em",
                               },
                             ]}
                           />
-                        ))
-                      )}
-                      <Typography
-                        variant="h6"
-                        sx={{
-                          fontSize: "1.2rem",
-                          marginLeft: "0.2em",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => {
-                          handleOpen();
-                          /* // filter users from users with _id of post?.likes
-                           */
-                          setLikedUsers(
-                            post?.likes
-                              ?.map((userId) => {
-                                return users.find(
-                                  (user) => user._id === userId
-                                );
-                              })
-                              .filter((user) => user)
-                          );
-                        }}
-                      >
-                        {post?.likes?.length === 1
-                          ? `${post?.likes?.length} like`
-                          : `${post?.likes?.length} likes`}
-                      </Typography>
+                        ) : (
+                          ("Post",
+                          (
+                            <FavoriteBorderIcon
+                              onClick={() => {
+                                if (allowLike) {
+                                  setAllowLike(false);
+                                  likeRequest(post?._id);
+                                }
+                              }}
+                              sx={[
+                                {
+                                  "&:hover": {
+                                    cursor: "pointer",
+                                    scale: "1.2",
+                                  },
+                                  marginLeft: "0.5em",
+                                },
+                              ]}
+                            />
+                          ))
+                        )}
+                        <Typography
+                          variant="h6"
+                          sx={{
+                            fontSize: "1.2rem",
+                            marginLeft: "0.2em",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => {
+                            handleOpen();
+                            /* // filter users from users with _id of post?.likes
+                             */
+                            setLikedUsers(
+                              post?.likes
+                                ?.map((userId) => {
+                                  return users.find(
+                                    (user) => user._id === userId
+                                  );
+                                })
+                                .filter((user) => user)
+                            );
+                          }}
+                        >
+                          {post?.likes?.length === 1
+                            ? `${post?.likes?.length} like`
+                            : `${post?.likes?.length} likes`}
+                        </Typography>
+                      </div>
                     </div>
                     {editPostMode ? (
                       <FormControl

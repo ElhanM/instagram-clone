@@ -52,6 +52,9 @@
       justify-content: space-between;
       &__options {
         margin-right: 1em;
+        &__follow {
+          margin-right: 1em;
+        }
       }
       &__user-info {
         display: flex;
@@ -63,9 +66,13 @@
       }
     }
     &__stats {
-      &__likes {
+      &__flex {
         @include flex-center;
-        justify-content: flex-start;
+        justify-content: space-between;
+        &__likes {
+          @include flex-center;
+          justify-content: flex-start;
+        }
       }
     }
   }
