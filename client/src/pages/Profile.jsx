@@ -74,6 +74,7 @@ const Profile = () => {
     setShowFollowersAndFollowing(false);
 
   const [followersAndFollowing, setFollowersAndFollowing] = useState([]);
+  const [msg, setMsg] = useState("");
 
   const axiosGetUser = async () => {
     try {
@@ -145,9 +146,7 @@ const Profile = () => {
   useEffect(() => {
     setValue();
   }, []);
-  useEffect(() => {
-    console.log("the FollowersAndFollowing", followersAndFollowing);
-  }, [followersAndFollowing]);
+
   return (
     <>
       <div className="profile">
@@ -195,11 +194,8 @@ const Profile = () => {
                     onClick={() => {
                       handleOpenFollowersAndFollowing();
                       // setFollowersAndFollowing to people accounts that follow user
-                      setFollowersAndFollowing(
-                        users?.filter((user) => {
-                          return user?.following.includes(userId);
-                        })
-                      );
+                      setFollowersAndFollowing(user[0]?.followers);
+                      setMsg("Followers");
                     }}
                   >
                     {user[0]?.followers?.length} followers
@@ -210,11 +206,8 @@ const Profile = () => {
                     onClick={() => {
                       handleOpenFollowersAndFollowing();
                       // setFollowersAndFollowing to people accounts that the user is following
-                      setFollowersAndFollowing(
-                        users?.filter((user) => {
-                          return user?.followers.includes(userId);
-                        })
-                      );
+                      setFollowersAndFollowing(user[0]?.following);
+                      setMsg("Following");
                     }}
                   >
                     {user[0]?.following?.length} following
@@ -374,44 +367,51 @@ const Profile = () => {
               variant="h3"
               sx={{ fontSize: "2rem", marginBottom: "0.5em" }}
             >
-              Followed by:
+              {msg}:
             </Typography>
-            {followersAndFollowing?.map((user) => (
-              <div className="show-posts-likes__user">
-                <div className="show-posts-likes__user__container__header">
-                  {
-                    <div className="show-posts-likes__user__container__header__left">
-                      <div className="show-posts-likes__user__container__header__left__photo">
-                        <Link
-                          to={`/profile/${user?._id}`}
-                          onClick={() => {
-                            handleCloseFollowersAndFollowing();
-                          }}
-                        >
-                          <Avatar
-                            alt={user?.username}
-                            src={user?.profilePhoto}
-                            sx={{ width: "3rem", height: "3rem" }}
-                          />
-                        </Link>
-                      </div>
-                      <div className="show-posts-likes__user__container__header__left__user">
-                        <Link
-                          to={`/profile/${user?._id}`}
-                          onClick={() => {
-                            handleCloseFollowersAndFollowing();
-                          }}
-                        >
-                          <Typography variant="h3" sx={{ fontSize: "2rem" }}>
-                            @{user?.username}
-                          </Typography>
-                        </Link>
-                      </div>
+            {users?.map(
+              (user) =>
+                // if user._id is in followersAndFollowing, then display user
+                followersAndFollowing.includes(user?._id) && (
+                  <div className="show-posts-likes__user">
+                    <div className="show-posts-likes__user__container__header">
+                      {
+                        <div className="show-posts-likes__user__container__header__left">
+                          <div className="show-posts-likes__user__container__header__left__photo">
+                            <Link
+                              to={`/profile/${user?._id}`}
+                              onClick={() => {
+                                handleCloseFollowersAndFollowing();
+                              }}
+                            >
+                              <Avatar
+                                alt={user?.username}
+                                src={user?.profilePhoto}
+                                sx={{ width: "3rem", height: "3rem" }}
+                              />
+                            </Link>
+                          </div>
+                          <div className="show-posts-likes__user__container__header__left__user">
+                            <Link
+                              to={`/profile/${user?._id}`}
+                              onClick={() => {
+                                handleCloseFollowersAndFollowing();
+                              }}
+                            >
+                              <Typography
+                                variant="h3"
+                                sx={{ fontSize: "2rem" }}
+                              >
+                                @{user?.username}
+                              </Typography>
+                            </Link>
+                          </div>
+                        </div>
+                      }
                     </div>
-                  }
-                </div>
-              </div>
-            ))}
+                  </div>
+                )
+            )}
           </div>
         </Box>
       </Modal>

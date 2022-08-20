@@ -199,8 +199,7 @@ const AppProvider = ({ children }) => {
       }
     };
     getAllUsers();
-  }, []);
-
+  }, [homePosts, explorePosts]);
 
   return (
     <AppContext.Provider
