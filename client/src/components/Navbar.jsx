@@ -207,7 +207,14 @@ const Navbar = () => {
         <AppBar position="sticky" sx={{ borderBottom: "1px solid #dbdbdb" }}>
           <Container maxWidth="xl">
             <Toolbar disableGutters>
-              <Link to="/" onClick={() => setValue()} className="navbar-link">
+              <Link
+                to="/"
+                onClick={() => {
+                  setValue();
+                  window.scrollTo(0, 0);
+                }}
+                className="navbar-link"
+              >
                 <InstagramIcon
                   sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
                 />
@@ -229,7 +236,14 @@ const Navbar = () => {
                   textDecoration: "none",
                 }}
               >
-                <Link to="/" onClick={() => setValue()} className="navbar-link">
+                <Link
+                  to="/"
+                  onClick={() => {
+                    setValue();
+                    window.scrollTo(0, 0);
+                  }}
+                  className="navbar-link"
+                >
                   INSTAGRAM
                 </Link>
               </Typography>
@@ -280,6 +294,7 @@ const Navbar = () => {
                       textAlign="center"
                       className="navbar-link"
                       onClick={() => {
+                        window.scrollTo(0, 0);
                         setValue(1);
                         handleCloseNavMenu();
                       }}
@@ -289,7 +304,14 @@ const Navbar = () => {
                   </div>
                 </Menu>
               </Box>
-              <Link to="/" onClick={() => setValue()} className="navbar-link">
+              <Link
+                to="/"
+                onClick={() => {
+                  setValue();
+                  window.scrollTo(0, 0);
+                }}
+                className="navbar-link"
+              >
                 <InstagramIcon
                   sx={{
                     display: { xs: "flex", md: "none" },
@@ -320,7 +342,14 @@ const Navbar = () => {
                   textDecoration: "none",
                 }}
               >
-                <Link to="/" onClick={() => setValue()} className="navbar-link">
+                <Link
+                  to="/"
+                  onClick={() => {
+                    setValue();
+                    window.scrollTo(0, 0);
+                  }}
+                  className="navbar-link"
+                >
                   INSTAGRAM
                 </Link>
               </Typography>
@@ -351,7 +380,10 @@ const Navbar = () => {
                   },
                 ]}
                 open={showSearchModal}
-                onClose={handleSearchClose}
+                onClose={() => {
+                  handleSearchClose();
+                  setSearchValue("");
+                }}
                 aria-labelledby="modal-modal-title"
                 aria-describedbyF="modal-modal-description"
               >
@@ -401,11 +433,13 @@ const Navbar = () => {
                         ]}
                         onClick={() => {
                           handleSearchClose();
+                          setSearchValue("");
                         }}
                       />
                     </div>
-                    {users?.map((user) => (
+                    {users?.map((user, index) => (
                       <SearchUsers
+                        index={index}
                         key={user?._id}
                         searchValue={searchValue}
                         user={user}
@@ -431,12 +465,19 @@ const Navbar = () => {
                   to="/create-post"
                   label="Create Post"
                   className="navbar-link"
+                  onClick={() => {
+                    setValue(0);
+                  }}
                 />
                 <Tab
                   LinkComponent={NavLink}
                   to="/explore"
                   label="Explore"
                   className="navbar-link"
+                  onClick={() => {
+                    window.scrollTo(0, 0);
+                    setValue(1);
+                  }}
                 />
               </Tabs>
               <Box sx={{ flexGrow: 0 }}>
