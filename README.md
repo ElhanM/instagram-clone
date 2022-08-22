@@ -4,7 +4,7 @@
 
 ### Frontend is hosted with netlify and backend with heroku
 
-## Link to project: https://instagram-clone-by-elco.netlify.app/
+### Link to project: https://instagram-clone-by-elco.netlify.app/
 
 ### .env for client
 
