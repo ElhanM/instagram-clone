@@ -1,6 +1,6 @@
 # Instagram clone
 
-## Fullstack web app made using the MERN stack along with Material UI
+## Fullstack small scale web app made using the MERN stack along with Material UI
 
 ### Frontend is hosted with netlify and backend with heroku
 

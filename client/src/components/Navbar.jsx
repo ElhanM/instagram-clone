@@ -23,6 +23,7 @@ import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchUsers from "./SearchUsers";
 import CloseIcon from "@mui/icons-material/Close";
+import Cookies from "universal-cookie";
 
 const styleDelete = {
   position: "absolute",
@@ -103,6 +104,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const Navbar = () => {
+  const cookies = new Cookies();
   const { userDispatch, userInfo, postsURL, authURL, value, setValue } =
     useGlobalContext();
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -147,7 +149,7 @@ const Navbar = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${cookies.get("authToken")}`,
           },
         }
       );
@@ -157,7 +159,7 @@ const Navbar = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${cookies.get("authToken")}`,
           },
         }
       );
@@ -165,13 +167,13 @@ const Navbar = () => {
         const deletePosts = await axios.delete(`${postsURL}`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${cookies.get("authToken")}`,
           },
         });
         const deleteUser = await axios.delete(`${authURL}`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${cookies.get("authToken")}`,
           },
         });
       } catch (error) {
@@ -535,7 +537,7 @@ const Navbar = () => {
                       onClick={() => {
                         setValue();
                         handleCloseUserMenu();
-                        localStorage.removeItem("authToken");
+                        cookies.remove("authToken", { path: "/" });
                         localStorage.removeItem("user");
                         userDispatch(null);
                       }}

@@ -13,8 +13,10 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
 import { useEffect } from "react";
+import Cookies from "universal-cookie";
 
 const Login = () => {
+  const cookies = new Cookies();
   const { userDispatch, loginURL, setValue } = useGlobalContext();
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -45,8 +47,11 @@ const Login = () => {
         }
       );
       console.log(response.data);
-      localStorage.setItem("authToken", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user));
+      cookies.set("authToken", response.data.token, {
+        path: "/",
+        maxAge: 2592000,
+      });
       userDispatch(response.data.user);
       history("/");
     } catch (error) {

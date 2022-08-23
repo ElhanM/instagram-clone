@@ -11,6 +11,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import CloseIcon from "@mui/icons-material/Close";
+import Cookies from "universal-cookie";
 
 const style = {
   position: "absolute",
@@ -63,6 +64,7 @@ const Profile = () => {
   const [showChangePhoto, setShowChangePhoto] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(true);
+  const cookies = new Cookies();
 
   const [allowFollow, setAllowFollow] = useState(true);
 
@@ -111,7 +113,7 @@ const Profile = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${cookies.get("authToken")}`,
           },
         }
       );

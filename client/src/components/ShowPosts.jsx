@@ -13,6 +13,7 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import SearchUsers from "./SearchUsers";
+import Cookies from "universal-cookie";
 
 const styleLikes = {
   position: "absolute",
@@ -51,6 +52,7 @@ const ShowPosts = ({
     users,
     setUsers,
   } = useGlobalContext();
+  const cookies = new Cookies();
   const [allowLike, setAllowLike] = useState(true);
   const [editPostMode, setEditPostMode] = useState(false);
 
@@ -75,7 +77,7 @@ const ShowPosts = ({
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${cookies.get("authToken")}`,
           },
         }
       );
@@ -97,7 +99,7 @@ const ShowPosts = ({
       const response = await axios.delete(`${postsURL}/post/${postId}`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          Authorization: `Bearer ${cookies.get("authToken")}`,
         },
       });
       const updatedPosts = allPosts?.map((post) => {
