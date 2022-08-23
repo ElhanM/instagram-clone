@@ -48,6 +48,10 @@ const Login = () => {
       );
       console.log(response.data);
       localStorage.setItem("user", JSON.stringify(response.data.user));
+      localStorage.setItem(
+        "cookieExpire",
+        JSON.stringify(new Date().setDate(new Date().getDate() + 28))
+      );
       cookies.set("authToken", response.data.token, {
         path: "/",
         maxAge: 2592000,

@@ -11,18 +11,26 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "./components/context";
 import Post from "./pages/Post";
+import Cookies from "universal-cookie";
 
 const Routing = () => {
+  const cookies = new Cookies();
   const { userDispatch, userInfo } = useGlobalContext();
   const history = useNavigate();
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     userDispatch(user);
     console.log("app.jsx useEffect");
-    console.log(
-      "process.env.REACT_APP_LOCAL_URL",
-      process.env.REACT_APP_LOCAL_URL
-    );
+    if (
+      localStorage.getItem("cookieExpire") <
+      JSON.stringify(new Date().setDate(new Date().getDate()))
+    ) {
+      cookies.remove("authToken", { path: "/" });
+      localStorage.removeItem("user");
+      localStorage.removeItem("cookieExpire");
+      userDispatch(null);
+      history("/login");
+    }
   }, []);
   return (
     <Routes>
