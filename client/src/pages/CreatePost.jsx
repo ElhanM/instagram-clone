@@ -8,8 +8,10 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
+import Cookies from "universal-cookie";
 
 const CreatePost = () => {
+  const cookies = new Cookies();
   const history = useNavigate();
   const {
     userDispatch,
@@ -50,7 +52,7 @@ const CreatePost = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${cookies.get("authToken")}`,
           },
         }
       );

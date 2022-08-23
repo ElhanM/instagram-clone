@@ -5,6 +5,7 @@ import axios from "axios";
 import { useState } from "react";
 import Posts from "../components/ShowPosts";
 import { Typography } from "@mui/material";
+import Cookies from "universal-cookie";
 
 const ExplorePage = () => {
   const {
@@ -18,6 +19,7 @@ const ExplorePage = () => {
     explorePosts,
     setExplorePosts,
   } = useGlobalContext();
+  const cookies = new Cookies();
   const [editCommentMode, setEditCommentMode] = useState(false);
   const [initialRender, setInitialRender] = useState(true);
 
@@ -44,7 +46,7 @@ const ExplorePage = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${cookies.get("authToken")}`,
           },
         }
       );
@@ -68,7 +70,7 @@ const ExplorePage = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${cookies.get("authToken")}`,
           },
         }
       );

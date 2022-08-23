@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState, useContext, useReducer, useEffect } from "react";
 import reducer from "./reducer";
+import Cookies from "universal-cookie";
 
 const AppContext = React.createContext();
 
@@ -27,6 +28,7 @@ const AppProvider = ({ children }) => {
   const [homePosts, setHomePosts] = useState([]);
   const [explorePosts, setExplorePosts] = useState([]);
   const [users, setUsers] = useState([]);
+  const cookies = new Cookies();
 
   const [state, dispatch] = useReducer(reducer, initialState);
   const userDispatch = (userData) => {
@@ -57,7 +59,7 @@ const AppProvider = ({ children }) => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${cookies.get("authToken")}`,
           },
         }
       );
@@ -82,7 +84,7 @@ const AppProvider = ({ children }) => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${cookies.get("authToken")}`,
           },
         }
       );
@@ -109,7 +111,7 @@ const AppProvider = ({ children }) => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${cookies.get("authToken")}`,
           },
         }
       );
@@ -135,7 +137,7 @@ const AppProvider = ({ children }) => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${cookies.get("authToken")}`,
           },
         }
       );

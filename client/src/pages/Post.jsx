@@ -13,6 +13,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
 import PostComments from "../components/PostComments";
+import Cookies from "universal-cookie";
 
 const style = {
   position: "absolute",
@@ -72,6 +73,7 @@ const Post = () => {
   const [editCommentMode, setEditCommentMode] = useState(false);
   const [allowLike, setAllowLike] = useState(true);
   const [loading, setLoading] = useState(true);
+  const cookies = new Cookies();
 
   const [allowFollow, setAllowFollow] = useState(true);
 
@@ -125,7 +127,7 @@ const Post = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${cookies.get("authToken")}`,
           },
         }
       );
@@ -149,7 +151,7 @@ const Post = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${cookies.get("authToken")}`,
           },
         }
       );
@@ -170,7 +172,7 @@ const Post = () => {
       const response = await axios.delete(`${postsURL}/post/${postId}`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          Authorization: `Bearer ${cookies.get("authToken")}`,
         },
       });
       const updatedPosts = allPosts?.map((post) => {
@@ -197,7 +199,7 @@ const Post = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${cookies.get("authToken")}`,
           },
         }
       );

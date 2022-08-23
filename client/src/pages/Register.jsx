@@ -12,8 +12,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
+import Cookies from "universal-cookie";
 
 const Register = () => {
+  const cookies = new Cookies();
   const history = useNavigate();
   const { cloudinaryRequest, registerURL, setValue } = useGlobalContext();
   const [image, setImage] = useState("");
@@ -47,8 +49,11 @@ const Register = () => {
       );
       console.log(response.data);
       setImageUrl("");
-      localStorage.setItem("authToken", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user));
+      cookies.set("authToken", response.data.token, {
+        path: "/",
+        maxAge: 2592000,
+      });
       history("/");
     } catch (error) {
       console.log(error.response.data.message);
