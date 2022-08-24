@@ -15,12 +15,11 @@ import Cookies from "universal-cookie";
 
 const Routing = () => {
   const cookies = new Cookies();
-  const { userDispatch, userInfo } = useGlobalContext();
+  const { userDispatch } = useGlobalContext();
   const history = useNavigate();
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     userDispatch(user);
-    console.log("app.jsx useEffect");
     if (
       localStorage.getItem("cookieExpire") <
       JSON.stringify(new Date().setDate(new Date().getDate()))

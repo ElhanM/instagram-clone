@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
 import axios from "axios";
 import { useState } from "react";
@@ -126,7 +126,6 @@ const Home = () => {
     }
   }, [allPosts]);
   useEffect(() => {
-    console.log("initialrender", initialRender);
     if (homePosts.length > 0) {
       setInitialRender(false);
     }

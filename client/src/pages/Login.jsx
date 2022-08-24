@@ -46,7 +46,6 @@ const Login = () => {
           },
         }
       );
-      console.log(response.data);
       localStorage.setItem("user", JSON.stringify(response.data.user));
       localStorage.setItem(
         "cookieExpire",
@@ -59,7 +58,6 @@ const Login = () => {
       userDispatch(response.data.user);
       history("/");
     } catch (error) {
-      console.log(error.response.data.message);
       setErrorMsg(error.response.data.message);
     }
   };

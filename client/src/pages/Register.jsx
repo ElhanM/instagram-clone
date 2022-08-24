@@ -47,7 +47,6 @@ const Register = () => {
           },
         }
       );
-      console.log(response.data);
       setImageUrl("");
       localStorage.setItem("user", JSON.stringify(response.data.user));
       localStorage.setItem(
@@ -60,7 +59,6 @@ const Register = () => {
       });
       history("/");
     } catch (error) {
-      console.log(error.response.data.message);
       setErrorMsg(error.response.data.message);
       setImageUrl("");
     }

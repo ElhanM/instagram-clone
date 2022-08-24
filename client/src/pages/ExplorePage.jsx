@@ -128,7 +128,6 @@ const ExplorePage = () => {
   }, [allPosts]);
 
   useEffect(() => {
-    console.log("initialrender", initialRender);
     if (explorePosts.length > 0) {
       setInitialRender(false);
     }

@@ -19,7 +19,7 @@ import Modal from "@mui/material/Modal";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
-import { styled, alpha } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchUsers from "./SearchUsers";
 import CloseIcon from "@mui/icons-material/Close";
@@ -30,7 +30,6 @@ const styleDelete = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -457,7 +456,6 @@ const Navbar = () => {
                 indicatorColor="secondary"
                 value={value}
                 onChange={(e, val) => {
-                  console.log(val);
                   setValue(val);
                   // mui shananigans
                 }}
