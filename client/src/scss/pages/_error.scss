@@ -1,0 +1,15 @@
+.error-page {
+  @include flex-center;
+  flex-direction: column;
+  &__header {
+    font-size: 4rem;
+  }
+  &__paragraph {
+    margin-top: -1em;
+    font-size: 2rem;
+  }
+  &__span {
+    color: blue;
+    text-decoration: underline;
+  }
+}

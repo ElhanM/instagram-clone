@@ -114,7 +114,6 @@ const Post = () => {
         description: response.data.post.description,
       });
       setLoading(false);
-      console.log(response.data.post);
     } catch (error) {
       console.log(error);
     }
@@ -222,7 +221,6 @@ const Post = () => {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     userDispatch(user);
-    console.log("app.jsx useEffect");
     if (!user) {
       history("/login");
     }

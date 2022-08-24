@@ -653,4 +653,35 @@ a :hover {
   .small {
     max-height: 20vh;
   }
+}
+
+.error-page {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.error-page__header {
+  font-size: 4rem;
+}
+.error-page__paragraph {
+  margin-top: -1em;
+  font-size: 2rem;
+}
+.error-page__span {
+  color: blue;
+  text-decoration: underline;
 }/*# sourceMappingURL=index.css.map */

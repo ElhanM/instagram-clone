@@ -12,7 +12,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import SearchUsers from "./SearchUsers";
 import Cookies from "universal-cookie";
 
 const styleLikes = {

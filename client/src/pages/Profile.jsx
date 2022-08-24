@@ -173,7 +173,6 @@ const Profile = () => {
                   <div
                     className="profile__container__header__profile-photo__overlay"
                     onClick={() => {
-                      console.log("showChangePhoto", showChangePhoto);
                       handleOpenChangePhoto();
                     }}
                   >
