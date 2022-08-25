@@ -104,7 +104,7 @@ const Register = () => {
           {errorMsg &&
             errorMsg?.split(",").map((error, index) => (
               <Typography
-                key={index}
+                key={error}
                 variant="h6"
                 sx={{
                   fontWeight: "400",

@@ -35,7 +35,6 @@ const Routing = () => {
     <Routes>
       <Route path="/" element={<SharedLayout />}>
         <Route index element={<Home />} />
-        {/* add redirects to all routes */}
         <Route path="profile/:userId" element={<Profile />}>
           <Route path=":postId" element={<Post />} />
         </Route>
