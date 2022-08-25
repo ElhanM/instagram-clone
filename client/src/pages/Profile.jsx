@@ -288,7 +288,7 @@ const Profile = () => {
                   .reverse()
                   .map((post, index) => (
                     <Link
-                      key={index}
+                      key={post?._id}
                       to={`/profile/${post?.user?._id}/${post?._id}`}
                     >
                       <img
@@ -332,7 +332,7 @@ const Profile = () => {
               {errorMsg &&
                 errorMsg?.split(",").map((error, index) => (
                   <Typography
-                    key={index}
+                    key={error}
                     variant="h6"
                     sx={{
                       fontWeight: "400",
