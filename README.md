@@ -1,8 +1,14 @@
 # Instagram clone
 
-## Fullstack small scale web app made using the MERN stack along with Material UI
+## Fullstack small scale web app made using the MERN stack
 
 ### Frontend is hosted with netlify and backend with heroku
+
+### External libraries used for frontend: <br />
+Material UI, Axios, SCSS, React Router Dom 6, Universal cookie
+
+### External libraries used for backend: <br />
+Bcryptjs, CORS, Dotenv, Express, Jsonwebtoken, Mongoose and Nodemon for dev
 
 ### Link to project: https://instagram-clone-by-elco.netlify.app/
 
