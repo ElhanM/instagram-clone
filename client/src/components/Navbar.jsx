@@ -175,6 +175,9 @@ const Navbar = () => {
             Authorization: `Bearer ${cookies.get("authToken")}`,
           },
         });
+        cookies.remove("authToken", { path: "/" });
+        localStorage.removeItem("user");
+        localStorage.removeItem("cookieExpire");
       } catch (error) {
         console.log(error);
       }
@@ -440,7 +443,6 @@ const Navbar = () => {
                     </div>
                     {users?.map((user, index) => (
                       <SearchUsers
-                        index={index}
                         key={user?._id}
                         searchValue={searchValue}
                         user={user}
