@@ -29,6 +29,7 @@ const AppProvider = ({ children }) => {
   const [explorePosts, setExplorePosts] = useState([]);
   const [users, setUsers] = useState([]);
   const cookies = new Cookies();
+  const [loadElse, setLoadElse] = useState(false);
 
   const [state, dispatch] = useReducer(reducer, initialState);
   const userDispatch = (userData) => {
@@ -47,6 +48,7 @@ const AppProvider = ({ children }) => {
         data: { posts },
       } = response;
       dispatch({ type: "GET_POSTS", payload: posts });
+      setLoadElse(true);
     } catch (error) {
       console.log(error);
     }
@@ -200,7 +202,9 @@ const AppProvider = ({ children }) => {
         console.log(error);
       }
     };
-    getAllUsers();
+    if (loadElse) {
+      getAllUsers();
+    }
   }, [homePosts, explorePosts]);
 
   return (
@@ -231,6 +235,7 @@ const AppProvider = ({ children }) => {
         setExplorePosts,
         users,
         setUsers,
+        loadElse,
       }}
     >
       {children}

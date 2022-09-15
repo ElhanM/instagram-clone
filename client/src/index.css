@@ -504,7 +504,8 @@ a :hover {
 }
 @media screen and (max-height: 600px) {
   .post__image img {
-    height: 110%;
+    width: 90vw;
+    height: 78vh;
   }
 }
 .post__image__close-icon {
@@ -522,7 +523,7 @@ a :hover {
 }
 @media screen and (max-height: 600px) {
   .post__info {
-    width: 45%;
+    width: 70vw;
   }
 }
 @media screen and (max-width: 1200px) {

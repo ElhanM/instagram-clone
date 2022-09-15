@@ -24,7 +24,8 @@
         height: 78vh;
       }
       @media screen and (max-height: 600px) {
-        height: 110%;
+        width: 90vw;
+        height: 78vh;
       }
     }
     &__close-icon {
@@ -42,7 +43,7 @@
     // @include flex-center;
     width: 30vw;
     @media screen and (max-height: 600px) {
-      width: 45%;
+      width: 70vw;
     }
     @media screen and (max-width: 1200px) {
       width: 70vw;
