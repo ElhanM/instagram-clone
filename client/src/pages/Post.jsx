@@ -15,6 +15,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import PostComments from "../components/PostComments";
 import Cookies from "universal-cookie";
 
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -25,10 +26,7 @@ const style = {
   border: "2px solid #000",
   boxShadow: 24,
   maxHeight: "90vh",
-  // add media screen
-  "@media (max-width: 1200px)": {
-    overflow: "auto",
-  },
+  overflow: "auto",
 };
 
 const styleLikes = {

@@ -104,8 +104,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Navbar = () => {
   const cookies = new Cookies();
-  const { userDispatch, userInfo, postsURL, authURL, value, setValue } =
-    useGlobalContext();
+  const {
+    userDispatch,
+    userInfo,
+    postsURL,
+    authURL,
+    value,
+    setValue,
+    users,
+    setUsers,
+  } = useGlobalContext();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -134,7 +142,6 @@ const Navbar = () => {
 
   const history = useNavigate();
 
-  const [users, setUsers] = useState([]);
   const [tempUsers, setTempUsers] = useState([]);
   useEffect(() => {
     setTempUsers(users);
@@ -188,22 +195,6 @@ const Navbar = () => {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    const getAllUsers = async () => {
-      try {
-        const response = await axios(`${authURL}`, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        setUsers(response?.data?.users);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getAllUsers();
-  }, []);
 
   return (
     <>
