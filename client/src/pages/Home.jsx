@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
 import axios from "axios";
@@ -30,12 +30,15 @@ const Home = () => {
     editCommentId: "",
     editCommentPostId: "",
   });
-  const handleChange = (e) => {
-    setInputs({
-      ...inputs,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const handleChange = useMemo(
+    () => (e) => {
+      setInputs({
+        ...inputs,
+        [e.target.name]: e.target.value,
+      });
+    },
+    [inputs]
+  );
   const history = useNavigate();
 
   const likeRequest = async (postId) => {
