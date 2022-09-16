@@ -14,6 +14,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Cookies from "universal-cookie";
 import { useMemo } from "react";
+import React from "react";
 
 const styleLikes = {
   position: "absolute",
@@ -694,10 +695,10 @@ const ShowPosts = ({
         </Modal>
       </>
     ),
-    [post,editCommentMode, handleChange]
+    [post, editCommentMode, handleChange]
   );
 
   return <>{content}</>;
 };
 
-export default ShowPosts;
+export const MemoShowPosts = React.memo(ShowPosts);
