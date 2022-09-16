@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
 import axios from "axios";
 import { useState } from "react";
-import Posts from "../components/ShowPosts";
+import {MemoShowPosts} from "../components/ShowPosts";
 import { Typography } from "@mui/material";
 import Cookies from "universal-cookie";
 
@@ -154,7 +154,7 @@ const Home = () => {
           ?.slice(0)
           .reverse()
           .map((post, index) => (
-            <Posts
+            <MemoShowPosts
               key={post?._id}
               post={post}
               unlikeRequest={unlikeRequest}
