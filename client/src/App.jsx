@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "./components/context";
 import Post from "./pages/Post";
 import Cookies from "universal-cookie";
+import React from "react";
 
 const Routing = () => {
   const cookies = new Cookies();
@@ -56,4 +57,4 @@ function App() {
   );
 }
 
-export default App;
+export const MemoApp = React.memo(App);

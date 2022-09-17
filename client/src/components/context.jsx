@@ -246,5 +246,5 @@ const AppProvider = ({ children }) => {
 export const useGlobalContext = () => {
   return useContext(AppContext);
 };
-
-export { AppContext, AppProvider };
+export const MemoAppProvider = React.memo(AppProvider);
+export { AppContext };
