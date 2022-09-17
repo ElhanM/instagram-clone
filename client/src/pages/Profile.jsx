@@ -12,6 +12,7 @@ import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import CloseIcon from "@mui/icons-material/Close";
 import Cookies from "universal-cookie";
+import Loading from "../components/Loading";
 
 const style = {
   position: "absolute",
@@ -156,7 +157,7 @@ const Profile = () => {
     <>
       <div className="profile">
         {loading ? (
-          <h1>Loading...</h1>
+          <Loading />
         ) : posts === [] ? (
           <h1>No posts to display </h1>
         ) : (

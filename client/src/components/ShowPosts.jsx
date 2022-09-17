@@ -51,7 +51,6 @@ const ShowPosts = ({
     postsURL,
     updatePostsDispatch,
     users,
-    setUsers,
   } = useGlobalContext();
   const cookies = new Cookies();
   const [allowLike, setAllowLike] = useState(true);
@@ -701,4 +700,7 @@ const ShowPosts = ({
   return <>{content}</>;
 };
 
+// this pervents the component from rerendering if none of the props it recives change
+// which does not do much for me because of the number of props I am providing
+// so most of my memoization comes from the useMemo hook
 export const MemoShowPosts = React.memo(ShowPosts);

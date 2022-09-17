@@ -7,6 +7,7 @@ import { MemoShowPosts } from "../components/ShowPosts";
 
 import { Typography } from "@mui/material";
 import Cookies from "universal-cookie";
+import Loading from "../components/Loading";
 
 const ExplorePage = () => {
   const {
@@ -149,7 +150,7 @@ const ExplorePage = () => {
   return (
     <div className="main-page">
       {loading ? (
-        <h1>Loading...</h1>
+        <Loading />
       ) : allPosts === [] ? (
         <h1>No posts to display </h1>
       ) : (
@@ -171,27 +172,29 @@ const ExplorePage = () => {
           ))
       )}
 
-      <Typography
-        variant="h6"
-        noWrap
-        component="a"
-        sx={{
-          mr: 2,
-          display: "flex",
-          fontFamily: "monospace",
-          fontWeight: 700,
-          color: "inherit",
-          textDecoration: "none",
-          margin: "1em auto",
-          padding: "0 1em",
-          justifyContent: "center",
-          // enable text wrap
-          whiteSpace: "normal",
-          wordWrap: "break-word",
-        }}
-      >
-        To find more posts navigate to the home page using the navbar
-      </Typography>
+      {loading || (
+        <Typography
+          variant="h6"
+          noWrap
+          component="a"
+          sx={{
+            mr: 2,
+            display: "flex",
+            fontFamily: "monospace",
+            fontWeight: 700,
+            color: "inherit",
+            textDecoration: "none",
+            margin: "1em auto",
+            padding: "0 1em",
+            justifyContent: "center",
+            // enable text wrap
+            whiteSpace: "normal",
+            wordWrap: "break-word",
+          }}
+        >
+          To find more posts navigate to the explore page using the navbar
+        </Typography>
+      )}
     </div>
   );
 };
