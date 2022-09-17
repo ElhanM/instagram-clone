@@ -12,7 +12,7 @@ import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/system";
 import { Link, NavLink } from "react-router-dom";
 import { Tabs, Tab, TextField } from "@mui/material";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import { useGlobalContext } from "../components/context";
 import Modal from "@mui/material/Modal";
@@ -576,4 +576,5 @@ const Navbar = () => {
     </>
   );
 };
-export default Navbar;
+
+export const MemoNavbar = React.memo(Navbar);
