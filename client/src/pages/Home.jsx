@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
 import axios from "axios";
 import { useState } from "react";
-import {MemoShowPosts} from "../components/ShowPosts";
+import { MemoShowPosts } from "../components/ShowPosts";
 import { Typography } from "@mui/material";
 import Cookies from "universal-cookie";
+import Loading from "../components/Loading";
 
 const Home = () => {
   const {
@@ -145,7 +146,7 @@ const Home = () => {
   return (
     <div className="main-page">
       {loading ? (
-        <h1>Loading...</h1>
+        <Loading />
       ) : allPosts === [] ? (
         <h1>No allPosts to display </h1>
       ) : (
@@ -167,27 +168,29 @@ const Home = () => {
             />
           ))
       )}
-      <Typography
-        variant="h6"
-        noWrap
-        component="a"
-        sx={{
-          mr: 2,
-          display: "flex",
-          fontFamily: "monospace",
-          fontWeight: 700,
-          color: "inherit",
-          textDecoration: "none",
-          margin: "1em auto",
-          padding: "0 1em",
-          justifyContent: "center",
-          // enable text wrap
-          whiteSpace: "normal",
-          wordWrap: "break-word",
-        }}
-      >
-        To find more posts navigate to the explore page using the navbar
-      </Typography>
+      {loading || (
+        <Typography
+          variant="h6"
+          noWrap
+          component="a"
+          sx={{
+            mr: 2,
+            display: "flex",
+            fontFamily: "monospace",
+            fontWeight: 700,
+            color: "inherit",
+            textDecoration: "none",
+            margin: "1em auto",
+            padding: "0 1em",
+            justifyContent: "center",
+            // enable text wrap
+            whiteSpace: "normal",
+            wordWrap: "break-word",
+          }}
+        >
+          To find more posts navigate to the explore page using the navbar
+        </Typography>
+      )}
     </div>
   );
 };

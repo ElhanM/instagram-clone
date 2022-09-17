@@ -14,7 +14,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
 import PostComments from "../components/PostComments";
 import Cookies from "universal-cookie";
-
+import Loading from "../components/Loading";
 
 const style = {
   position: "absolute",
@@ -237,7 +237,7 @@ const Post = () => {
         >
           <Box sx={style}>
             {loading ? (
-              <h1>Loading...</h1>
+              <Loading />
             ) : allPosts === [] ? (
               <h1>No allPosts to display </h1>
             ) : (
