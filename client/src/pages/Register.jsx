@@ -37,10 +37,18 @@ const Register = () => {
       ...inputs,
       username: inputs?.username?.replace(/\s/g, "").toLowerCase(),
     });
+    let postImage;
+    if (imageUrl) {
+      postImage = imageUrl.replace(".jpg", ".webp");
+      postImage = postImage.replace(
+        "/image/upload/",
+        "/image/upload/c_scale,w_210/"
+      );
+    }
     try {
       const response = await axios.post(
         registerURL,
-        { ...inputs, profilePhoto: imageUrl },
+        { ...inputs, profilePhoto: postImage },
         {
           headers: {
             "Content-Type": "application/json",
@@ -69,9 +77,7 @@ const Register = () => {
     if (image) {
       cloudinaryRequest(image, setImageUrl);
     } else {
-      setImageUrl(
-        "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
-      );
+      setImageUrl("");
     }
   };
   useEffect(() => {

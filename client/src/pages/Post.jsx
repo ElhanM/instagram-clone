@@ -172,13 +172,7 @@ const Post = () => {
           Authorization: `Bearer ${cookies.get("authToken")}`,
         },
       });
-      const updatedPosts = allPosts?.map((post) => {
-        if (post?._id === postId) {
-          return;
-        } else {
-          return post;
-        }
-      });
+      const updatedPosts = allPosts?.filter((post) => post?._id !== postId);
       updatePostsDispatch(updatedPosts);
       history(`/profile/${userId}`);
     } catch (error) {
