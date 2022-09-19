@@ -105,7 +105,16 @@ const Post = () => {
           "Content-Type": "application/json",
         },
       });
-      setPost(response.data.post);
+
+      const updatedPhoto = response.data.post.photo.replace(
+        "/image/upload/c_scale,w_600/",
+        "/image/upload/"
+      );
+
+      const updateResponse = { ...response.data.post, photo: updatedPhoto };
+      console.log({ updateResponse });
+
+      setPost(updateResponse);
       setInputs({
         ...inputs,
         title: response.data.post.title,
@@ -116,6 +125,8 @@ const Post = () => {
       console.log(error);
     }
   };
+  // useEffect(() => {
+  // }, [updateResponse]);
   const likeRequest = async (postId) => {
     try {
       const response = await axios.put(
