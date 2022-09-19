@@ -271,7 +271,6 @@ const ShowPosts = ({
           <div className="main-page__container__image">
             <Link to={`/profile/${post?.user?._id}/${post?._id}`}>
               <img
-                // src={post?.photo}
                 srcset={`${post?.photo.replace(
                   "/image/upload/c_scale,w_600/",
                   "/image/upload/c_scale,w_400/"
