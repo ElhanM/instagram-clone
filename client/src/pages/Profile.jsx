@@ -108,9 +108,14 @@ const Profile = () => {
   };
   const changeProfilePictureRequest = async () => {
     try {
+      let postImage = imageUrl.replace(".jpg", ".webp");
+      postImage = postImage.replace(
+        "/image/upload/",
+        "/image/upload/c_scale,w_210/"
+      );
       const response = await axios.patch(
         authURL,
-        { profilePhoto: imageUrl },
+        { profilePhoto: postImage },
         {
           headers: {
             "Content-Type": "application/json",

@@ -46,9 +46,14 @@ const CreatePost = () => {
 
   const postRequest = async () => {
     try {
+      let postImage = imageUrl.replace(".jpg", ".webp");
+      postImage = postImage.replace(
+        "/image/upload/",
+        "/image/upload/c_scale,w_600/"
+      );
       const response = await axios.post(
         postsURL,
-        { ...inputs, photo: imageUrl },
+        { ...inputs, photo: postImage },
         {
           headers: {
             "Content-Type": "application/json",
