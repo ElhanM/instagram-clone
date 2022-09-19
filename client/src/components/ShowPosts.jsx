@@ -271,13 +271,14 @@ const ShowPosts = ({
           <div className="main-page__container__image">
             <Link to={`/profile/${post?.user?._id}/${post?._id}`}>
               <img
-                srcset={`${post?.photo.replace(
-                  "/image/upload/c_scale,w_600/",
-                  "/image/upload/c_scale,w_400/"
-                )} 400w, ${post?.photo.replace(
-                  "/image/upload/c_scale,w_600/",
-                  "/image/upload/c_scale,w_500/"
-                )} 500w, ${post?.photo} 600w`}
+              // does not work on deployed website
+                // srcset={`${post?.photo.replace(
+                //   "/image/upload/c_scale,w_600/",
+                //   "/image/upload/c_scale,w_400/"
+                // )} 400w, ${post?.photo.replace(
+                //   "/image/upload/c_scale,w_600/",
+                //   "/image/upload/c_scale,w_500/"
+                // )} 500w, ${post?.photo} 600w`}
                 sizes="100vw"
                 src={post?.photo}
                 alt={post?.description || post?.title}
