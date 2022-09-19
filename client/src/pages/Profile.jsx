@@ -109,10 +109,7 @@ const Profile = () => {
   const changeProfilePictureRequest = async () => {
     try {
       let postImage = imageUrl.replace(".jpg", ".webp");
-      postImage = postImage.replace(
-        "/image/upload/",
-        "/image/upload/c_scale,w_210/"
-      );
+
       const response = await axios.patch(
         authURL,
         { profilePhoto: postImage },
@@ -171,7 +168,10 @@ const Profile = () => {
               <div className="profile__container__header__profile-photo">
                 <Avatar
                   alt={user[0]?.username}
-                  src={user[0]?.profilePhoto}
+                  src={user[0]?.profilePhoto.replace(
+                    "/image/upload/c_scale,w_210/",
+                    "/image/upload/c_scale,w_450/"
+                  )}
                   sx={{ width: "13rem", height: "13rem" }}
                 />
                 {user[0]?._id ===
