@@ -6,7 +6,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
-import ShowPostsComments from "./ShowPostsComments";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import axios from "axios";
@@ -14,7 +13,10 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Cookies from "universal-cookie";
 import { useMemo } from "react";
-import React from "react";
+import React, { Suspense, lazy } from "react";
+import Loading from "./Loading";
+
+const ShowPostsComments = lazy(() => import("./ShowPostsComments"));
 
 const styleLikes = {
   position: "absolute",
@@ -129,7 +131,7 @@ const ShowPosts = ({
                     // what matters is which quality is displayed
                     src={post?.user?.profilePhoto.replace(
                       "/image/upload/c_scale,w_210/",
-                      "/image/upload/c_scale,w_150/"
+                      "/image/upload/c_scale,w_120/"
                     )}
                     sx={{ width: "3rem", height: "3rem" }}
                   />
@@ -272,16 +274,19 @@ const ShowPosts = ({
             <Link to={`/profile/${post?.user?._id}/${post?._id}`}>
               <img
                 src={post?.photo}
-                // does not work on deployed website
+                // // does not work on deployed website
                 // srcset={`${post?.photo.replace(
                 //   "/image/upload/c_scale,w_600/",
                 //   "/image/upload/c_scale,w_400/"
-                // )} 400w, 
+                // )} 400w,
                 // ${post?.photo.replace(
                 //   "/image/upload/c_scale,w_600/",
                 //   "/image/upload/c_scale,w_500/"
                 // )} 500w,
                 // ${post?.photo} 600w`}
+                // // my image container is always as big as the image rezolution so i do not need media queries for sizes
+                // // e.g. if my picture with 600px width was shrunk and displayed in a 400px width container i would use media queries
+                // // to instead render the 400px width picture
                 // sizes="100vw"
                 alt={post?.description || post?.title}
               />
@@ -610,16 +615,18 @@ const ShowPosts = ({
             ) : (
               <div className="comments-main-page">
                 {post?.comments?.map((comment) => (
-                  <ShowPostsComments
-                    key={comment?._id}
-                    comment={comment}
-                    setEditCommentMode={setEditCommentMode}
-                    inputs={inputs}
-                    setInputs={setInputs}
-                    post={post}
-                    deleteComment={deleteComment}
-                    allPosts={allPosts}
-                  />
+                  <Suspense fallback={<Loading />}>
+                    <ShowPostsComments
+                      key={comment?._id}
+                      comment={comment}
+                      setEditCommentMode={setEditCommentMode}
+                      inputs={inputs}
+                      setInputs={setInputs}
+                      post={post}
+                      deleteComment={deleteComment}
+                      allPosts={allPosts}
+                    />
+                  </Suspense>
                 ))}
               </div>
             )}
@@ -670,11 +677,11 @@ const ShowPosts = ({
                                 handleClose();
                               }}
                             >
-                              <Avatar
-                                alt={user?.username}
-                                src={user?.profilePhoto}
-                                sx={{ width: "3rem", height: "3rem" }}
-                              />
+                              src=
+                              {post?.user?.profilePhoto.replace(
+                                "/image/upload/c_scale,w_210/",
+                                "/image/upload/c_scale,w_120/"
+                              )}
                             </Link>
                           </div>
                           <div className="show-posts-likes__user__container__header__left__user">
@@ -723,3 +730,5 @@ const ShowPosts = ({
 // which does not do much for me because of the number of props I am providing
 // so most of my memoization comes from the useMemo hook
 export const MemoShowPosts = React.memo(ShowPosts);
+// you can also do
+// export default React.memo(ShowPosts);

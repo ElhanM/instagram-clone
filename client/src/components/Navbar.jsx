@@ -530,6 +530,7 @@ const Navbar = () => {
                         handleCloseUserMenu();
                         cookies.remove("authToken", { path: "/" });
                         localStorage.removeItem("user");
+                        localStorage.removeItem("cookieExpire");
                         userDispatch(null);
                       }}
                       className="navbar-link"
@@ -577,4 +578,4 @@ const Navbar = () => {
   );
 };
 
-export const MemoNavbar = React.memo(Navbar);
+export default React.memo(Navbar);
