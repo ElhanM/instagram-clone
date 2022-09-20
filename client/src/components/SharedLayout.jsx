@@ -1,7 +1,10 @@
 import { Outlet } from "react-router-dom";
-import { MemoNavbar } from "./Navbar";
 import { useGlobalContext } from "./context";
 import { useEffect } from "react";
+import React, { Suspense, lazy } from "react";
+import Loading from "./Loading";
+
+const Navbar = lazy(() => import("./Navbar"));
 
 const SharedLayout = () => {
   const { userDispatch, userInfo } = useGlobalContext();
@@ -12,7 +15,12 @@ const SharedLayout = () => {
 
   return (
     <>
-      {userInfo && <MemoNavbar />}
+      {userInfo && (
+        // this way content loads faster
+        <Suspense>
+          <Navbar />
+        </Suspense>
+      )}
       <Outlet />
     </>
   );

@@ -37,8 +37,8 @@ const Register = () => {
       ...inputs,
       username: inputs?.username?.replace(/\s/g, "").toLowerCase(),
     });
-    let postImage;
-    if (imageUrl) {
+    let postImage = "";
+    if (imageUrl !== true) {
       postImage = imageUrl.replace(".jpg", ".webp");
       postImage = postImage.replace(
         "/image/upload/",
@@ -64,6 +64,8 @@ const Register = () => {
       cookies.set("authToken", response.data.token, {
         path: "/",
         maxAge: 2592000,
+        secure: true,
+        sameSite: "none",
       });
       history("/");
     } catch (error) {
@@ -77,7 +79,7 @@ const Register = () => {
     if (image) {
       cloudinaryRequest(image, setImageUrl);
     } else {
-      setImageUrl("");
+      setImageUrl(true);
     }
   };
   useEffect(() => {

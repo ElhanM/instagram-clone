@@ -54,6 +54,8 @@ const Login = () => {
       cookies.set("authToken", response.data.token, {
         path: "/",
         maxAge: 2592000,
+        secure: true,
+        sameSite: "none",
       });
       userDispatch(response.data.user);
       history("/");

@@ -13,7 +13,10 @@ const SearchUsers = ({ user, searchValue, handleSearchClose }) => {
                 <Link to={`/profile/${user?._id}`}>
                   <Avatar
                     alt={user?.username}
-                    src={user?.profilePhoto}
+                    src={user?.profilePhoto.replace(
+                      "/image/upload/c_scale,w_210/",
+                      "/image/upload/c_scale,w_120/"
+                    )}
                     sx={{ width: "3rem", height: "3rem" }}
                     onClick={() => {
                       handleSearchClose();
