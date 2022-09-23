@@ -27,9 +27,7 @@ const AppProvider = ({ children }) => {
   const [value, setValue] = useState();
   const [homePosts, setHomePosts] = useState([]);
   const [explorePosts, setExplorePosts] = useState([]);
-  const [users, setUsers] = useState([]);
   const cookies = new Cookies();
-  const [loadElse, setLoadElse] = useState(false);
 
   const [state, dispatch] = useReducer(reducer, initialState);
   const userDispatch = (userData) => {
@@ -48,7 +46,6 @@ const AppProvider = ({ children }) => {
         data: { posts },
       } = response;
       dispatch({ type: "GET_POSTS", payload: posts });
-      setLoadElse(true);
     } catch (error) {
       console.log(error);
     }
@@ -189,24 +186,6 @@ const AppProvider = ({ children }) => {
     dispatch({ type: "UPDATE_POSTS", payload: postsData });
   };
 
-  useEffect(() => {
-    const getAllUsers = async () => {
-      try {
-        const response = await axios(`${authURL}`, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        setUsers(response?.data?.users);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    if (loadElse) {
-      getAllUsers();
-    }
-  }, [homePosts, explorePosts]);
-
   return (
     <AppContext.Provider
       value={{
@@ -233,16 +212,12 @@ const AppProvider = ({ children }) => {
         setHomePosts,
         explorePosts,
         setExplorePosts,
-        users,
-        setUsers,
-        loadElse,
       }}
     >
       {children}
     </AppContext.Provider>
   );
 };
-// make sure use
 export const useGlobalContext = () => {
   return useContext(AppContext);
 };

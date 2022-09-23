@@ -153,7 +153,6 @@ const Home = () => {
         homePosts
           // slice, for some reason, prevents allPosts from jumping around when liking/unliking them
           ?.slice(0)
-          .reverse()
           .map((post, index) => (
             <MemoShowPosts
               key={post?._id}
@@ -188,7 +187,8 @@ const Home = () => {
             wordWrap: "break-word",
           }}
         >
-          To find more posts navigate to the explore page using the navbar
+          To find more posts navigate to the explore page or search for a
+          specific user using the navbar
         </Typography>
       )}
     </div>

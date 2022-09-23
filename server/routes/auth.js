@@ -16,7 +16,7 @@ const {
 
 router
   .route("/")
-  .get(getAllUsers)
+  .post(getAllUsers)
   .patch(protect, changeProfilePhoto)
   .delete(protect, deleteUserAccount);
 router.route("/register").post(register);
