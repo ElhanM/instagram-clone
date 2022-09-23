@@ -1,7 +1,6 @@
 # Instagram clone
 
-## Fullstack small scale web app made using the MERN stack
-### As this is my first ever MERN project, the app is not fully optimized (e.g. there is no pagination due to bad database planning)
+## Fullstack small scale web app made using the MERN stack with API debouncing
 
 ### Frontend is hosted with netlify and backend with heroku
 

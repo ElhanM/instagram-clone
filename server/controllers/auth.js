@@ -13,7 +13,11 @@ const register = async (req, res, next) => {
 
 const getAllUsers = async (req, res, next) => {
   try {
-    const users = await User.find({});
+    const users = await User.find({
+      username: { $regex: `${req.body.searchValue}` },
+    })
+      .sort({ username: 1 })
+      .limit(5);
     res.status(200).json({ users });
   } catch (error) {
     next(error);

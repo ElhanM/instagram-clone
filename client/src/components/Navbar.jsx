@@ -104,16 +104,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Navbar = () => {
   const cookies = new Cookies();
-  const {
-    userDispatch,
-    userInfo,
-    postsURL,
-    authURL,
-    value,
-    setValue,
-    users,
-    setUsers,
-  } = useGlobalContext();
+  const { userDispatch, userInfo, postsURL, authURL, value, setValue } =
+    useGlobalContext();
+  const [users, setUsers] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const [defaultSearchValue, setDefaultSearchValue] = useState("");
+
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -135,7 +131,6 @@ const Navbar = () => {
   const handleDeleteOpen = () => setShowDeleteAccountModal(true);
   const handleDeleteClose = () => setShowDeleteAccountModal(false);
 
-  const [searchValue, setSearchValue] = useState("");
   const [showSearchModal, setShowSearchModal] = useState(false);
   const handleSearchOpen = () => setShowSearchModal(true);
   const handleSearchClose = () => setShowSearchModal(false);
@@ -195,6 +190,51 @@ const Navbar = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    const getAllUsers = async () => {
+      try {
+        const response = await axios.post(
+          `${authURL}`,
+          { searchValue: searchValue },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        setUsers(response?.data?.users);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (searchValue !== "") {
+      getAllUsers();
+    } else {
+      setUsers([]);
+    }
+  }, [searchValue]);
+
+  const setSearchValueDebounce = debounce((text) => {
+    setSearchValue(text);
+  }, 300);
+
+  const [timeoutState, setTimeoutState] = useState();
+  function debounce(cb, delay = 1000) {
+    return (...args) => {
+      clearTimeout(timeoutState);
+      setTimeoutState(
+        setTimeout(() => {
+          cb(...args);
+        }, delay)
+      );
+    };
+  }
+
+  useEffect(() => {
+    console.log(Object.prototype.toString.call(users) == "[object Array]");
+    console.log({ users });
+  }, [users]);
 
   return (
     <>
@@ -377,6 +417,7 @@ const Navbar = () => {
                 open={showSearchModal}
                 onClose={() => {
                   handleSearchClose();
+                  setDefaultSearchValue("");
                   setSearchValue("");
                 }}
                 aria-labelledby="modal-modal-title"
@@ -393,9 +434,10 @@ const Navbar = () => {
                         id="search"
                         autoComplete="off"
                         autoFocus
-                        value={searchValue}
+                        value={defaultSearchValue}
                         onChange={(e) => {
-                          setSearchValue(e.target.value);
+                          setDefaultSearchValue(e.target.value.trim());
+                          setSearchValueDebounce(e.target.value.trim());
                         }}
                         sx={[
                           {
@@ -428,18 +470,24 @@ const Navbar = () => {
                         ]}
                         onClick={() => {
                           handleSearchClose();
+                          setDefaultSearchValue("");
                           setSearchValue("");
                         }}
                       />
                     </div>
-                    {users?.map((user, index) => (
-                      <SearchUsers
-                        key={user?._id}
-                        searchValue={searchValue}
-                        user={user}
-                        handleSearchClose={handleSearchClose}
-                      />
-                    ))}
+                    {users.length === 0 ? (
+                      <Typography variant="h3" sx={{ fontSize: "2rem" }}>
+                        Try searching for a user
+                      </Typography>
+                    ) : (
+                      users?.map((user, index) => (
+                        <SearchUsers
+                          key={user?._id}
+                          user={user}
+                          handleSearchClose={handleSearchClose}
+                        />
+                      ))
+                    )}
                   </div>
                 </Box>
               </Modal>
@@ -579,3 +627,4 @@ const Navbar = () => {
 };
 
 export default React.memo(Navbar);
+// export const NavbarCom = Navbar;

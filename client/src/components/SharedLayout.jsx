@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import { useGlobalContext } from "./context";
 import { useEffect } from "react";
 import React, { Suspense, lazy } from "react";
-import Loading from "./Loading";
+// import { NavbarCom } from "./Navbar";
 
 const Navbar = lazy(() => import("./Navbar"));
 

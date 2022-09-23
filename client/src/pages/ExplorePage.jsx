@@ -156,7 +156,6 @@ const ExplorePage = () => {
       ) : (
         explorePosts
           ?.slice(0)
-          .reverse()
           .map((post) => (
             <MemoShowPosts
               key={post?._id}
@@ -192,7 +191,8 @@ const ExplorePage = () => {
             wordWrap: "break-word",
           }}
         >
-          To find more posts navigate to the explore page using the navbar
+          To find more posts navigate to the home page or search for a specific
+          user using the navbar
         </Typography>
       )}
     </div>
