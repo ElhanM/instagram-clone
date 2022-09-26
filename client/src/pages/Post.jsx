@@ -610,7 +610,7 @@ const Post = () => {
                         variant="standard"
                         required
                         name="comment"
-                        label="Add comment"
+                        label="Add a comment"
                         id="comment"
                         autoComplete="off"
                         value={inputs.comment}

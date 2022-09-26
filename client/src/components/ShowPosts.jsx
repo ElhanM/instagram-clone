@@ -394,6 +394,11 @@ const ShowPosts = ({
                 }}
                 onSubmit={(e) => {
                   e.preventDefault();
+                  setPost({
+                    ...post,
+                    title: inputs.title,
+                    description: inputs.description,
+                  });
                   editPost(post?._id);
                   setEditPostMode((prev) => !prev);
                 }}
@@ -510,7 +515,7 @@ const ShowPosts = ({
                 variant="standard"
                 required
                 name="comment"
-                label="Add comment"
+                label="Add a comment"
                 id="comment"
                 autoComplete="off"
                 sx={[
