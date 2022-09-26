@@ -55,6 +55,7 @@ const ShowPosts = ({
     users,
     authURL,
   } = useGlobalContext();
+  const [removed, setRemoved] = useState(false);
   const [post, setPost] = useState(mapPost);
   const [commentsRerender, setCommentsRerender] = useState(true);
   const cookies = new Cookies();
@@ -212,6 +213,7 @@ const ShowPosts = ({
                       },
                     ]}
                     onClick={() => {
+                      setRemoved(true);
                       deletePost(post?._id);
                     }}
                   />
@@ -498,7 +500,7 @@ const ShowPosts = ({
               onSubmit={(e) => {
                 e.preventDefault();
                 console.log("post", e.target[0].value);
-               
+
                 setCommentsRerender((prev) => !prev);
                 handleSubmit(post?._id, e.target[0].value, post, setPost);
                 e.target[0].value = "";
@@ -779,6 +781,7 @@ const ShowPosts = ({
       commentsRerender,
     ]
   );
+  if (removed) return;
 
   return <>{content}</>;
 };
