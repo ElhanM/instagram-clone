@@ -94,7 +94,7 @@ const Login = () => {
           {errorMsg &&
             errorMsg?.split(",").map((error, index) => (
               <Typography
-                key={error}
+                key={index}
                 variant="h6"
                 sx={{
                   fontWeight: "400",

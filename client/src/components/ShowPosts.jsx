@@ -5,7 +5,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Link, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import axios from "axios";
@@ -34,7 +34,7 @@ const styleLikes = {
 };
 
 const ShowPosts = ({
-  post,
+  mapPost,
   unlikeRequest,
   likeRequest,
   editCommentMode,
@@ -53,7 +53,10 @@ const ShowPosts = ({
     postsURL,
     updatePostsDispatch,
     users,
+    authURL,
   } = useGlobalContext();
+  const [post, setPost] = useState(mapPost);
+  const [commentsRerender, setCommentsRerender] = useState(true);
   const cookies = new Cookies();
   const [allowLike, setAllowLike] = useState(true);
   const [editPostMode, setEditPostMode] = useState(false);
@@ -67,7 +70,6 @@ const ShowPosts = ({
   const [likedUsers, setLikedUsers] = useState([]);
 
   const history = useNavigate();
-
   const editPost = async (postId) => {
     try {
       const response = await axios.patch(
@@ -83,14 +85,6 @@ const ShowPosts = ({
           },
         }
       );
-      const updatedPosts = allPosts?.map((post) => {
-        if (post?._id === postId) {
-          return response.data.post;
-        } else {
-          return post;
-        }
-      });
-      updatePostsDispatch(updatedPosts);
     } catch (error) {
       console.log(error);
     }
@@ -116,6 +110,21 @@ const ShowPosts = ({
       console.log(error);
     }
   };
+
+  const [showFollowButton, setShowFollowButton] = useState(
+    post?.user?.followers?.includes(
+      JSON.parse(localStorage.getItem("user"))._id
+    )
+  );
+  const [showLike, setshowLike] = useState(
+    post?.likes?.includes(JSON.parse(localStorage.getItem("user"))._id)
+  );
+  useEffect(() => {
+    setLikedUsers(post);
+  }, [post]);
+  useEffect(() => {
+    console.log({ post });
+  }, [post, commentsRerender]);
 
   const content = useMemo(
     () => (
@@ -211,15 +220,14 @@ const ShowPosts = ({
               {JSON.parse(localStorage.getItem("user"))._id !==
                 post?.user?._id && (
                 <>
-                  {post?.user?.followers?.includes(
-                    JSON.parse(localStorage.getItem("user"))._id
-                  ) ? (
+                  {showFollowButton ? (
                     <Button
                       fullWidth
                       variant="contained"
                       onClick={() => {
+                        setShowFollowButton(false);
                         setAllowFollow(true);
-                        followRequest(post?.user?._id, allPosts);
+                        followRequest(post?.user?._id, post);
                       }}
                       sx={[
                         {
@@ -244,8 +252,10 @@ const ShowPosts = ({
                       variant="contained"
                       onClick={() => {
                         if (allowFollow) {
+                          setShowFollowButton(true);
+
                           setAllowFollow(false);
-                          followRequest(post?.user?._id, allPosts, "follow");
+                          followRequest(post?.user?._id, post, "follow");
                         }
                       }}
                       sx={[
@@ -294,10 +304,12 @@ const ShowPosts = ({
           </div>
           <div className="main-page__container__footer">
             <div className="main-page__container__footer__likes">
-              {post?.likes?.includes(userInfo?._id) ? (
+              {showLike ? (
                 <FavoriteIcon
                   onClick={() => {
                     setAllowLike(true);
+                    setshowLike(false);
+                    post?.likes?.pop();
                     unlikeRequest(post?._id);
                   }}
                   sx={[
@@ -315,6 +327,10 @@ const ShowPosts = ({
                   onClick={() => {
                     if (allowLike) {
                       setAllowLike(false);
+                      setshowLike(true);
+                      post?.likes?.push(
+                        JSON.parse(localStorage.getItem("user"))._id
+                      );
                       likeRequest(post?._id);
                     }
                   }}
@@ -336,16 +352,26 @@ const ShowPosts = ({
                   cursor: "pointer",
                 }}
                 onClick={() => {
+                  const getAllUserLikes = async () => {
+                    try {
+                      const response = await axios.post(
+                        `${authURL}/user-likes`,
+                        { users: post?.likes },
+                        {
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
+                        }
+                      );
+                      setLikedUsers(response?.data?.users);
+                    } catch (error) {
+                      console.log(error);
+                    }
+                  };
+                  getAllUserLikes();
                   handleOpen();
                   /* // filter users from users with _id of post?.likes
                    */
-                  setLikedUsers(
-                    post?.likes
-                      ?.map((userId) => {
-                        return users.find((user) => user._id === userId);
-                      })
-                      .filter((user) => user)
-                  );
                 }}
               >
                 {post?.likes?.length === 1
@@ -471,7 +497,10 @@ const ShowPosts = ({
               }}
               onSubmit={(e) => {
                 e.preventDefault();
-                handleSubmit(post?._id, e.target[0].value, allPosts);
+                console.log("post", e.target[0].value);
+               
+                setCommentsRerender((prev) => !prev);
+                handleSubmit(post?._id, e.target[0].value, post, setPost);
                 e.target[0].value = "";
               }}
             >
@@ -540,6 +569,16 @@ const ShowPosts = ({
                   e.preventDefault();
                   editComment(post?._id, inputs, allPosts);
                   setEditCommentMode((prev) => !prev);
+                  let foundIndex = post?.comments?.findIndex(
+                    (x) => x._id == inputs.editCommentId
+                  );
+                  let tempComments = [...post?.comments];
+                  tempComments[foundIndex] = {
+                    ...tempComments[foundIndex],
+                    text: inputs.editComment,
+                  };
+
+                  setPost({ ...post, comments: tempComments });
                   setInputs({ ...inputs, editCommentPostId: post?._id });
                 }}
               >
@@ -614,20 +653,24 @@ const ShowPosts = ({
               </FormControl>
             ) : (
               <div className="comments-main-page">
-                {post?.comments?.map((comment) => (
-                  <Suspense fallback={<Loading />}>
-                    <ShowPostsComments
-                      key={comment?._id}
-                      comment={comment}
-                      setEditCommentMode={setEditCommentMode}
-                      inputs={inputs}
-                      setInputs={setInputs}
-                      post={post}
-                      deleteComment={deleteComment}
-                      allPosts={allPosts}
-                    />
-                  </Suspense>
-                ))}
+                <Suspense fallback={<Loading />}>
+                  {post?.comments
+                    ?.slice(0)
+                    .reverse()
+                    .map((comment) => (
+                      <ShowPostsComments
+                        key={comment?._id}
+                        comment={comment}
+                        setEditCommentMode={setEditCommentMode}
+                        inputs={inputs}
+                        setInputs={setInputs}
+                        post={post}
+                        setPost={setPost}
+                        deleteComment={deleteComment}
+                        commentsRerender={commentsRerender}
+                      />
+                    ))}
+                </Suspense>
               </div>
             )}
           </div>
@@ -665,45 +708,50 @@ const ShowPosts = ({
                 Liked by:
               </Typography>
               {likedUsers.length > 0 ? (
-                likedUsers?.map((user, index) => (
-                  <div className="show-posts-likes__user">
-                    <div className="show-posts-likes__user__container__header">
-                      {
-                        <div className="show-posts-likes__user__container__header__left">
-                          <div className="show-posts-likes__user__container__header__left__photo">
-                            <Link
-                              to={`/profile/${user?._id}`}
-                              onClick={() => {
-                                handleClose();
-                              }}
-                            >
-                              src=
-                              {post?.user?.profilePhoto.replace(
-                                "/image/upload/c_scale,w_210/",
-                                "/image/upload/c_scale,w_120/"
-                              )}
-                            </Link>
-                          </div>
-                          <div className="show-posts-likes__user__container__header__left__user">
-                            <Link
-                              to={`/profile/${user?._id}`}
-                              onClick={() => {
-                                handleClose();
-                              }}
-                            >
-                              <Typography
-                                variant="h3"
-                                sx={{ fontSize: "2rem" }}
+                likedUsers
+                  ?.slice(0)
+                  .reverse()
+                  .map((user, index) => (
+                    <div className="show-posts-likes__user">
+                      <div className="show-posts-likes__user__container__header">
+                        {
+                          <div className="show-posts-likes__user__container__header__left">
+                            <div className="show-posts-likes__user__container__header__left__photo">
+                              <Link
+                                to={`/profile/${user?._id}`}
+                                onClick={() => {
+                                  handleClose();
+                                }}
                               >
-                                @{user?.username}
-                              </Typography>
-                            </Link>
+                                <Avatar
+                                  src={user?.profilePhoto.replace(
+                                    "/image/upload/c_scale,w_210/",
+                                    "/image/upload/c_scale,w_120/"
+                                  )}
+                                  sx={{ width: "4rem", height: "4rem" }}
+                                />
+                              </Link>
+                            </div>
+                            <div className="show-posts-likes__user__container__header__left__user">
+                              <Link
+                                to={`/profile/${user?._id}`}
+                                onClick={() => {
+                                  handleClose();
+                                }}
+                              >
+                                <Typography
+                                  variant="h3"
+                                  sx={{ fontSize: "2rem" }}
+                                >
+                                  @{user?.username}
+                                </Typography>
+                              </Link>
+                            </div>
                           </div>
-                        </div>
-                      }
+                        }
+                      </div>
                     </div>
-                  </div>
-                ))
+                  ))
               ) : (
                 <Typography
                   variant="h3"
@@ -720,7 +768,16 @@ const ShowPosts = ({
         </Modal>
       </>
     ),
-    [post, editCommentMode, handleChange]
+    [
+      post,
+      editCommentMode,
+      handleChange,
+      showLikes,
+      likedUsers,
+      showLike,
+      showFollowButton,
+      commentsRerender,
+    ]
   );
 
   return <>{content}</>;

@@ -24,6 +24,17 @@ const getAllUsers = async (req, res, next) => {
   }
 };
 
+const getAllUserLikes = async (req, res, next) => {
+  try {
+    const users = await User.find({
+      _id: { $in: [...req.body.users] },
+    });
+    res.status(200).json({ users });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getUser = async (req, res, next) => {
   const { userId } = req.params;
   try {
@@ -160,4 +171,5 @@ module.exports = {
   deleteUserAccount,
   getAllUsers,
   unfollowAllUsers,
+  getAllUserLikes,
 };

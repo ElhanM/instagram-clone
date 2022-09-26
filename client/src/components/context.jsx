@@ -5,7 +5,7 @@ import Cookies from "universal-cookie";
 
 const AppContext = React.createContext();
 
-const initialState = { userInfo: null, allPosts: [], loading: true };
+const initialState = { userInfo: null, allPosts: [] };
 
 const CLOUDINARYURL =
   "https://api.cloudinary.com/v1_1/instagram-clone-web-app/image/upload";
@@ -25,32 +25,14 @@ const registerURL = `${authURL}/register`;
 
 const AppProvider = ({ children }) => {
   const [value, setValue] = useState();
-  const [homePosts, setHomePosts] = useState([]);
-  const [explorePosts, setExplorePosts] = useState([]);
   const cookies = new Cookies();
 
   const [state, dispatch] = useReducer(reducer, initialState);
   const userDispatch = (userData) => {
     dispatch({ type: "USER", payload: userData });
   };
-  const axiosGetPosts = async () => {
-    try {
-      dispatch({ type: "LOADING" });
 
-      const response = await axios(postsURL, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const {
-        data: { posts },
-      } = response;
-      dispatch({ type: "GET_POSTS", payload: posts });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const handleSubmit = async (postId, addComment, posts) => {
+  const handleSubmit = async (postId, addComment, posts, setPosts) => {
     try {
       const response = await axios.put(
         commentURL,
@@ -62,15 +44,7 @@ const AppProvider = ({ children }) => {
           },
         }
       );
-
-      const updatedPosts = posts.map((post) => {
-        if (post._id === response.data.comment._id) {
-          return { ...post, comments: response.data.comment.comments };
-        } else {
-          return post;
-        }
-      });
-      updatePostsDispatch(updatedPosts);
+      setPosts({ ...posts, comments: response.data.comment.comments });
     } catch (error) {
       console.log(error);
     }
@@ -87,14 +61,6 @@ const AppProvider = ({ children }) => {
           },
         }
       );
-      const updatedPosts = posts?.map((post) => {
-        if (post?._id === postId) {
-          return { ...post, comments: response?.data?.comment?.comments };
-        } else {
-          return post;
-        }
-      });
-      updatePostsDispatch(updatedPosts);
     } catch (error) {
       console.log(error);
     }
@@ -114,14 +80,6 @@ const AppProvider = ({ children }) => {
           },
         }
       );
-      const updatedPosts = posts?.map((post) => {
-        if (post?._id === postId) {
-          return response.data.post;
-        } else {
-          return post;
-        }
-      });
-      updatePostsDispatch(updatedPosts);
     } catch (error) {
       console.log(error);
     }
@@ -140,27 +98,6 @@ const AppProvider = ({ children }) => {
           },
         }
       );
-      const updatedPosts = posts?.map((post) => {
-        if (post?.user?._id === userId) {
-          return {
-            ...post,
-            user: {
-              ...post.user,
-              following:
-                url === "follow"
-                  ? response.data.followUser.following
-                  : response.data.unfollowUser.following,
-              followers:
-                url === "follow"
-                  ? response.data.followUser.followers
-                  : response.data.unfollowUser.followers,
-            },
-          };
-        } else {
-          return post;
-        }
-      });
-      updatePostsDispatch(updatedPosts);
     } catch (error) {
       console.log(error);
     }
@@ -179,9 +116,7 @@ const AppProvider = ({ children }) => {
       console.log(error);
     }
   };
-  useEffect(() => {
-    axiosGetPosts();
-  }, []);
+
   const updatePostsDispatch = (postsData) => {
     dispatch({ type: "UPDATE_POSTS", payload: postsData });
   };
@@ -208,10 +143,7 @@ const AppProvider = ({ children }) => {
         cloudinaryRequest,
         value,
         setValue,
-        homePosts,
-        setHomePosts,
-        explorePosts,
-        setExplorePosts,
+       
       }}
     >
       {children}

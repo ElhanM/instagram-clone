@@ -62,7 +62,6 @@ const CreatePost = () => {
         }
       );
       const tempPosts = [...allPosts, response.data.post];
-      console.log(response.data);
       updatePostsDispatch(tempPosts);
       history("/");
       setValue();
@@ -107,7 +106,7 @@ const CreatePost = () => {
         {errorMsg &&
           errorMsg?.split(",").map((error, index) => (
             <Typography
-              key={error}
+              key={index}
               variant="h6"
               sx={{
                 fontWeight: "400",

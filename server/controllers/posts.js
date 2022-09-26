@@ -1,14 +1,83 @@
 const Post = require("../models/Post");
 const ErrorResponse = require("../utils/errorResponse");
 
-const getAllPosts = async (req, res, next) => {
+const getAllHomePosts = async (req, res, next) => {
   try {
-    const posts = await Post.find({})
+    const PAGE_SIZE = 2;
+    const page = parseInt(
+      req.query.page === "0"
+        ? "1"
+        : parseInt(req.query.page) !== NaN
+        ? req.query.page
+        : "1"
+    );
+    const count = await Post.countDocuments({
+      user: [req.user._id, ...req.user.following],
+    });
+    const posts = await Post.find({
+      user: [req.user._id, ...req.user.following],
+    })
       .sort({ _id: -1 })
-      .limit(10)
+      .limit(PAGE_SIZE)
+      .skip(PAGE_SIZE * (page - 1))
       .populate("user", "_id username followers following profilePhoto")
       .populate("comments.user", "_id username");
-    res.status(200).json({ posts });
+    res.status(200).json({
+      info: {
+        count,
+        pages: Math.ceil(count / PAGE_SIZE),
+        next:
+          page === Math.ceil(count / PAGE_SIZE)
+            ? null
+            : `http://localhost:5001/api/posts?page=${page + 1}`,
+        previous:
+          page === 1
+            ? null
+            : `http://localhost:5001/api/posts?page=${page - 1}`,
+      },
+      posts,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+const getAllExplorePosts = async (req, res, next) => {
+  try {
+    const PAGE_SIZE = 2;
+    const page = parseInt(
+      req.query.page === "0"
+        ? "1"
+        : parseInt(req.query.page) !== NaN
+        ? req.query.page
+        : "1"
+    );
+    const count = await Post.countDocuments({
+      user: { $nin: [req.user._id, ...req.user.following] },
+    });
+    const posts = await Post.find({
+      user: { $nin: [req.user._id, ...req.user.following] },
+    })
+      .sort({ _id: -1 })
+      .limit(PAGE_SIZE)
+      .skip(PAGE_SIZE * (page - 1))
+      .populate("user", "_id username followers following profilePhoto")
+      .populate("comments.user", "_id username")
+      .populate("likes", "_id username");
+    res.status(200).json({
+      info: {
+        count,
+        pages: Math.ceil(count / PAGE_SIZE),
+        next:
+          page === Math.ceil(count / PAGE_SIZE)
+            ? null
+            : `http://localhost:5001/api/posts?page=${page + 1}`,
+        previous:
+          page === 1
+            ? null
+            : `http://localhost:5001/api/posts?page=${page - 1}`,
+      },
+      posts,
+    });
   } catch (error) {
     next(error);
   }
@@ -191,7 +260,6 @@ const editPost = async (req, res, next) => {
 };
 
 module.exports = {
-  getAllPosts,
   getAllPostsByUser,
   createPost,
   editPost,
@@ -204,4 +272,6 @@ module.exports = {
   editComment,
   deleteAllPostsByUser,
   unlikeAllPosts,
+  getAllHomePosts,
+  getAllExplorePosts,
 };

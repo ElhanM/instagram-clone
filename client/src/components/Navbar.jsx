@@ -231,10 +231,7 @@ const Navbar = () => {
     };
   }
 
-  useEffect(() => {
-    console.log(Object.prototype.toString.call(users) == "[object Array]");
-    console.log({ users });
-  }, [users]);
+
 
   return (
     <>

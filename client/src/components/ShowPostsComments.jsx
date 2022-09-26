@@ -2,6 +2,7 @@ import { Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
 
 const ShowPostsComments = ({
   comment,
@@ -10,8 +11,9 @@ const ShowPostsComments = ({
   setInputs,
   post,
   deleteComment,
-  allPosts,
+  setPost,
 }) => {
+
   return (
     <>
       <div className="comments-main-page__flex-post">
@@ -76,7 +78,15 @@ const ShowPostsComments = ({
                     color: "red",
                   },
                 ]}
-                onClick={() => deleteComment(post?._id, comment?._id, allPosts)}
+                onClick={() => {
+                  deleteComment(post?._id, comment?._id);
+                  let foundIndex = post?.comments?.findIndex(
+                    (x) => x._id == comment?._id
+                  );
+                  let tempComments = [...post?.comments];
+                  tempComments.splice(foundIndex, foundIndex);
+                  setPost({ ...post, comments: tempComments });
+                }}
               />
             </>
           )}
@@ -86,4 +96,12 @@ const ShowPostsComments = ({
   );
 };
 
-export default ShowPostsComments;
+export default React.memo(
+  ShowPostsComments,
+  function areEqual(prevProps, nextProps) {
+    if (prevProps.post !== nextProps.post) {
+      return false;
+    }
+    return true;
+  }
+);

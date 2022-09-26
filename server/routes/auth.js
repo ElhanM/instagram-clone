@@ -12,6 +12,7 @@ const {
   deleteUserAccount,
   getAllUsers,
   unfollowAllUsers,
+  getAllUserLikes,
 } = require("../controllers/auth");
 
 router
@@ -19,6 +20,7 @@ router
   .post(getAllUsers)
   .patch(protect, changeProfilePhoto)
   .delete(protect, deleteUserAccount);
+router.route("/user-likes").post(getAllUserLikes);
 router.route("/register").post(register);
 router.route("/login").post(login);
 router.route("/follow").put(protect, followUser);
