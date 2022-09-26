@@ -62,10 +62,6 @@ const Home = () => {
     };
   }, []);
 
-  useEffect(() => {
-    console.log({ data });
-  }, [data]);
-
   const [inputs, setInputs] = useState({
     title: "",
     description: "",
