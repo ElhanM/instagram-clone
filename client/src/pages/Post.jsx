@@ -112,7 +112,6 @@ const Post = () => {
       );
 
       const updateResponse = { ...response.data.post, photo: updatedPhoto };
-      console.log({ updateResponse });
 
       setPost(updateResponse);
       setInputs({

@@ -3,7 +3,6 @@ const router = express.Router();
 const protect = require("../middleware/auth");
 
 const {
-  getAllPosts,
   createPost,
   editPost,
   deletePost,
@@ -16,14 +15,17 @@ const {
   editComment,
   deleteAllPostsByUser,
   unlikeAllPosts,
+  getAllHomePosts,
+  getAllExplorePosts,
 } = require("../controllers/posts");
 
 router
   .route("/")
-  .get(getAllPosts)
   .post(protect, createPost)
   .put(protect, deleteComment)
   .delete(protect, deleteAllPostsByUser);
+router.route("/home-posts").get(protect, getAllHomePosts);
+router.route("/explore-posts").get(protect, getAllExplorePosts);
 router.route("/user-posts/:user").get(getAllPostsByUser);
 router
   .route("/post/:postId")

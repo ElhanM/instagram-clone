@@ -7,22 +7,60 @@ import { MemoShowPosts } from "../components/ShowPosts";
 import { Typography } from "@mui/material";
 import Cookies from "universal-cookie";
 import Loading from "../components/Loading";
+import { useInfiniteQuery } from "react-query";
 
 const Home = () => {
   const {
     userDispatch,
-    allPosts,
     loading,
     updatePostsDispatch,
     likeURL,
     unlikeURL,
     setValue,
-    homePosts,
-    setHomePosts,
+    postsURL,
+    axiosGetPosts,
   } = useGlobalContext();
   const cookies = new Cookies();
   const [editCommentMode, setEditCommentMode] = useState(false);
-  const [initialRender, setInitialRender] = useState(true);
+
+  const [isFetchingHome, setIsFetchingHome] = useState(false);
+  const fetchHomePosts = async (page = 1) => {
+    const response = await axios(`${postsURL}/home-posts?page=${page}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${cookies.get("authToken")}`,
+      },
+    });
+    return response.data;
+  };
+  const { data, hasNextPage, fetchNextPage, isFetching } = useInfiniteQuery(
+    "homePosts",
+    ({ pageParam = 1 }) => fetchHomePosts(pageParam),
+    {
+      getNextPageParam: (lastPage, allPages) => {
+        const maxPages = lastPage.info.pages;
+        const nextPage = allPages.length + 1;
+        return nextPage <= maxPages ? nextPage : undefined;
+      },
+    }
+  );
+
+  useEffect(() => {
+    const onScroll = async (event) => {
+      const { scrollHeight, scrollTop, clientHeight } =
+        event.target.scrollingElement;
+
+      if (!isFetchingHome && scrollHeight - scrollTop <= clientHeight * 1.5) {
+        setIsFetchingHome(true);
+        if (hasNextPage) await fetchNextPage();
+        setIsFetchingHome(false);
+      }
+    };
+    document.addEventListener("scroll", onScroll);
+    return () => {
+      document.removeEventListener("scroll", onScroll);
+    };
+  }, []);
 
   const [inputs, setInputs] = useState({
     title: "",
@@ -54,14 +92,6 @@ const Home = () => {
           },
         }
       );
-      const updatedPosts = allPosts?.map((post) => {
-        if (post?._id === response?.data?.likePost?._id) {
-          return { ...post, likes: response?.data?.likePost?.likes };
-        } else {
-          return post;
-        }
-      });
-      updatePostsDispatch(updatedPosts);
     } catch (error) {
       console.log(error);
     }
@@ -78,62 +108,10 @@ const Home = () => {
           },
         }
       );
-      const updatedPosts = allPosts?.map((post) => {
-        if (post._id === response?.data?.unlikePost?._id) {
-          return { ...post, likes: response?.data?.unlikePost?.likes };
-        } else {
-          return post;
-        }
-      });
-      updatePostsDispatch(updatedPosts);
     } catch (error) {
       console.log(error);
     }
   };
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    console.log(user);
-    userDispatch(user);
-    if (!user) {
-      history("/login");
-    }
-    if (initialRender) {
-      const tempHomePosts = allPosts?.filter((post) => {
-        return (
-          // return post if post?.user?._id !== user?._id and if initial render is true make !post?.user?.followers?.includes(JSON.parse(localStorage.getItem("user"))._id) second condition
-          post?.user?._id === JSON.parse(localStorage.getItem("user"))._id ||
-          !initialRender ||
-          post?.user?.followers?.includes(
-            JSON.parse(localStorage.getItem("user"))._id
-          )
-        );
-      });
-      if (tempHomePosts !== homePosts) {
-        setHomePosts(tempHomePosts);
-      }
-    } else {
-      // fixing bug where posts from people the user was following showed up in explore page
-      const tempAllPosts = allPosts?.filter((post) => {
-        return (
-          post?.user?._id === JSON.parse(localStorage.getItem("user"))._id ||
-          !initialRender ||
-          post?.user?.followers?.includes(
-            JSON.parse(localStorage.getItem("user"))._id
-          )
-        );
-      });
-      // if homePosts does not contain post from tempAllPosts then remove it
-      const tempHomePosts = tempAllPosts?.filter((post) => {
-        return homePosts.find((explorePost) => post?._id === explorePost?._id);
-      });
-      setHomePosts(tempHomePosts);
-    }
-  }, [allPosts]);
-  useEffect(() => {
-    if (homePosts.length > 0) {
-      setInitialRender(false);
-    }
-  }, [homePosts, initialRender]);
 
   useEffect(() => {
     setValue();
@@ -147,16 +125,12 @@ const Home = () => {
     <div className="main-page">
       {loading ? (
         <Loading />
-      ) : allPosts === [] ? (
-        <h1>No allPosts to display </h1>
       ) : (
-        homePosts
-          // slice, for some reason, prevents allPosts from jumping around when liking/unliking them
-          ?.slice(0)
-          .map((post, index) => (
+        data.pages.map((page) =>
+          page.posts.map((post) => (
             <MemoShowPosts
               key={post?._id}
-              post={post}
+              mapPost={post}
               unlikeRequest={unlikeRequest}
               likeRequest={likeRequest}
               editCommentMode={editCommentMode}
@@ -166,8 +140,11 @@ const Home = () => {
               handleChange={handleChange}
             />
           ))
+        )
       )}
-      {loading || (
+      {isFetching && <Loading />}
+
+      {!loading && !isFetching && (
         <Typography
           variant="h6"
           noWrap

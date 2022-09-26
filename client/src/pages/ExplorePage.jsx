@@ -4,7 +4,7 @@ import { useGlobalContext } from "../components/context";
 import axios from "axios";
 import { useState } from "react";
 import { MemoShowPosts } from "../components/ShowPosts";
-
+import { useInfiniteQuery } from "react-query";
 import { Typography } from "@mui/material";
 import Cookies from "universal-cookie";
 import Loading from "../components/Loading";
@@ -12,18 +12,59 @@ import Loading from "../components/Loading";
 const ExplorePage = () => {
   const {
     userDispatch,
-    allPosts,
     loading,
     updatePostsDispatch,
     likeURL,
     unlikeURL,
     setValue,
-    explorePosts,
-    setExplorePosts,
+    postsURL,
+    axiosGetPosts,
   } = useGlobalContext();
   const cookies = new Cookies();
   const [editCommentMode, setEditCommentMode] = useState(false);
-  const [initialRender, setInitialRender] = useState(true);
+
+  const [isFetchingExplore, setIsFetchingExplore] = useState(false);
+  const fetchExplorePosts = async (page = 1) => {
+    const response = await axios(`${postsURL}/explore-posts?page=${page}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${cookies.get("authToken")}`,
+      },
+    });
+    return response.data;
+  };
+  const { data, hasNextPage, fetchNextPage, isFetching } = useInfiniteQuery(
+    "explorePosts",
+    ({ pageParam = 1 }) => fetchExplorePosts(pageParam),
+    {
+      getNextPageParam: (lastPage, allPages) => {
+        const maxPages = lastPage.info.pages;
+        const nextPage = allPages.length + 1;
+        return nextPage <= maxPages ? nextPage : undefined;
+      },
+    }
+  );
+
+  useEffect(() => {
+    const onScroll = async (event) => {
+      const { scrollHeight, scrollTop, clientHeight } =
+        event.target.scrollingElement;
+
+      if (
+        !isFetchingExplore &&
+        scrollHeight - scrollTop <= clientHeight * 1.5
+      ) {
+        setIsFetchingExplore(true);
+        if (hasNextPage) await fetchNextPage();
+        setIsFetchingExplore(false);
+      }
+    };
+
+    document.addEventListener("scroll", onScroll);
+    return () => {
+      document.removeEventListener("scroll", onScroll);
+    };
+  }, []);
 
   const [inputs, setInputs] = useState({
     title: "",
@@ -56,14 +97,6 @@ const ExplorePage = () => {
           },
         }
       );
-      const updatedPosts = allPosts?.map((post) => {
-        if (post?._id === response?.data?.likePost?._id) {
-          return { ...post, likes: response?.data?.likePost?.likes };
-        } else {
-          return post;
-        }
-      });
-      updatePostsDispatch(updatedPosts);
     } catch (error) {
       console.log(error);
     }
@@ -80,64 +113,11 @@ const ExplorePage = () => {
           },
         }
       );
-      const updatedPosts = allPosts?.map((post) => {
-        if (post._id === response?.data?.unlikePost?._id) {
-          return { ...post, likes: response?.data?.unlikePost?.likes };
-        } else {
-          return post;
-        }
-      });
-      updatePostsDispatch(updatedPosts);
     } catch (error) {
       console.log(error);
     }
   };
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    userDispatch(user);
-    if (!user) {
-      history("/login");
-    }
-    if (initialRender) {
-      const tempExplorePosts = allPosts?.filter((post) => {
-        return (
-          // return post if post?.user?._id !== user?._id and if initial render is true make !post?.user?.followers?.includes(JSON.parse(localStorage.getItem("user"))._id) second condition
-          post?.user?._id !== JSON.parse(localStorage.getItem("user"))._id &&
-          (!initialRender ||
-            !post?.user?.followers?.includes(
-              JSON.parse(localStorage.getItem("user"))._id
-            ))
-        );
-      });
-      if (tempExplorePosts !== explorePosts) {
-        setExplorePosts(tempExplorePosts);
-      }
-    } else {
-      // fixing bug where posts from people the user was following showed up in explore page
-      const tempAllPosts = allPosts?.filter((post) => {
-        return (
-          post?.user?._id !== JSON.parse(localStorage.getItem("user"))._id &&
-          (!initialRender ||
-            !post?.user?.followers?.includes(
-              JSON.parse(localStorage.getItem("user"))._id
-            ))
-        );
-      });
-      // if explorePosts does not contain post from tempHomePosts then remove it
-      const tempExplorePosts = tempAllPosts?.filter((post) => {
-        return explorePosts.find(
-          (explorePost) => post?._id === explorePost?._id
-        );
-      });
-      setExplorePosts(tempExplorePosts);
-    }
-  }, [allPosts]);
 
-  useEffect(() => {
-    if (explorePosts.length > 0) {
-      setInitialRender(false);
-    }
-  }, [explorePosts, initialRender]);
 
   useEffect(() => {
     setValue(1);
@@ -151,15 +131,12 @@ const ExplorePage = () => {
     <div className="main-page">
       {loading ? (
         <Loading />
-      ) : allPosts === [] ? (
-        <h1>No posts to display </h1>
       ) : (
-        explorePosts
-          ?.slice(0)
-          .map((post) => (
+        data.pages.map((page) =>
+          page.posts.map((post) => (
             <MemoShowPosts
               key={post?._id}
-              post={post}
+              mapPost={post}
               unlikeRequest={unlikeRequest}
               likeRequest={likeRequest}
               editCommentMode={editCommentMode}
@@ -169,9 +146,12 @@ const ExplorePage = () => {
               handleChange={handleChange}
             />
           ))
+        )
       )}
 
-      {loading || (
+      {isFetching && <Loading />}
+
+      {!loading && !isFetching && (
         <Typography
           variant="h6"
           noWrap
@@ -191,8 +171,8 @@ const ExplorePage = () => {
             wordWrap: "break-word",
           }}
         >
-          To find more posts navigate to the home page or search for a specific
-          user using the navbar
+          To find more posts navigate to the explore page or search for a
+          specific user using the navbar
         </Typography>
       )}
     </div>
