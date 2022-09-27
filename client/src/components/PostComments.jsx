@@ -78,7 +78,7 @@ const PostComments = ({
                   color: "red",
                 },
               ]}
-              onClick={() => deleteComment(postId, comment._id, allPosts)}
+              onClick={() => deleteComment(postId, comment._id)}
             />
           </>
         ) : (

@@ -61,6 +61,8 @@ const Post = () => {
     users,
     setUsers,
     followRequest,
+    refetchProfile,
+    setRefetchProfile,
   } = useGlobalContext();
   const history = useNavigate();
   const handleOpenEdit = () => setOpen(true);
@@ -88,6 +90,9 @@ const Post = () => {
     editComment: "",
     editCommentId: "",
   });
+  useEffect(() => {
+    console.log({ inputs });
+  }, [inputs]);
   const handleChange = (e) => {
     setInputs({
       ...inputs,
@@ -114,18 +119,12 @@ const Post = () => {
       const updateResponse = { ...response.data.post, photo: updatedPhoto };
 
       setPost(updateResponse);
-      setInputs({
-        ...inputs,
-        title: response.data.post.title,
-        description: response.data.post.description,
-      });
       setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
-  // useEffect(() => {
-  // }, [updateResponse]);
+
   const likeRequest = async (postId) => {
     try {
       const response = await axios.put(
@@ -138,14 +137,6 @@ const Post = () => {
           },
         }
       );
-      const updatedPosts = allPosts.map((post) => {
-        if (post?._id === postId) {
-          return { ...post, likes: response?.data?.likePost?.likes };
-        } else {
-          return post;
-        }
-      });
-      updatePostsDispatch(updatedPosts);
     } catch (error) {
       console.log(error);
     }
@@ -162,14 +153,6 @@ const Post = () => {
           },
         }
       );
-      const updatedPosts = allPosts.map((post) => {
-        if (post?._id === postId) {
-          return { ...post, likes: response?.data?.unlikePost?.likes };
-        } else {
-          return post;
-        }
-      });
-      updatePostsDispatch(updatedPosts);
     } catch (error) {
       console.log(error);
     }
@@ -182,8 +165,7 @@ const Post = () => {
           Authorization: `Bearer ${cookies.get("authToken")}`,
         },
       });
-      const updatedPosts = allPosts?.filter((post) => post?._id !== postId);
-      updatePostsDispatch(updatedPosts);
+
       history(`/profile/${userId}`);
     } catch (error) {
       console.log(error);
@@ -204,14 +186,6 @@ const Post = () => {
           },
         }
       );
-      const updatedPosts = allPosts?.map((post) => {
-        if (post?._id === postId) {
-          return response.data.post;
-        } else {
-          return post;
-        }
-      });
-      updatePostsDispatch(updatedPosts);
     } catch (error) {
       console.log(error);
     }
@@ -219,7 +193,7 @@ const Post = () => {
 
   useEffect(() => {
     getPost();
-  }, [allPosts]);
+  }, [post]);
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     userDispatch(user);
@@ -230,6 +204,14 @@ const Post = () => {
   useEffect(() => {
     setValue();
   }, []);
+  useEffect(() => {
+    setInputs({
+      ...inputs,
+      title: post.title,
+      description: post.description,
+    });
+  }, [post.title, post.description]);
+
   return (
     <>
       <div>
@@ -299,11 +281,6 @@ const Post = () => {
                               ]}
                               onClick={() => {
                                 setEditPostMode((prev) => !prev);
-                                setInputs({
-                                  ...inputs,
-                                  title: post.title,
-                                  description: post.description,
-                                });
                               }}
                             />
                           ) : (
@@ -332,7 +309,10 @@ const Post = () => {
                                 color: "red",
                               },
                             ]}
-                            onClick={deletePost}
+                            onClick={() => {
+                              deletePost();
+                              setRefetchProfile(true)
+                            }}
                           />
                         </>
                       ) : (
@@ -435,6 +415,7 @@ const Post = () => {
                               onClick={() => {
                                 if (allowLike) {
                                   setAllowLike(false);
+
                                   likeRequest(post?._id);
                                 }
                               }}
@@ -747,21 +728,25 @@ const Post = () => {
                       </FormControl>
                     ) : (
                       <div className={`comments ${editPostMode && "small"}`}>
-                        {post?.comments?.map((comment) => (
-                          <PostComments
-                            key={comment?._id}
-                            comment={comment}
-                            unlikeRequest={unlikeRequest}
-                            likeRequest={likeRequest}
-                            editCommentMode={editCommentMode}
-                            inputs={inputs}
-                            setInputs={setInputs}
-                            setEditCommentMode={setEditCommentMode}
-                            handleChange={handleChange}
-                            postId={postId}
-                            userId={userId}
-                          />
-                        ))}
+                        {post?.comments
+                          ?.slice(0)
+                          .reverse()
+                          .map((comment) => (
+                            <PostComments
+                              key={comment?._id}
+                              comment={comment}
+                              unlikeRequest={unlikeRequest}
+                              likeRequest={likeRequest}
+                              editCommentMode={editCommentMode}
+                              inputs={inputs}
+                              setInputs={setInputs}
+                              setEditCommentMode={setEditCommentMode}
+                              handleChange={handleChange}
+                              postId={postId}
+                              userId={userId}
+                              deleteComment={deleteComment}
+                            />
+                          ))}
                       </div>
                     )}
                   </div>

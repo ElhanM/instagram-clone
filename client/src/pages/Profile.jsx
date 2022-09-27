@@ -14,6 +14,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import Cookies from "universal-cookie";
 import Loading from "../components/Loading";
 import { useInfiniteQuery } from "react-query";
+import { useLocation } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -46,6 +47,7 @@ const styleFollowersAndFollowing = {
 
 const Profile = () => {
   const { userId } = useParams();
+  const location = useLocation();
   const {
     userDispatch,
     allPosts,
@@ -58,6 +60,8 @@ const Profile = () => {
     setUsers,
     followRequest,
     postsURL,
+    refetchProfile,
+    setRefetchProfile,
   } = useGlobalContext();
   const history = useNavigate();
   const [posts, setPosts] = useState([]);
@@ -158,17 +162,18 @@ const Profile = () => {
     );
     return response.data;
   };
-  const { data, hasNextPage, fetchNextPage, isFetching } = useInfiniteQuery(
-    "homePosts",
-    ({ pageParam = 1 }) => fetchProfilePosts(pageParam),
-    {
-      getNextPageParam: (lastPage, allPages) => {
-        const maxPages = lastPage.info.pages;
-        const nextPage = allPages.length + 1;
-        return nextPage <= maxPages ? nextPage : undefined;
-      },
-    }
-  );
+  const { data, hasNextPage, fetchNextPage, isFetching, refetch } =
+    useInfiniteQuery(
+      "homePosts",
+      ({ pageParam = 1 }) => fetchProfilePosts(pageParam),
+      {
+        getNextPageParam: (lastPage, allPages) => {
+          const maxPages = lastPage.info.pages;
+          const nextPage = allPages.length + 1;
+          return nextPage <= maxPages ? nextPage : undefined;
+        },
+      }
+    );
 
   useEffect(() => {
     const onScroll = async (event) => {
@@ -206,6 +211,13 @@ const Profile = () => {
   useEffect(() => {
     setValue();
   }, []);
+  useEffect(() => {
+    if (refetchProfile) {
+      refetch();
+      console.log({ location });
+      setRefetchProfile(false);
+    }
+  }, [location]);
 
   return (
     <>
