@@ -116,6 +116,10 @@ const Home = () => {
   useEffect(() => {
     setValue();
   }, []);
+  useEffect(() => {
+    
+    console.log({data})
+  }, [data]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
