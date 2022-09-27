@@ -85,10 +85,36 @@ const getAllExplorePosts = async (req, res, next) => {
 
 const getAllPostsByUser = async (req, res, next) => {
   try {
+    const PAGE_SIZE = 6;
+    const page = parseInt(
+      req.query.page === "0"
+        ? "1"
+        : parseInt(req.query.page) !== NaN
+        ? req.query.page
+        : "1"
+    );
+    const count = await Post.countDocuments({ user: req.params.user });
     const posts = await Post.find({ user: req.params.user })
+      .sort({ _id: -1 })
+      .limit(PAGE_SIZE)
+      .skip(PAGE_SIZE * (page - 1))
       .populate("user", "_id username followers following profilePhoto")
       .populate("comments.user", "_id username");
-    res.status(200).json({ posts });
+    res.status(200).json({
+      info: {
+        count,
+        pages: Math.ceil(count / PAGE_SIZE),
+        next:
+          page === Math.ceil(count / PAGE_SIZE)
+            ? null
+            : `http://localhost:5001/api/posts?page=${page + 1}`,
+        previous:
+          page === 1
+            ? null
+            : `http://localhost:5001/api/posts?page=${page - 1}`,
+      },
+      posts,
+    });
   } catch (error) {
     return next(
       new ErrorResponse(`No posts from user with id : ${req.params.user}`, 404)

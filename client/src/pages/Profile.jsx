@@ -13,6 +13,7 @@ import Modal from "@mui/material/Modal";
 import CloseIcon from "@mui/icons-material/Close";
 import Cookies from "universal-cookie";
 import Loading from "../components/Loading";
+import { useInfiniteQuery } from "react-query";
 
 const style = {
   position: "absolute",
@@ -56,6 +57,7 @@ const Profile = () => {
     users,
     setUsers,
     followRequest,
+    postsURL,
   } = useGlobalContext();
   const history = useNavigate();
   const [posts, setPosts] = useState([]);
@@ -142,6 +144,52 @@ const Profile = () => {
     }
     handleCloseChangePhoto();
   }, [imageUrl]);
+
+  const [isFetchingProfile, setIsFetchingProfile] = useState(false);
+  const fetchProfilePosts = async (page = 1) => {
+    const response = await axios(
+      `${postsURL}/user-posts/${userId}?page=${page}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${cookies.get("authToken")}`,
+        },
+      }
+    );
+    return response.data;
+  };
+  const { data, hasNextPage, fetchNextPage, isFetching } = useInfiniteQuery(
+    "homePosts",
+    ({ pageParam = 1 }) => fetchProfilePosts(pageParam),
+    {
+      getNextPageParam: (lastPage, allPages) => {
+        const maxPages = lastPage.info.pages;
+        const nextPage = allPages.length + 1;
+        return nextPage <= maxPages ? nextPage : undefined;
+      },
+    }
+  );
+
+  useEffect(() => {
+    const onScroll = async (event) => {
+      const { scrollHeight, scrollTop, clientHeight } =
+        event.target.scrollingElement;
+
+      if (
+        !isFetchingProfile &&
+        scrollHeight - scrollTop <= clientHeight * 1.5
+      ) {
+        setIsFetchingProfile(true);
+        if (hasNextPage) await fetchNextPage();
+        setIsFetchingProfile(false);
+      }
+    };
+    document.addEventListener("scroll", onScroll);
+    return () => {
+      document.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     axiosGetUser();
@@ -291,12 +339,10 @@ const Profile = () => {
               </div>
             </div>
             <div className="profile__container__hr"></div>
-            {posts.length > 0 ? (
+            {data.pages.length > 0 ? (
               <div className="profile__container__posts">
-                {posts
-                  ?.slice(0)
-                  .reverse()
-                  .map((post, index) => (
+                {data.pages.map((page) =>
+                  page.posts.map((post) => (
                     <Link
                       key={post?._id}
                       to={`/profile/${post?.user?._id}/${post?._id}`}
@@ -306,7 +352,8 @@ const Profile = () => {
                         alt={post?.description || post?.title}
                       />
                     </Link>
-                  ))}
+                  ))
+                )}
               </div>
             ) : (
               <Typography
@@ -319,6 +366,7 @@ const Profile = () => {
                 No posts to display
               </Typography>
             )}
+            {isFetching && <Loading />}
           </div>
         )}
       </div>
