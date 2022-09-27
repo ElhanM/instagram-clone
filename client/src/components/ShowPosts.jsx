@@ -124,7 +124,7 @@ const ShowPosts = ({
     setLikedUsers(post);
   }, [post]);
   useEffect(() => {
-    console.log({ post });
+    // console.log({ post });
   }, [post, commentsRerender]);
 
   const content = useMemo(
@@ -229,7 +229,7 @@ const ShowPosts = ({
                       onClick={() => {
                         setShowFollowButton(false);
                         setAllowFollow(true);
-                        followRequest(post?.user?._id, post);
+                        followRequest(post?.user?._id);
                       }}
                       sx={[
                         {
@@ -257,7 +257,7 @@ const ShowPosts = ({
                           setShowFollowButton(true);
 
                           setAllowFollow(false);
-                          followRequest(post?.user?._id, post, "follow");
+                          followRequest(post?.user?._id, "follow");
                         }
                       }}
                       sx={[
