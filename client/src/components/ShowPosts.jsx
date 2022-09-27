@@ -117,7 +117,7 @@ const ShowPosts = ({
       JSON.parse(localStorage.getItem("user"))._id
     )
   );
-  const [showLike, setshowLike] = useState(
+  const [showLike, setShowLike] = useState(
     post?.likes?.includes(JSON.parse(localStorage.getItem("user"))._id)
   );
   useEffect(() => {
@@ -310,7 +310,7 @@ const ShowPosts = ({
                 <FavoriteIcon
                   onClick={() => {
                     setAllowLike(true);
-                    setshowLike(false);
+                    setShowLike(false);
                     post?.likes?.pop();
                     unlikeRequest(post?._id);
                   }}
@@ -329,7 +329,7 @@ const ShowPosts = ({
                   onClick={() => {
                     if (allowLike) {
                       setAllowLike(false);
-                      setshowLike(true);
+                      setShowLike(true);
                       post?.likes?.push(
                         JSON.parse(localStorage.getItem("user"))._id
                       );

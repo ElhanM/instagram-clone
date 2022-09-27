@@ -26,6 +26,7 @@ const registerURL = `${authURL}/register`;
 const AppProvider = ({ children }) => {
   const [value, setValue] = useState();
   const cookies = new Cookies();
+  const [refetchProfile, setRefetchProfile] = useState(false);
 
   const [state, dispatch] = useReducer(reducer, initialState);
   const userDispatch = (userData) => {
@@ -49,7 +50,7 @@ const AppProvider = ({ children }) => {
       console.log(error);
     }
   };
-  const deleteComment = async (postId, commentId, posts) => {
+  const deleteComment = async (postId, commentId) => {
     try {
       const response = await axios.put(
         `${postsURL}`,
@@ -143,7 +144,8 @@ const AppProvider = ({ children }) => {
         cloudinaryRequest,
         value,
         setValue,
-       
+        refetchProfile,
+        setRefetchProfile
       }}
     >
       {children}
