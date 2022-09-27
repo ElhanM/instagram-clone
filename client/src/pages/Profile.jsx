@@ -14,7 +14,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import Cookies from "universal-cookie";
 import Loading from "../components/Loading";
 import { useInfiniteQuery } from "react-query";
-import { useLocation } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -47,7 +46,6 @@ const styleFollowersAndFollowing = {
 
 const Profile = () => {
   const { userId } = useParams();
-  const location = useLocation();
   const {
     userDispatch,
     allPosts,
@@ -162,19 +160,26 @@ const Profile = () => {
     );
     return response.data;
   };
-  const { data, hasNextPage, fetchNextPage, isFetching, refetch } =
-    useInfiniteQuery(
-      "homePosts",
-      ({ pageParam = 1 }) => fetchProfilePosts(pageParam),
-      {
-        getNextPageParam: (lastPage, allPages) => {
-          const maxPages = lastPage.info.pages;
-          const nextPage = allPages.length + 1;
-          return nextPage <= maxPages ? nextPage : undefined;
-        },
-      }
-    );
-
+  const {
+    data: profilePosts,
+    hasNextPage,
+    fetchNextPage,
+    isFetching,
+    refetch,
+  } = useInfiniteQuery(
+    "profilePosts",
+    ({ pageParam = 1 }) => fetchProfilePosts(pageParam),
+    {
+      getNextPageParam: (lastPage, allPages) => {
+        const maxPages = lastPage.info.pages;
+        const nextPage = allPages.length + 1;
+        return nextPage <= maxPages ? nextPage : undefined;
+      },
+    }
+  );
+  useEffect(() => {
+    refetch();
+  }, [userId]);
   useEffect(() => {
     const onScroll = async (event) => {
       const { scrollHeight, scrollTop, clientHeight } =
@@ -211,13 +216,6 @@ const Profile = () => {
   useEffect(() => {
     setValue();
   }, []);
-  useEffect(() => {
-    if (refetchProfile) {
-      refetch();
-      console.log({ location });
-      setRefetchProfile(false);
-    }
-  }, [location]);
 
   return (
     <>
@@ -298,7 +296,7 @@ const Profile = () => {
                           variant="contained"
                           onClick={() => {
                             setAllowFollow(true);
-                            followRequest(user[0]?._id, allPosts);
+                            followRequest(user[0]?._id);
                           }}
                           sx={[
                             {
@@ -324,7 +322,7 @@ const Profile = () => {
                           onClick={() => {
                             if (allowFollow) {
                               setAllowFollow(false);
-                              followRequest(user[0]?._id, allPosts, "follow");
+                              followRequest(user[0]?._id, "follow");
                             }
                           }}
                           sx={[
@@ -351,9 +349,9 @@ const Profile = () => {
               </div>
             </div>
             <div className="profile__container__hr"></div>
-            {data.pages.length > 0 ? (
+            {profilePosts.pages.length > 0 ? (
               <div className="profile__container__posts">
-                {data.pages.map((page) =>
+                {profilePosts.pages.map((page) =>
                   page.posts.map((post) => (
                     <Link
                       key={post?._id}

@@ -85,7 +85,7 @@ const AppProvider = ({ children }) => {
       console.log(error);
     }
   };
-  const followRequest = async (userId, posts, url = "unfollow") => {
+  const followRequest = async (userId, url = "unfollow") => {
     try {
       const response = await axios.put(
         `${authURL}/${url === "follow" ? "follow" : "unfollow"}`,
@@ -145,7 +145,7 @@ const AppProvider = ({ children }) => {
         value,
         setValue,
         refetchProfile,
-        setRefetchProfile
+        setRefetchProfile,
       }}
     >
       {children}
