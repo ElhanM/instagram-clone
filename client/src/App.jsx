@@ -7,7 +7,7 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import CreatePost from "./pages/CreatePost";
 import Error from "./pages/Error";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "./components/context";
 import Post from "./pages/Post";
@@ -18,12 +18,21 @@ const Routing = () => {
   const cookies = new Cookies();
   const { userDispatch } = useGlobalContext();
   const history = useNavigate();
+
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
+    console.log("user:", { user: !user });
+    console.log(
+      "user:",
+      localStorage.getItem("cookieExpire") <
+        JSON.stringify(new Date().setDate(new Date().getDate()))
+    );
+
     userDispatch(user);
     if (
       localStorage.getItem("cookieExpire") <
-      JSON.stringify(new Date().setDate(new Date().getDate()))
+        JSON.stringify(new Date().setDate(new Date().getDate())) ||
+      !user
     ) {
       cookies.remove("authToken", { path: "/" });
       localStorage.removeItem("user");
@@ -35,14 +44,25 @@ const Routing = () => {
   return (
     <Routes>
       <Route path="/" element={<SharedLayout />}>
-        <Route index element={<Home />} />
-        <Route path="profile/:userId" element={<Profile />}>
-          <Route path=":postId" element={<Post />} />
-        </Route>
-        <Route path="create-post" element={<CreatePost />} />
-        <Route path="explore" element={<ExplorePage />} />
-        <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
+        {!JSON.parse(localStorage.getItem("user")) ||
+        localStorage.getItem("cookieExpire") <
+          JSON.stringify(new Date().setDate(new Date().getDate())) ? (
+          <>
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+          </>
+        ) : (
+          <>
+            <Route index element={<Home />} />
+            <Route path="profile/:userId" element={<Profile />}>
+              <Route path=":postId" element={<Post />} />
+            </Route>
+            <Route path="create-post" element={<CreatePost />} />
+            <Route path="explore" element={<ExplorePage />} />
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+          </>
+        )}
         <Route path="*" element={<Error />} />
       </Route>
     </Routes>

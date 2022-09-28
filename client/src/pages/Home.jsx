@@ -33,6 +33,7 @@ const Home = () => {
     });
     return response.data;
   };
+  
   const { data, hasNextPage, fetchNextPage, isFetching } = useInfiniteQuery(
     "homePosts",
     ({ pageParam = 1 }) => fetchHomePosts(pageParam),
@@ -117,8 +118,7 @@ const Home = () => {
     setValue();
   }, []);
   useEffect(() => {
-    
-    console.log({data})
+    console.log({ data });
   }, [data]);
 
   useEffect(() => {
