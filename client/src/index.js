@@ -7,11 +7,11 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import Loading from "./components/Loading";
 
 const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      suspense: true,
-    },
-  },
+  // defaultOptions: {
+  //   queries: {
+  //     suspense: false,
+  //   },
+  // },
 });
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

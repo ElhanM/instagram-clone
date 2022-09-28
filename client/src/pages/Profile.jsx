@@ -185,7 +185,7 @@ const Profile = () => {
   );
   useEffect(() => {
     refetch();
-  }, [location, userId]);
+  }, [userId]);
 
   useEffect(() => {
     const onScroll = async (event) => {
