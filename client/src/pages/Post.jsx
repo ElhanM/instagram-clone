@@ -16,6 +16,7 @@ import PostComments from "../components/PostComments";
 import Cookies from "universal-cookie";
 import Loading from "../components/Loading";
 import { useQuery } from "react-query";
+import { useLocation } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -66,6 +67,8 @@ const Post = () => {
     refetchProfile,
     setRefetchProfile,
   } = useGlobalContext();
+  const location = useLocation();
+
   const history = useNavigate();
   const handleOpenEdit = () => setOpen(true);
   const { userId, postId } = useParams();
@@ -117,13 +120,12 @@ const Post = () => {
       );
 
       const updateResponse = { ...response.data.post, photo: updatedPhoto };
-
       return updateResponse;
     } catch (error) {
       console.log(error);
     }
   };
-  const { data: post, isFetching, refetch } = useQuery("post", getPost);
+  const { data: post, isLoading, refetch } = useQuery("post", getPost);
 
   const likeRequest = async (postId) => {
     try {
@@ -137,6 +139,7 @@ const Post = () => {
           },
         }
       );
+      refetch();
     } catch (error) {
       console.log(error);
     }
@@ -153,6 +156,7 @@ const Post = () => {
           },
         }
       );
+      refetch();
     } catch (error) {
       console.log(error);
     }
@@ -186,11 +190,11 @@ const Post = () => {
           },
         }
       );
+      refetch();
     } catch (error) {
       console.log(error);
     }
   };
-
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     userDispatch(user);
@@ -208,7 +212,9 @@ const Post = () => {
       description: post.description,
     });
   }, [post.title, post.description]);
-
+  useEffect(() => {
+    console.log({ location });
+  }, [location]);
   return (
     <>
       <div>
@@ -220,7 +226,7 @@ const Post = () => {
         >
           <Box sx={style}>
             <div className="post">
-              {isFetching ? (
+              {isLoading ? (
                 <div
                   style={{
                     margin: "0 auto",
@@ -330,7 +336,11 @@ const Post = () => {
                                     variant="contained"
                                     onClick={() => {
                                       setAllowFollow(true);
-                                      followRequest(post?.user?._id, refetch);
+                                      followRequest(
+                                        post?.user?._id,
+                                        undefined,
+                                        refetch
+                                      );
                                     }}
                                     sx={[
                                       {
@@ -576,7 +586,13 @@ const Post = () => {
                         }}
                         onSubmit={(e) => {
                           e.preventDefault();
-                          handleSubmit(postId, inputs.comment, allPosts);
+                          handleSubmit(
+                            postId,
+                            inputs.comment,
+                            undefined,
+                            undefined,
+                            refetch
+                          );
                           inputs.comment = "";
                         }}
                       >
@@ -646,7 +662,7 @@ const Post = () => {
                           }}
                           onSubmit={(e) => {
                             e.preventDefault();
-                            editComment(postId, inputs, allPosts);
+                            editComment(postId, inputs, refetch);
                             setEditCommentMode((prev) => !prev);
                           }}
                         >
@@ -738,6 +754,7 @@ const Post = () => {
                                 postId={postId}
                                 userId={userId}
                                 deleteComment={deleteComment}
+                                refetch={refetch}
                               />
                             ))}
                         </div>
