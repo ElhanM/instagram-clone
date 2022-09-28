@@ -12,7 +12,8 @@ const PostComments = ({
   allPosts,
   postId,
   userId,
-  refetch,
+  post,
+  setPost,
 }) => {
   return (
     <div className="comments__flex-post">
@@ -79,7 +80,19 @@ const PostComments = ({
                   color: "red",
                 },
               ]}
-              onClick={() => deleteComment(postId, comment._id, refetch)}
+              onClick={() => {
+                deleteComment(postId, comment._id);
+                let foundIndex = post?.comments?.findIndex(
+                  (x) => x._id == comment?._id
+                );
+                if (foundIndex !== 0) {
+                  let tempComments = [...post?.comments];
+                  tempComments.splice(foundIndex, foundIndex);
+                  setPost({ ...post, comments: tempComments });
+                } else {
+                  setPost({ ...post, comments: [] });
+                }
+              }}
             />
           </>
         ) : (
@@ -95,7 +108,19 @@ const PostComments = ({
                   color: "red",
                 },
               ]}
-              onClick={() => deleteComment(postId, comment._id, refetch)}
+              onClick={() => {
+                deleteComment(postId, comment._id);
+                let foundIndex = post?.comments?.findIndex(
+                  (x) => x._id == comment?._id
+                );
+                if (foundIndex !== 0) {
+                  let tempComments = [...post?.comments];
+                  tempComments.splice(foundIndex, foundIndex);
+                  setPost({ ...post, comments: tempComments });
+                } else {
+                  setPost({ ...post, comments: [] });
+                }
+              }}
             />
           )
         )}

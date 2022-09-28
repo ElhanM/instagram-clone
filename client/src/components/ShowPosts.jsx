@@ -505,6 +505,10 @@ const ShowPosts = ({
               onSubmit={(e) => {
                 e.preventDefault();
                 console.log("post", e.target[0].value);
+                post?.comments?.push({
+                  text: e.target[0].value,
+                  user: JSON.parse(localStorage.getItem("user")),
+                });
 
                 setCommentsRerender((prev) => !prev);
                 handleSubmit(post?._id, e.target[0].value, post, setPost);
@@ -574,8 +578,7 @@ const ShowPosts = ({
                 }}
                 onSubmit={(e) => {
                   e.preventDefault();
-                  editComment(post?._id, inputs, allPosts);
-                  setEditCommentMode((prev) => !prev);
+                  editComment(post?._id, inputs);
                   let foundIndex = post?.comments?.findIndex(
                     (x) => x._id == inputs.editCommentId
                   );
@@ -587,6 +590,7 @@ const ShowPosts = ({
 
                   setPost({ ...post, comments: tempComments });
                   setInputs({ ...inputs, editCommentPostId: post?._id });
+                  setEditCommentMode((prev) => !prev);
                 }}
               >
                 <div className="post__edit-comment-flex">
@@ -674,7 +678,6 @@ const ShowPosts = ({
                         post={post}
                         setPost={setPost}
                         deleteComment={deleteComment}
-                        commentsRerender={commentsRerender}
                       />
                     ))}
                 </Suspense>
