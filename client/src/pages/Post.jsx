@@ -128,12 +128,15 @@ const Post = () => {
       console.log(error);
     }
   };
-  const { data, isLoading, refetch, isFetching } = useQuery("post", getPost);
+  const { data, isLoading, refetch, isFetching } = useQuery("post", getPost, {
+    suspense: false,
+  });
   useEffect(() => {
     setPost(data);
-    setRefetchPostInitial(false);
   }, [data]);
-
+  useEffect(() => {
+    setRefetchPostInitial(false);
+  }, [post]);
   const likeRequest = async (postId) => {
     try {
       const response = await axios.put(
@@ -227,7 +230,7 @@ const Post = () => {
   useEffect(() => {
     setRefetchPostInitial(true);
     refetch();
-  }, [postId, location]);
+  }, [postId]);
   useEffect(() => {
     console.log({ refetchPostInitial });
   }, [refetchPostInitial]);

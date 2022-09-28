@@ -33,17 +33,18 @@ const ExplorePage = () => {
     });
     return response.data;
   };
-  const { data, hasNextPage, fetchNextPage, isFetching } = useInfiniteQuery(
-    "explorePosts",
-    ({ pageParam = 1 }) => fetchExplorePosts(pageParam),
-    {
-      getNextPageParam: (lastPage, allPages) => {
-        const maxPages = lastPage.info.pages;
-        const nextPage = allPages.length + 1;
-        return nextPage <= maxPages ? nextPage : undefined;
-      },
-    }
-  );
+  const { data, hasNextPage, fetchNextPage, isFetching, isLoading } =
+    useInfiniteQuery(
+      "explorePosts",
+      ({ pageParam = 1 }) => fetchExplorePosts(pageParam),
+      {
+        getNextPageParam: (lastPage, allPages) => {
+          const maxPages = lastPage.info.pages;
+          const nextPage = allPages.length + 1;
+          return nextPage <= maxPages ? nextPage : undefined;
+        },
+      }
+    );
 
   useEffect(() => {
     const onScroll = async (event) => {
@@ -118,7 +119,6 @@ const ExplorePage = () => {
     }
   };
 
-
   useEffect(() => {
     setValue(1);
   }, []);
@@ -129,7 +129,7 @@ const ExplorePage = () => {
 
   return (
     <div className="main-page">
-      {loading ? (
+      {loading || isLoading ? (
         <Loading />
       ) : (
         data.pages.map((page) =>
@@ -149,7 +149,7 @@ const ExplorePage = () => {
         )
       )}
 
-      {isFetching && <Loading />}
+      {isFetching && !isLoading && <Loading />}
 
       {!loading && !isFetching && (
         <Typography
