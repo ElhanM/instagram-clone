@@ -33,18 +33,19 @@ const Home = () => {
     });
     return response.data;
   };
-  
-  const { data, hasNextPage, fetchNextPage, isFetching } = useInfiniteQuery(
-    "homePosts",
-    ({ pageParam = 1 }) => fetchHomePosts(pageParam),
-    {
-      getNextPageParam: (lastPage, allPages) => {
-        const maxPages = lastPage.info.pages;
-        const nextPage = allPages.length + 1;
-        return nextPage <= maxPages ? nextPage : undefined;
-      },
-    }
-  );
+
+  const { data, hasNextPage, fetchNextPage, isFetching, isLoading } =
+    useInfiniteQuery(
+      "homePosts",
+      ({ pageParam = 1 }) => fetchHomePosts(pageParam),
+      {
+        getNextPageParam: (lastPage, allPages) => {
+          const maxPages = lastPage.info.pages;
+          const nextPage = allPages.length + 1;
+          return nextPage <= maxPages ? nextPage : undefined;
+        },
+      }
+    );
 
   useEffect(() => {
     const onScroll = async (event) => {
@@ -127,7 +128,7 @@ const Home = () => {
 
   return (
     <div className="main-page">
-      {loading ? (
+      {loading || isLoading ? (
         <Loading />
       ) : (
         data.pages.map((page) =>
@@ -146,7 +147,7 @@ const Home = () => {
           ))
         )
       )}
-      {isFetching && <Loading />}
+      {isFetching && !isLoading && <Loading />}
 
       {!loading && !isFetching && (
         <Typography
