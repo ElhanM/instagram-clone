@@ -14,6 +14,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import Cookies from "universal-cookie";
 import Loading from "../components/Loading";
 import { useInfiniteQuery } from "react-query";
+import { useLocation } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -46,6 +47,7 @@ const styleFollowersAndFollowing = {
 
 const Profile = () => {
   const { userId } = useParams();
+  const location = useLocation();
   const {
     userDispatch,
     allPosts,
@@ -140,12 +142,14 @@ const Profile = () => {
       setErrorMsg("Please provide an image");
     }
   };
+
   useEffect(() => {
     if (imageUrl) {
       changeProfilePictureRequest();
     }
     handleCloseChangePhoto();
   }, [imageUrl]);
+  const [initialFetch, setInitialFetch] = useState(true);
 
   const [isFetchingProfile, setIsFetchingProfile] = useState(false);
   const fetchProfilePosts = async (page = 1) => {
@@ -158,6 +162,8 @@ const Profile = () => {
         },
       }
     );
+    setInitialFetch(false);
+
     return response.data;
   };
   const {
@@ -179,7 +185,8 @@ const Profile = () => {
   );
   useEffect(() => {
     refetch();
-  }, [userId]);
+  }, [location, userId]);
+
   useEffect(() => {
     const onScroll = async (event) => {
       const { scrollHeight, scrollTop, clientHeight } =
@@ -216,14 +223,17 @@ const Profile = () => {
   useEffect(() => {
     setValue();
   }, []);
-
+  useEffect(() => {
+    console.log({ profilePosts });
+  }, [profilePosts]);
+  useEffect(() => {
+    setInitialFetch(true);
+  }, [userId]);
   return (
     <>
       <div className="profile">
-        {loading ? (
+        {loading || (isFetching && initialFetch) ? (
           <Loading />
-        ) : posts === [] ? (
-          <h1>No posts to display </h1>
         ) : (
           <div className="profile__container">
             <div className="profile__container__header">
@@ -349,7 +359,9 @@ const Profile = () => {
               </div>
             </div>
             <div className="profile__container__hr"></div>
-            {profilePosts.pages.length > 0 ? (
+            {isFetching && initialFetch ? (
+              <Loading />
+            ) : profilePosts.pages[0].posts.length > 0 ? (
               <div className="profile__container__posts">
                 {profilePosts.pages.map((page) =>
                   page.posts.map((post) => (
@@ -376,7 +388,6 @@ const Profile = () => {
                 No posts to display
               </Typography>
             )}
-            {isFetching && <Loading />}
           </div>
         )}
       </div>

@@ -12,6 +12,7 @@ const PostComments = ({
   allPosts,
   postId,
   userId,
+  refetch,
 }) => {
   return (
     <div className="comments__flex-post">
@@ -78,7 +79,7 @@ const PostComments = ({
                   color: "red",
                 },
               ]}
-              onClick={() => deleteComment(postId, comment._id)}
+              onClick={() => deleteComment(postId, comment._id, refetch)}
             />
           </>
         ) : (
@@ -94,7 +95,7 @@ const PostComments = ({
                   color: "red",
                 },
               ]}
-              onClick={() => deleteComment(postId, comment._id, allPosts)}
+              onClick={() => deleteComment(postId, comment._id, refetch)}
             />
           )
         )}
