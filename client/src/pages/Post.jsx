@@ -89,6 +89,7 @@ const Post = () => {
 
   const [likedUsers, setLikedUsers] = useState([]);
   const [post, setPost] = useState({});
+  const [refetchPostInitial, setRefetchPostInitial] = useState(true);
 
   const [inputs, setInputs] = useState({
     title: "",
@@ -116,7 +117,7 @@ const Post = () => {
         },
       });
 
-      const updatedPhoto = response.data.post.photo.replace(
+      const updatedPhoto = response?.data?.post?.photo.replace(
         "/image/upload/c_scale,w_600/",
         "/image/upload/"
       );
@@ -127,9 +128,10 @@ const Post = () => {
       console.log(error);
     }
   };
-  const { data, isLoading, refetch } = useQuery("post", getPost);
+  const { data, isLoading, refetch, isFetching } = useQuery("post", getPost);
   useEffect(() => {
     setPost(data);
+    setRefetchPostInitial(false);
   }, [data]);
 
   const likeRequest = async (postId) => {
@@ -218,13 +220,17 @@ const Post = () => {
   useEffect(() => {
     setInputs({
       ...inputs,
-      title: post.title,
-      description: post.description,
+      title: post?.title,
+      description: post?.description,
     });
-  }, [post.title, post.description]);
+  }, [post?.title, post?.description]);
   useEffect(() => {
-    console.log({ location });
-  }, [location]);
+    setRefetchPostInitial(true);
+    refetch();
+  }, [postId, location]);
+  useEffect(() => {
+    console.log({ refetchPostInitial });
+  }, [refetchPostInitial]);
   return (
     <>
       <div>
@@ -236,7 +242,7 @@ const Post = () => {
         >
           <Box sx={style}>
             <div className="post">
-              {isLoading ? (
+              {isLoading || refetchPostInitial ? (
                 <div
                   style={{
                     margin: "0 auto",
@@ -248,7 +254,7 @@ const Post = () => {
                 <>
                   <div className="post__image">
                     <img
-                      src={post.photo}
+                      src={post?.photo}
                       alt={post?.description || post?.title}
                     />
                     <CloseIcon
@@ -572,13 +578,13 @@ const Post = () => {
                             variant="h1"
                             sx={{ fontSize: "1.7rem", marginLeft: ".5em" }}
                           >
-                            {post.title}
+                            {post?.title}
                           </Typography>
                           <Typography
                             variant="h1"
                             sx={{ fontSize: "1.4rem", marginLeft: ".5em" }}
                           >
-                            {post.description}
+                            {post?.description}
                           </Typography>
                         </>
                       )}
