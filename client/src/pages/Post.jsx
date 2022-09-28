@@ -85,8 +85,10 @@ const Post = () => {
   const [showLikes, setShowLikes] = useState(false);
   const handleOpen = () => setShowLikes(true);
   const handleClose = () => setShowLikes(false);
+  const [commentsRerender, setCommentsRerender] = useState(true);
 
   const [likedUsers, setLikedUsers] = useState([]);
+  const [post, setPost] = useState({});
 
   const [inputs, setInputs] = useState({
     title: "",
@@ -125,7 +127,10 @@ const Post = () => {
       console.log(error);
     }
   };
-  const { data: post, isLoading, refetch } = useQuery("post", getPost);
+  const { data, isLoading, refetch } = useQuery("post", getPost);
+  useEffect(() => {
+    setPost(data);
+  }, [data]);
 
   const likeRequest = async (postId) => {
     try {
@@ -139,11 +144,18 @@ const Post = () => {
           },
         }
       );
-      refetch();
     } catch (error) {
       console.log(error);
     }
   };
+  const [showFollowButton, setShowFollowButton] = useState(
+    post?.user?.followers?.includes(
+      JSON.parse(localStorage.getItem("user"))._id
+    )
+  );
+  const [showLike, setShowLike] = useState(
+    post?.likes?.includes(JSON.parse(localStorage.getItem("user"))._id)
+  );
   const unlikeRequest = async (postId) => {
     try {
       const response = await axios.put(
@@ -156,7 +168,6 @@ const Post = () => {
           },
         }
       );
-      refetch();
     } catch (error) {
       console.log(error);
     }
@@ -190,7 +201,6 @@ const Post = () => {
           },
         }
       );
-      refetch();
     } catch (error) {
       console.log(error);
     }
@@ -328,19 +338,14 @@ const Post = () => {
                             {JSON.parse(localStorage.getItem("user"))._id !==
                               post?.user?._id && (
                               <>
-                                {post?.user?.followers?.includes(
-                                  JSON.parse(localStorage.getItem("user"))._id
-                                ) ? (
+                                {showFollowButton ? (
                                   <Button
                                     fullWidth
                                     variant="contained"
                                     onClick={() => {
+                                      setShowFollowButton(false);
                                       setAllowFollow(true);
-                                      followRequest(
-                                        post?.user?._id,
-                                        undefined,
-                                        refetch
-                                      );
+                                      followRequest(post?.user?._id);
                                     }}
                                     sx={[
                                       {
@@ -366,11 +371,12 @@ const Post = () => {
                                     variant="contained"
                                     onClick={() => {
                                       if (allowFollow) {
+                                        setShowFollowButton(true);
+
                                         setAllowFollow(false);
                                         followRequest(
                                           post?.user?._id,
-                                          "follow",
-                                          refetch
+                                          "follow"
                                         );
                                       }
                                     }}
@@ -403,12 +409,12 @@ const Post = () => {
                     <div className="post__info__stats">
                       <div className="post__info__stats__flex">
                         <div className="post__info__stats__flex__likes">
-                          {post?.likes?.includes(
-                            JSON.parse(localStorage.getItem("user"))._id
-                          ) ? (
+                          {showLike ? (
                             <FavoriteIcon
                               onClick={() => {
                                 setAllowLike(true);
+                                setShowLike(false);
+                                post?.likes?.pop();
                                 unlikeRequest(post?._id);
                               }}
                               sx={[
@@ -418,32 +424,30 @@ const Post = () => {
                                     scale: "1.2",
                                   },
                                   color: "red",
-                                  marginLeft: "0.5em",
                                 },
                               ]}
                             />
                           ) : (
-                            ("Post",
-                            (
-                              <FavoriteBorderIcon
-                                onClick={() => {
-                                  if (allowLike) {
-                                    setAllowLike(false);
-
-                                    likeRequest(post?._id);
-                                  }
-                                }}
-                                sx={[
-                                  {
-                                    "&:hover": {
-                                      cursor: "pointer",
-                                      scale: "1.2",
-                                    },
-                                    marginLeft: "0.5em",
+                            <FavoriteBorderIcon
+                              onClick={() => {
+                                if (allowLike) {
+                                  setAllowLike(false);
+                                  setShowLike(true);
+                                  post?.likes?.push(
+                                    JSON.parse(localStorage.getItem("user"))._id
+                                  );
+                                  likeRequest(post?._id);
+                                }
+                              }}
+                              sx={[
+                                {
+                                  "&:hover": {
+                                    cursor: "pointer",
+                                    scale: "1.2",
                                   },
-                                ]}
-                              />
-                            ))
+                                },
+                              ]}
+                            />
                           )}
                           <Typography
                             variant="h6"
@@ -475,7 +479,12 @@ const Post = () => {
                           }}
                           onSubmit={(e) => {
                             e.preventDefault();
-                            editPost();
+                            setPost({
+                              ...post,
+                              title: inputs.title,
+                              description: inputs.description,
+                            });
+                            editPost(post?._id);
                             setEditPostMode((prev) => !prev);
                           }}
                         >
@@ -586,13 +595,13 @@ const Post = () => {
                         }}
                         onSubmit={(e) => {
                           e.preventDefault();
-                          handleSubmit(
-                            postId,
-                            inputs.comment,
-                            undefined,
-                            undefined,
-                            refetch
-                          );
+                          post?.comments?.push({
+                            text: e.target[0].value,
+                            user: JSON.parse(localStorage.getItem("user")),
+                          });
+                          setCommentsRerender((prev) => !prev);
+
+                          handleSubmit(postId, inputs.comment, post, setPost);
                           inputs.comment = "";
                         }}
                       >
@@ -662,7 +671,22 @@ const Post = () => {
                           }}
                           onSubmit={(e) => {
                             e.preventDefault();
-                            editComment(postId, inputs, refetch);
+                            editComment(postId, inputs);
+
+                            let foundIndex = post?.comments?.findIndex(
+                              (x) => x._id == inputs.editCommentId
+                            );
+                            let tempComments = [...post?.comments];
+                            tempComments[foundIndex] = {
+                              ...tempComments[foundIndex],
+                              text: inputs.editComment,
+                            };
+
+                            setPost({ ...post, comments: tempComments });
+                            setInputs({
+                              ...inputs,
+                              editCommentPostId: post?._id,
+                            });
                             setEditCommentMode((prev) => !prev);
                           }}
                         >
@@ -754,7 +778,8 @@ const Post = () => {
                                 postId={postId}
                                 userId={userId}
                                 deleteComment={deleteComment}
-                                refetch={refetch}
+                                post={post}
+                                setPost={setPost}
                               />
                             ))}
                         </div>

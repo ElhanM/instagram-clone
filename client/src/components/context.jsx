@@ -33,7 +33,7 @@ const AppProvider = ({ children }) => {
     dispatch({ type: "USER", payload: userData });
   };
 
-  const handleSubmit = async (postId, addComment, posts, setPosts, refetch) => {
+  const handleSubmit = async (postId, addComment, posts, setPosts) => {
     try {
       const response = await axios.put(
         commentURL,
@@ -48,14 +48,12 @@ const AppProvider = ({ children }) => {
       if (posts) {
         setPosts({ ...posts, comments: response.data.comment.comments });
       }
-      if (refetch) {
-        refetch();
-      }
+      console.log(posts);
     } catch (error) {
       console.log(error);
     }
   };
-  const deleteComment = async (postId, commentId, refetch) => {
+  const deleteComment = async (postId, commentId) => {
     try {
       const response = await axios.put(
         `${postsURL}`,
@@ -67,14 +65,11 @@ const AppProvider = ({ children }) => {
           },
         }
       );
-      if (refetch) {
-        refetch();
-      }
     } catch (error) {
       console.log(error);
     }
   };
-  const editComment = async (postId, inputs, refetch) => {
+  const editComment = async (postId, inputs) => {
     try {
       const response = await axios.put(
         `${postsURL}/post/${postId}`,
@@ -89,14 +84,11 @@ const AppProvider = ({ children }) => {
           },
         }
       );
-      if (refetch) {
-        refetch();
-      }
     } catch (error) {
       console.log(error);
     }
   };
-  const followRequest = async (userId, url = "unfollow", refetch) => {
+  const followRequest = async (userId, url = "unfollow") => {
     try {
       const response = await axios.put(
         `${authURL}/${url === "follow" ? "follow" : "unfollow"}`,
@@ -110,9 +102,6 @@ const AppProvider = ({ children }) => {
           },
         }
       );
-      if (refetch) {
-        refetch();
-      }
     } catch (error) {
       console.log(error);
     }

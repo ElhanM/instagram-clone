@@ -13,7 +13,6 @@ const ShowPostsComments = ({
   deleteComment,
   setPost,
 }) => {
-
   return (
     <>
       <div className="comments-main-page__flex-post">
@@ -83,9 +82,13 @@ const ShowPostsComments = ({
                   let foundIndex = post?.comments?.findIndex(
                     (x) => x._id == comment?._id
                   );
-                  let tempComments = [...post?.comments];
-                  tempComments.splice(foundIndex, foundIndex);
-                  setPost({ ...post, comments: tempComments });
+                  if (foundIndex !== 0) {
+                    let tempComments = [...post?.comments];
+                    tempComments.splice(foundIndex, foundIndex);
+                    setPost({ ...post, comments: tempComments });
+                  } else {
+                    setPost({ ...post, comments: [] });
+                  }
                 }}
               />
             </>
