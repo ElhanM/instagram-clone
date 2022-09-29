@@ -224,11 +224,14 @@ const Profile = () => {
     setValue();
   }, []);
   useEffect(() => {
-    console.log({ profilePosts });
-  }, [profilePosts]);
+    console.log({ user });
+  }, [user]);
   useEffect(() => {
     setInitialFetch(true);
   }, [userId]);
+  const [showFollowButton, setShowFollowButton] = useState(
+    user[0]?.followers?.includes(JSON.parse(localStorage.getItem("user"))._id)
+  );
   return (
     <>
       <div className="profile">
@@ -300,58 +303,65 @@ const Profile = () => {
                     <>
                       {user[0]?.followers?.includes(
                         JSON.parse(localStorage.getItem("user"))._id
-                      ) ? (
-                        <Button
-                          fullWidth
-                          variant="contained"
-                          onClick={() => {
-                            setAllowFollow(true);
-                            followRequest(user[0]?._id);
-                          }}
-                          sx={[
-                            {
-                              "&:hover": {
-                                backgroundColor: "#000",
-                                color: "#fff",
-                              },
-                              color: "#000",
-                              backgroundColor: "#fff",
-                              borderColor: "#000",
-                              border: "2px solid #000",
-                              transition: "background-color 0.2s ease",
-                              height: "2em",
-                            },
-                          ]}
-                        >
-                          Unfollow
-                        </Button>
-                      ) : (
-                        <Button
-                          fullWidth
-                          variant="contained"
-                          onClick={() => {
-                            if (allowFollow) {
-                              setAllowFollow(false);
-                              followRequest(user[0]?._id, "follow");
-                            }
-                          }}
-                          sx={[
-                            {
-                              "&:hover": {
-                                backgroundColor: "#000",
-                                color: "#fff",
-                              },
-                              color: "#000",
-                              backgroundColor: "#fff",
-                              borderColor: "#000",
-                              border: "2px solid #000",
-                              transition: "background-color 0.2s ease",
-                              height: "2em",
-                            },
-                          ]}
-                        >
-                          Follow
-                        </Button>
+                      ) && (
+                        <>
+                          {showFollowButton ? (
+                            <Button
+                              fullWidth
+                              variant="contained"
+                              onClick={() => {
+                                setShowFollowButton(false);
+                                setAllowFollow(true);
+                                followRequest(user[0]?._id);
+                              }}
+                              sx={[
+                                {
+                                  "&:hover": {
+                                    backgroundColor: "#000",
+                                    color: "#fff",
+                                  },
+                                  color: "#000",
+                                  backgroundColor: "#fff",
+                                  borderColor: "#000",
+                                  border: "2px solid #000",
+                                  transition: "background-color 0.2s ease",
+                                  height: "2em",
+                                },
+                              ]}
+                            >
+                              Unfollow
+                            </Button>
+                          ) : (
+                            <Button
+                              fullWidth
+                              variant="contained"
+                              onClick={() => {
+                                if (allowFollow) {
+                                  setShowFollowButton(true);
+
+                                  setAllowFollow(false);
+                                  followRequest(user[0]?._id, "follow");
+                                }
+                              }}
+                              sx={[
+                                {
+                                  "&:hover": {
+                                    backgroundColor: "#000",
+                                    color: "#fff",
+                                  },
+                                  color: "#000",
+                                  backgroundColor: "#fff",
+                                  borderColor: "#000",
+                                  border: "2px solid #000",
+                                  transition: "background-color 0.2s ease",
+                                  height: "2em",
+                                },
+                              ]}
+                            >
+                              Follow
+                            </Button>
+                          )}
+                        </>
                       )}
                     </>
                   )}
