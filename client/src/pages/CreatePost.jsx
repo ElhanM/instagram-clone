@@ -29,6 +29,7 @@ const CreatePost = () => {
       history("/login");
     }
   }, []);
+  const [isCreatingPost, setIsCreatingPost] = useState(false);
   const [inputs, setInputs] = useState({
     title: "",
     description: "",
@@ -83,6 +84,7 @@ const CreatePost = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setIsCreatingPost(true);
     if (image) {
       cloudinaryRequest(image, setImageUrl);
     } else {
@@ -198,6 +200,7 @@ const CreatePost = () => {
             type="submit"
             fullWidth
             variant="contained"
+            disabled={isCreatingPost}
             sx={[
               {
                 "&:hover": {
@@ -214,7 +217,7 @@ const CreatePost = () => {
               },
             ]}
           >
-            Create
+            {isCreatingPost ? <span> Posting...</span> : <span> Create</span>}
           </Button>
         </Box>
       </Box>

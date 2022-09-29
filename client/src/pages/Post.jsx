@@ -27,6 +27,7 @@ const style = {
   bgcolor: "#fafafa",
   border: "2px solid #000",
   boxShadow: 24,
+  height: "90vh",
   maxHeight: "90vh",
   overflow: "auto",
   position: "relative",
@@ -133,10 +134,8 @@ const Post = () => {
   });
   useEffect(() => {
     setPost(data);
-  }, [data]);
-  useEffect(() => {
     setRefetchPostInitial(false);
-  }, [post]);
+  }, [data]);
   const likeRequest = async (postId) => {
     try {
       const response = await axios.put(
@@ -248,7 +247,7 @@ const Post = () => {
               {isLoading || refetchPostInitial ? (
                 <div
                   style={{
-                    margin: "0 auto",
+                    margin: "20% auto",
                   }}
                 >
                   <Loading />
