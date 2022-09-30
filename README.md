@@ -10,7 +10,7 @@ Material UI, Axios, SCSS, React Router Dom 6, Universal cookie, React Loader Spi
 ### External libraries used for backend: <br />
 Bcryptjs, CORS, Dotenv, Express, Jsonwebtoken, Mongoose and Nodemon for dev
 
-### Link to project: https://instagram-clone-by-elco.netlify.app/
+### Link to project: https://instagram-clone-elhan.netlify.app/
 
 ### .env for client
 
