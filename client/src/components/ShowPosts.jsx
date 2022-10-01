@@ -121,11 +121,9 @@ const ShowPosts = ({
     post?.likes?.includes(JSON.parse(localStorage.getItem("user"))._id)
   );
   useEffect(() => {
-    setLikedUsers(post);
-  }, [post]);
-  useEffect(() => {
-    // console.log({ post });
-  }, [post, commentsRerender]);
+    console.log({likedUsers})
+  }, [likedUsers]);
+
 
   const content = useMemo(
     () => (
