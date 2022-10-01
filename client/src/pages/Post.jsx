@@ -27,10 +27,8 @@ const style = {
   bgcolor: "#fafafa",
   border: "2px solid #000",
   boxShadow: 24,
-  height: "90vh",
   maxHeight: "90vh",
   overflow: "auto",
-  position: "relative",
 };
 
 const styleLikes = {
@@ -67,6 +65,7 @@ const Post = () => {
     followRequest,
     refetchProfile,
     setRefetchProfile,
+    authURL,
   } = useGlobalContext();
   const location = useLocation();
 
@@ -133,6 +132,7 @@ const Post = () => {
     suspense: false,
   });
   useEffect(() => {
+    console.log({ data });
     setPost(data);
     setRefetchPostInitial(false);
   }, [data]);
@@ -152,14 +152,18 @@ const Post = () => {
       console.log(error);
     }
   };
-  const [showFollowButton, setShowFollowButton] = useState(
-    post?.user?.followers?.includes(
-      JSON.parse(localStorage.getItem("user"))._id
-    )
-  );
-  const [showLike, setShowLike] = useState(
-    post?.likes?.includes(JSON.parse(localStorage.getItem("user"))._id)
-  );
+  const [showFollowButton, setShowFollowButton] = useState();
+  const [showLike, setShowLike] = useState();
+  useEffect(() => {
+    setShowFollowButton(
+      post?.user?.followers?.includes(
+        JSON.parse(localStorage.getItem("user"))._id
+      )
+    );
+    setShowLike(
+      post?.likes?.includes(JSON.parse(localStorage.getItem("user"))._id)
+    );
+  }, [post]);
   const unlikeRequest = async (postId) => {
     try {
       const response = await axios.put(
@@ -465,6 +469,23 @@ const Post = () => {
                               cursor: "pointer",
                             }}
                             onClick={() => {
+                              const getAllUserLikes = async () => {
+                                try {
+                                  const response = await axios.post(
+                                    `${authURL}/user-likes`,
+                                    { users: post?.likes },
+                                    {
+                                      headers: {
+                                        "Content-Type": "application/json",
+                                      },
+                                    }
+                                  );
+                                  setLikedUsers(response?.data?.users);
+                                } catch (error) {
+                                  console.log(error);
+                                }
+                              };
+                              getAllUserLikes();
                               handleOpen();
                             }}
                           >

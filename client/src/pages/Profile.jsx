@@ -130,8 +130,6 @@ const Profile = () => {
           },
         }
       );
-      const tempPosts = [...allPosts, response.data.changeProfilePhoto];
-      updatePostsDispatch(tempPosts);
       userDispatch(response.data.changeProfilePhoto);
       localStorage.setItem(
         "user",
@@ -186,6 +184,9 @@ const Profile = () => {
   useEffect(() => {
     refetch();
   }, [userId]);
+  useEffect(() => {
+    console.log({ profilePosts });
+  }, [profilePosts]);
 
   useEffect(() => {
     const onScroll = async (event) => {
@@ -229,9 +230,19 @@ const Profile = () => {
   useEffect(() => {
     setInitialFetch(true);
   }, [userId]);
-  const [showFollowButton, setShowFollowButton] = useState(
-    user[0]?.followers?.includes(JSON.parse(localStorage.getItem("user"))._id)
-  );
+  const [showFollowButton, setShowFollowButton] = useState();
+  const [followersCount, setFollowersCount] = useState(0);
+  useEffect(() => {
+    setShowFollowButton(
+      user?.[0]?.followers?.includes(
+        JSON.parse(localStorage.getItem("user"))._id
+      )
+    );
+    setFollowersCount(user[0]?.followers?.length);
+  }, [user]);
+  useEffect(() => {
+    console.log("user", { showFollowButton });
+  }, [showFollowButton]);
   return (
     <>
       <div className="profile">
@@ -271,7 +282,7 @@ const Profile = () => {
                 </div>
                 <div className="profile__container__header__user-info__stats">
                   <Typography variant="p" sx={{ marginRight: "0.8em" }}>
-                    {posts?.length} posts
+                    {profilePosts?.pages[0].info.count} posts
                   </Typography>
                   <Typography
                     variant="p"
@@ -283,7 +294,7 @@ const Profile = () => {
                       setMsg("Followers");
                     }}
                   >
-                    {user[0]?.followers?.length} followers
+                    {followersCount} followers
                   </Typography>
                   <Typography
                     variant="p"
@@ -299,69 +310,66 @@ const Profile = () => {
                   </Typography>
                 </div>
                 <div className="profile__container__header__user-info__follow">
-                  {JSON.parse(localStorage.getItem("user"))._id !== userId && (
+                  {JSON.parse(localStorage.getItem("user"))._id !==
+                    user?.[0]?._id && (
                     <>
-                      {user[0]?.followers?.includes(
-                        JSON.parse(localStorage.getItem("user"))._id
-                      ) && (
-                        <>
-                          {showFollowButton ? (
-                            <Button
-                              fullWidth
-                              variant="contained"
-                              onClick={() => {
-                                setShowFollowButton(false);
-                                setAllowFollow(true);
-                                followRequest(user[0]?._id);
-                              }}
-                              sx={[
-                                {
-                                  "&:hover": {
-                                    backgroundColor: "#000",
-                                    color: "#fff",
-                                  },
-                                  color: "#000",
-                                  backgroundColor: "#fff",
-                                  borderColor: "#000",
-                                  border: "2px solid #000",
-                                  transition: "background-color 0.2s ease",
-                                  height: "2em",
-                                },
-                              ]}
-                            >
-                              Unfollow
-                            </Button>
-                          ) : (
-                            <Button
-                              fullWidth
-                              variant="contained"
-                              onClick={() => {
-                                if (allowFollow) {
-                                  setShowFollowButton(true);
+                      {showFollowButton ? (
+                        <Button
+                          fullWidth
+                          variant="contained"
+                          onClick={() => {
+                            setShowFollowButton(false);
+                            setAllowFollow(true);
+                            setFollowersCount(followersCount - 1);
+                            followRequest(user?.[0]?._id);
+                          }}
+                          sx={[
+                            {
+                              "&:hover": {
+                                backgroundColor: "#000",
+                                color: "#fff",
+                              },
+                              color: "#000",
+                              backgroundColor: "#fff",
+                              borderColor: "#000",
+                              border: "2px solid #000",
+                              transition: "background-color 0.2s ease",
+                              height: "2em",
+                            },
+                          ]}
+                        >
+                          Unfollow
+                        </Button>
+                      ) : (
+                        <Button
+                          fullWidth
+                          variant="contained"
+                          onClick={() => {
+                            if (allowFollow) {
+                              setShowFollowButton(true);
+                              setFollowersCount(followersCount + 1);
 
-                                  setAllowFollow(false);
-                                  followRequest(user[0]?._id, "follow");
-                                }
-                              }}
-                              sx={[
-                                {
-                                  "&:hover": {
-                                    backgroundColor: "#000",
-                                    color: "#fff",
-                                  },
-                                  color: "#000",
-                                  backgroundColor: "#fff",
-                                  borderColor: "#000",
-                                  border: "2px solid #000",
-                                  transition: "background-color 0.2s ease",
-                                  height: "2em",
-                                },
-                              ]}
-                            >
-                              Follow
-                            </Button>
-                          )}
-                        </>
+                              setAllowFollow(false);
+                              followRequest(user?.[0]?._id, "follow");
+                            }
+                          }}
+                          sx={[
+                            {
+                              "&:hover": {
+                                backgroundColor: "#000",
+                                color: "#fff",
+                              },
+                              color: "#000",
+                              backgroundColor: "#fff",
+                              borderColor: "#000",
+                              border: "2px solid #000",
+                              transition: "background-color 0.2s ease",
+                              height: "2em",
+                            },
+                          ]}
+                        >
+                          Follow
+                        </Button>
                       )}
                     </>
                   )}
