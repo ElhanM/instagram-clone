@@ -13,6 +13,16 @@ import { useGlobalContext } from "./components/context";
 import Post from "./pages/Post";
 import Cookies from "universal-cookie";
 import React from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
+import Loading from "./components/Loading";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      suspense: true,
+    },
+  },
+});
 
 const Routing = () => {
   const cookies = new Cookies();
@@ -53,12 +63,48 @@ const Routing = () => {
           </>
         ) : (
           <>
-            <Route index element={<Home />} />
-            <Route path="profile/:userId" element={<Profile />}>
-              <Route path=":postId" element={<Post />} />
+            <Route
+              index
+              element={
+                <QueryClientProvider client={queryClient}>
+                  <React.Suspense fallback={<Loading />}>
+                    <Home />
+                  </React.Suspense>
+                </QueryClientProvider>
+              }
+            />
+            <Route
+              path="profile/:userId"
+              element={
+                <QueryClientProvider client={queryClient}>
+                  <React.Suspense fallback={<Loading />}>
+                    <Profile />
+                  </React.Suspense>
+                </QueryClientProvider>
+              }
+            >
+              <Route
+                path=":postId"
+                element={
+                  <QueryClientProvider client={queryClient}>
+                    <React.Suspense fallback={<Loading />}>
+                      <Post />
+                    </React.Suspense>
+                  </QueryClientProvider>
+                }
+              />
             </Route>
             <Route path="create-post" element={<CreatePost />} />
-            <Route path="explore" element={<ExplorePage />} />
+            <Route
+              path="explore"
+              element={
+                <QueryClientProvider client={queryClient}>
+                  <React.Suspense fallback={<Loading />}>
+                    <ExplorePage />
+                  </React.Suspense>
+                </QueryClientProvider>
+              }
+            />
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
           </>
@@ -77,4 +123,4 @@ function App() {
   );
 }
 
-export const MemoApp = React.memo(App);
+export default App;
