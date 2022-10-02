@@ -121,9 +121,8 @@ const ShowPosts = ({
     post?.likes?.includes(JSON.parse(localStorage.getItem("user"))._id)
   );
   useEffect(() => {
-    console.log({likedUsers})
+    console.log({ likedUsers });
   }, [likedUsers]);
-
 
   const content = useMemo(
     () => (
@@ -792,9 +791,15 @@ const ShowPosts = ({
   return <>{content}</>;
 };
 
-// this pervents the component from rerendering if none of the props it recives change
-// which does not do much for me because of the number of props I am providing
-// so most of my memoization comes from the useMemo hook
-export const MemoShowPosts = React.memo(ShowPosts);
-// you can also do
-// export default React.memo(ShowPosts);
+export const MemoShowPosts = React.memo(
+  ShowPosts,
+  function areEqual(prevProps, nextProps) {
+    if (
+      prevProps.editCommentMode !== nextProps.editCommentMode ||
+      prevProps.handleChange !== nextProps.handleChange
+    ) {
+      return false;
+    }
+    return true;
+  }
+);

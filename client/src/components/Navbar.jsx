@@ -624,4 +624,3 @@ const Navbar = () => {
 };
 
 export default React.memo(Navbar);
-// export const NavbarCom = Navbar;
