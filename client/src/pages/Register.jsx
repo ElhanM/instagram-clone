@@ -137,6 +137,18 @@ const Register = () => {
             autoComplete="off"
             value={inputs.username}
             onChange={handleChange}
+            sx={[
+              {
+                "& label.Mui-focused": {
+                  color: "#000",
+                },
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#000",
+                  },
+                },
+              },
+            ]}
           />
           <TextField
             margin="normal"
@@ -148,6 +160,18 @@ const Register = () => {
             autoComplete="off"
             value={inputs.email}
             onChange={handleChange}
+            sx={[
+              {
+                "& label.Mui-focused": {
+                  color: "#000",
+                },
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#000",
+                  },
+                },
+              },
+            ]}
           />
           <TextField
             margin="normal"
@@ -159,9 +183,19 @@ const Register = () => {
             autoComplete="new-password"
             value={inputs.password}
             onChange={handleChange}
-            sx={{
-              marginBottom: "1em",
-            }}
+            sx={[
+              {
+                "& label.Mui-focused": {
+                  color: "#000",
+                },
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#000",
+                  },
+                },
+                marginBottom: "1em",
+              },
+            ]}
           />
           <label htmlFor="photo">Choose profile picture: (optional)</label>
           <TextField
@@ -190,13 +224,27 @@ const Register = () => {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={[
+              {
+                "&:hover": {
+                  backgroundColor: "#000",
+                  color: "#fff",
+                },
+                mt: 3,
+                mb: 2,
+                color: "#000",
+                backgroundColor: "#fff",
+                borderColor: "#000",
+                border: "2px solid #000",
+                transition: "background-color 0.2s ease",
+              },
+            ]}
           >
             Register
           </Button>
           <Grid container>
             <Grid item>
-              <Link to="/login" variant="body2" className="login-link">
+              <Link to="/login" variant="body2">
                 Already have an account? Login
               </Link>
             </Grid>

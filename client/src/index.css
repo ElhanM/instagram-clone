@@ -298,7 +298,7 @@ a :hover {
 }
 
 .main-page {
-  width: 100vw;
+  width: 100%;
   padding-top: 2em;
 }
 .main-page a {

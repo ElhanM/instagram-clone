@@ -119,6 +119,18 @@ const Login = () => {
             type="text"
             value={inputs.email}
             onChange={handleChange}
+            sx={[
+              {
+                "& label.Mui-focused": {
+                  color: "#000",
+                },
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#000",
+                  },
+                },
+              },
+            ]}
           />
           <TextField
             margin="normal"
@@ -130,18 +142,44 @@ const Login = () => {
             autoComplete="new-password"
             value={inputs.password}
             onChange={handleChange}
+            sx={[
+              {
+                "& label.Mui-focused": {
+                  color: "#000",
+                },
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#000",
+                  },
+                },
+              },
+            ]}
           />
           <Button
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={[
+              {
+                "&:hover": {
+                  backgroundColor: "#000",
+                  color: "#fff",
+                },
+                mt: 3,
+                mb: 2,
+                color: "#000",
+                backgroundColor: "#fff",
+                borderColor: "#000",
+                border: "2px solid #000",
+                transition: "background-color 0.2s ease",
+              },
+            ]}
           >
             Login
           </Button>
           <Grid container>
             <Grid item>
-              <Link to="/register" variant="body2" className="login-link">
+              <Link to="/register" variant="body2">
                 Don't have an account? Register
               </Link>
             </Grid>
