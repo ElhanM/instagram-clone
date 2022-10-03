@@ -24,11 +24,28 @@ const getAllUsers = async (req, res, next) => {
   }
 };
 
+const getUsersFollowersFollowing = async (req, res, next) => {
+  try {
+    const users = await User.find(
+      {
+        _id: { $in: [...req.body.users] },
+      },
+      { _id: 1, username: 1, profilePhoto: 1 }
+    ).sort({ username: 1 });
+    res.status(200).json({ users });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getAllUserLikes = async (req, res, next) => {
   try {
-    const users = await User.find({
-      _id: { $in: [...req.body.users] },
-    });
+    const users = await User.find(
+      {
+        _id: { $in: [...req.body.users] },
+      },
+      { _id: 1, username: 1, profilePhoto: 1 }
+    );
     res.status(200).json({ users });
   } catch (error) {
     next(error);
@@ -172,4 +189,5 @@ module.exports = {
   getAllUsers,
   unfollowAllUsers,
   getAllUserLikes,
+  getUsersFollowersFollowing,
 };

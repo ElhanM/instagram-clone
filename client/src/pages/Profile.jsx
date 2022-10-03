@@ -243,6 +243,25 @@ const Profile = () => {
   useEffect(() => {
     console.log("user", { showFollowButton });
   }, [showFollowButton]);
+  const getUserFollowersFollowing = async (users) => {
+    try {
+      const response = await axios.post(
+        `${authURL}/user-followers-following`,
+        { users },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setFollowersAndFollowing(response?.data?.users);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    console.log({ followersAndFollowing });
+  }, [followersAndFollowing]);
   return (
     <>
       <div className="profile">
@@ -288,9 +307,8 @@ const Profile = () => {
                     variant="p"
                     sx={{ marginRight: "0.8em", cursor: "pointer" }}
                     onClick={() => {
+                      getUserFollowersFollowing(user[0]?.followers);
                       handleOpenFollowersAndFollowing();
-                      // setFollowersAndFollowing to people accounts that follow user
-                      setFollowersAndFollowing(user[0]?.followers);
                       setMsg("Followers");
                     }}
                   >
@@ -300,9 +318,8 @@ const Profile = () => {
                     variant="p"
                     sx={{ marginRight: "0.8em", cursor: "pointer" }}
                     onClick={() => {
+                      getUserFollowersFollowing(user[0]?.following);
                       handleOpenFollowersAndFollowing();
-                      // setFollowersAndFollowing to people accounts that the user is following
-                      setFollowersAndFollowing(user[0]?.following);
                       setMsg("Following");
                     }}
                   >
@@ -532,10 +549,9 @@ const Profile = () => {
               {msg}:
             </Typography>
             {followersAndFollowing.length > 0 ? (
-              users?.map(
+              followersAndFollowing?.map(
                 (user, index) =>
                   // if user._id is in followersAndFollowing, then display user
-                  followersAndFollowing.includes(user?._id) && (
                     <div className="show-posts-likes__user">
                       <div className="show-posts-likes__user__container__header">
                         {
@@ -573,7 +589,6 @@ const Profile = () => {
                         }
                       </div>
                     </div>
-                  )
               )
             ) : (
               <Typography

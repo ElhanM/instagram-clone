@@ -13,6 +13,7 @@ const {
   getAllUsers,
   unfollowAllUsers,
   getAllUserLikes,
+  getUsersFollowersFollowing,
 } = require("../controllers/auth");
 
 router
@@ -21,6 +22,7 @@ router
   .patch(protect, changeProfilePhoto)
   .delete(protect, deleteUserAccount);
 router.route("/user-likes").post(getAllUserLikes);
+router.route("/user-followers-following").post(getUsersFollowersFollowing);
 router.route("/register").post(register);
 router.route("/login").post(login);
 router.route("/follow").put(protect, followUser);
