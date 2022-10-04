@@ -11,14 +11,11 @@ import Loading from "../components/Loading";
 
 const ExplorePage = () => {
   const {
-    userDispatch,
     loading,
-    updatePostsDispatch,
     likeURL,
     unlikeURL,
     setValue,
     postsURL,
-    axiosGetPosts,
   } = useGlobalContext();
   const cookies = new Cookies();
   const [editCommentMode, setEditCommentMode] = useState(false);

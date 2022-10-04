@@ -14,14 +14,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import Cookies from "universal-cookie";
 import Loading from "../components/Loading";
 import { useInfiniteQuery } from "react-query";
-import { useLocation } from "react-router-dom";
 
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -47,21 +45,14 @@ const styleFollowersAndFollowing = {
 
 const Profile = () => {
   const { userId } = useParams();
-  const location = useLocation();
   const {
     userDispatch,
     allPosts,
     authURL,
-    userInfo,
-    updatePostsDispatch,
     cloudinaryRequest,
     setValue,
-    users,
-    setUsers,
     followRequest,
     postsURL,
-    refetchProfile,
-    setRefetchProfile,
   } = useGlobalContext();
   const history = useNavigate();
   const [posts, setPosts] = useState([]);
@@ -71,8 +62,9 @@ const Profile = () => {
   const [showChangePhoto, setShowChangePhoto] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(true);
+  const [loadingFollowers, setLoadingFollowers] = useState(false);
   const cookies = new Cookies();
-
+  const [changingProfilePhoto, setChangingProfilePhoto] = useState(false);
   const [allowFollow, setAllowFollow] = useState(true);
 
   const handleOpenChangePhoto = () => setShowChangePhoto(true);
@@ -98,14 +90,19 @@ const Profile = () => {
       const {
         data: { user },
       } = response;
+      console.log(user);
       setUser(user);
       setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
+  useEffect(() => {
+    console.log({ user });
+  }, [user]);
   const handleSubmit = (event) => {
     event.preventDefault();
+    setChangingProfilePhoto(true);
     if (image) {
       cloudinaryRequest(image, setImageUrl);
     } else {
@@ -135,6 +132,9 @@ const Profile = () => {
         "user",
         JSON.stringify(response.data.changeProfilePhoto)
       );
+      console.log(response.data);
+      setUser([response.data.changeProfilePhoto]);
+      setChangingProfilePhoto(false);
     } catch (error) {
       console.log(error);
       setErrorMsg("Please provide an image");
@@ -255,6 +255,7 @@ const Profile = () => {
         }
       );
       setFollowersAndFollowing(response?.data?.users);
+      setLoadingFollowers(false);
     } catch (error) {
       console.log(error);
     }
@@ -307,6 +308,7 @@ const Profile = () => {
                     variant="p"
                     sx={{ marginRight: "0.8em", cursor: "pointer" }}
                     onClick={() => {
+                      setLoadingFollowers(true);
                       getUserFollowersFollowing(user[0]?.followers);
                       handleOpenFollowersAndFollowing();
                       setMsg("Followers");
@@ -318,6 +320,7 @@ const Profile = () => {
                     variant="p"
                     sx={{ marginRight: "0.8em", cursor: "pointer" }}
                     onClick={() => {
+                      setLoadingFollowers(true);
                       getUserFollowersFollowing(user[0]?.following);
                       handleOpenFollowersAndFollowing();
                       setMsg("Following");
@@ -494,6 +497,7 @@ const Profile = () => {
                 type="submit"
                 fullWidth
                 variant="contained"
+                disabled={changingProfilePhoto}
                 sx={[
                   {
                     "&:hover": {
@@ -510,7 +514,11 @@ const Profile = () => {
                   },
                 ]}
               >
-                Save
+                {changingProfilePhoto ? (
+                  <span>Changing... </span>
+                ) : (
+                  <span>Change profile picture</span>
+                )}
               </Button>
             </Box>
           </Box>
@@ -548,48 +556,46 @@ const Profile = () => {
             >
               {msg}:
             </Typography>
-            {followersAndFollowing.length > 0 ? (
-              followersAndFollowing?.map(
-                (user, index) =>
-                  // if user._id is in followersAndFollowing, then display user
-                    <div className="show-posts-likes__user">
-                      <div className="show-posts-likes__user__container__header">
-                        {
-                          <div className="show-posts-likes__user__container__header__left">
-                            <div className="show-posts-likes__user__container__header__left__photo">
-                              <Link
-                                to={`/profile/${user?._id}`}
-                                onClick={() => {
-                                  handleCloseFollowersAndFollowing();
-                                }}
-                              >
-                                <Avatar
-                                  alt={user?.username}
-                                  src={user?.profilePhoto}
-                                  sx={{ width: "3rem", height: "3rem" }}
-                                />
-                              </Link>
-                            </div>
-                            <div className="show-posts-likes__user__container__header__left__user">
-                              <Link
-                                to={`/profile/${user?._id}`}
-                                onClick={() => {
-                                  handleCloseFollowersAndFollowing();
-                                }}
-                              >
-                                <Typography
-                                  variant="h3"
-                                  sx={{ fontSize: "2rem" }}
-                                >
-                                  @{user?.username}
-                                </Typography>
-                              </Link>
-                            </div>
-                          </div>
-                        }
+            {loadingFollowers ? (
+              <Loading />
+            ) : followersAndFollowing.length > 0 ? (
+              followersAndFollowing?.map((user, index) => (
+                // if user._id is in followersAndFollowing, then display user
+                <div className="show-posts-likes__user">
+                  <div className="show-posts-likes__user__container__header">
+                    {
+                      <div className="show-posts-likes__user__container__header__left">
+                        <div className="show-posts-likes__user__container__header__left__photo">
+                          <Link
+                            to={`/profile/${user?._id}`}
+                            onClick={() => {
+                              handleCloseFollowersAndFollowing();
+                            }}
+                          >
+                            <Avatar
+                              alt={user?.username}
+                              src={user?.profilePhoto}
+                              sx={{ width: "3rem", height: "3rem" }}
+                            />
+                          </Link>
+                        </div>
+                        <div className="show-posts-likes__user__container__header__left__user">
+                          <Link
+                            to={`/profile/${user?._id}`}
+                            onClick={() => {
+                              handleCloseFollowersAndFollowing();
+                            }}
+                          >
+                            <Typography variant="h3" sx={{ fontSize: "2rem" }}>
+                              @{user?.username}
+                            </Typography>
+                          </Link>
+                        </div>
                       </div>
-                    </div>
-              )
+                    }
+                  </div>
+                </div>
+              ))
             ) : (
               <Typography
                 variant="h3"

@@ -1,5 +1,4 @@
 import { useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
 import axios from "axios";
 import { useState } from "react";
@@ -11,14 +10,11 @@ import { useInfiniteQuery } from "react-query";
 
 const Home = () => {
   const {
-    userDispatch,
     loading,
-    updatePostsDispatch,
     likeURL,
     unlikeURL,
     setValue,
     postsURL,
-    axiosGetPosts,
   } = useGlobalContext();
   const cookies = new Cookies();
   const [editCommentMode, setEditCommentMode] = useState(false);
@@ -80,7 +76,6 @@ const Home = () => {
     },
     [inputs]
   );
-  const history = useNavigate();
 
   const likeRequest = async (postId) => {
     try {
