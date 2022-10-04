@@ -61,7 +61,7 @@ const ShowPosts = ({
   const cookies = new Cookies();
   const [allowLike, setAllowLike] = useState(true);
   const [editPostMode, setEditPostMode] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const [allowFollow, setAllowFollow] = useState(true);
 
   const [showLikes, setShowLikes] = useState(false);
@@ -363,10 +363,12 @@ const ShowPosts = ({
                         }
                       );
                       setLikedUsers(response?.data?.users);
+                      setLoading(false);
                     } catch (error) {
                       console.log(error);
                     }
                   };
+                  setLoading(true);
                   getAllUserLikes();
                   handleOpen();
                   /* // filter users from users with _id of post?.likes
@@ -714,7 +716,9 @@ const ShowPosts = ({
               >
                 Liked by:
               </Typography>
-              {likedUsers.length > 0 ? (
+              {loading ? (
+                <Loading />
+              ) : likedUsers.length > 0 ? (
                 likedUsers
                   ?.slice(0)
                   .reverse()

@@ -107,6 +107,7 @@ const Navbar = () => {
   const { userDispatch, userInfo, postsURL, authURL, value, setValue } =
     useGlobalContext();
   const [users, setUsers] = useState([]);
+  const [initialSearch, setInitialSearch] = useState(true);
   const [searchValue, setSearchValue] = useState("");
   const [defaultSearchValue, setDefaultSearchValue] = useState("");
 
@@ -204,6 +205,7 @@ const Navbar = () => {
           }
         );
         setUsers(response?.data?.users);
+        setInitialSearch(false);
       } catch (error) {
         console.log(error);
       }
@@ -230,8 +232,6 @@ const Navbar = () => {
       );
     };
   }
-
-
 
   return (
     <>
@@ -472,9 +472,13 @@ const Navbar = () => {
                         }}
                       />
                     </div>
-                    {users.length === 0 ? (
+                    {initialSearch ? (
                       <Typography variant="h3" sx={{ fontSize: "2rem" }}>
                         Try searching for a user
+                      </Typography>
+                    ) : users.length === 0 ? (
+                      <Typography variant="h3" sx={{ fontSize: "2rem" }}>
+                        No users match your search
                       </Typography>
                     ) : (
                       users?.map((user, index) => (

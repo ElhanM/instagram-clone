@@ -79,7 +79,7 @@ const Post = () => {
   const [loading, setLoading] = useState(true);
   const cookies = new Cookies();
   const [refetchPost, setRefetchPost] = useState(false);
-
+  const [loadingLikes, setloadingLikes] = useState(false);
   const [allowFollow, setAllowFollow] = useState(true);
 
   const [showLikes, setShowLikes] = useState(false);
@@ -481,10 +481,12 @@ const Post = () => {
                                     }
                                   );
                                   setLikedUsers(response?.data?.users);
+                                  setloadingLikes(false);
                                 } catch (error) {
                                   console.log(error);
                                 }
                               };
+                              setloadingLikes(true);
                               getAllUserLikes();
                               handleOpen();
                             }}
@@ -853,7 +855,9 @@ const Post = () => {
             >
               Liked by:
             </Typography>
-            {likedUsers?.length > 0 ? (
+            {loadingLikes ? (
+              <Loading />
+            ) : likedUsers?.length > 0 ? (
               likedUsers?.map((user, index) => (
                 <div className="show-posts-likes__user">
                   <div className="show-posts-likes__user__container__header">
