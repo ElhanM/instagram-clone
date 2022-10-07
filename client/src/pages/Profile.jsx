@@ -88,16 +88,13 @@ const Profile = () => {
       const {
         data: { user },
       } = response;
-      console.log(user);
       setUser(user);
       setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
-  useEffect(() => {
-    console.log({ user });
-  }, [user]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     setChangingProfilePhoto(true);
@@ -130,7 +127,6 @@ const Profile = () => {
         "user",
         JSON.stringify(response.data.changeProfilePhoto)
       );
-      console.log(response.data);
       setUser([response.data.changeProfilePhoto]);
       setChangingProfilePhoto(false);
     } catch (error) {
@@ -183,10 +179,6 @@ const Profile = () => {
     refetch();
   }, [userId]);
   useEffect(() => {
-    console.log({ profilePosts });
-  }, [profilePosts]);
-
-  useEffect(() => {
     const onScroll = async (event) => {
       const { scrollHeight, scrollTop, clientHeight } =
         event.target.scrollingElement;
@@ -218,9 +210,7 @@ const Profile = () => {
   useEffect(() => {
     setValue();
   }, []);
-  useEffect(() => {
-    console.log({ user });
-  }, [user]);
+
   useEffect(() => {
     setInitialFetch(true);
   }, [userId]);
@@ -234,9 +224,7 @@ const Profile = () => {
     );
     setFollowersCount(user[0]?.followers?.length);
   }, [user]);
-  useEffect(() => {
-    console.log("user", { showFollowButton });
-  }, [showFollowButton]);
+
   const getUserFollowersFollowing = async (users) => {
     try {
       const response = await axios.post(
@@ -254,9 +242,7 @@ const Profile = () => {
       console.log(error);
     }
   };
-  useEffect(() => {
-    console.log({ followersAndFollowing });
-  }, [followersAndFollowing]);
+
   return (
     <>
       <div className="profile">

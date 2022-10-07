@@ -130,7 +130,6 @@ const Post = () => {
     suspense: false,
   });
   useEffect(() => {
-    console.log({ data });
     setPost(data);
     setRefetchPostInitial(false);
   }, [data]);

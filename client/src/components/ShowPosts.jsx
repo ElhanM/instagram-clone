@@ -110,9 +110,7 @@ const ShowPosts = ({
   const [showLike, setShowLike] = useState(
     post?.likes?.includes(JSON.parse(localStorage.getItem("user"))._id)
   );
-  useEffect(() => {
-    console.log({ likedUsers });
-  }, [likedUsers]);
+
 
   const content = useMemo(
     () => (
@@ -493,7 +491,6 @@ const ShowPosts = ({
               }}
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log("post", e.target[0].value);
                 post?.comments?.push({
                   text: e.target[0].value,
                   user: JSON.parse(localStorage.getItem("user")),
