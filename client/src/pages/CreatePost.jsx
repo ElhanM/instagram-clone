@@ -15,8 +15,6 @@ const CreatePost = () => {
   const {
     userDispatch,
     userInfo,
-    updatePostsDispatch,
-    allPosts,
     cloudinaryRequest,
     postsURL,
     setValue,
@@ -61,8 +59,6 @@ const CreatePost = () => {
           },
         }
       );
-      const tempPosts = [...allPosts, response.data.post];
-      updatePostsDispatch(tempPosts);
       history("/");
       setValue();
     } catch (error) {
@@ -216,7 +212,7 @@ const CreatePost = () => {
               },
             ]}
           >
-            {isCreatingPost ? <span> Posting...</span> : <span> Create</span>}
+            {isCreatingPost ? "Posting..." : "Create"}
           </Button>
         </Box>
       </Box>

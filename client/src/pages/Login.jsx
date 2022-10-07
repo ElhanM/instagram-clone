@@ -19,7 +19,7 @@ const Login = () => {
   const cookies = new Cookies();
   const { userDispatch, loginURL, setValue } = useGlobalContext();
   const [errorMsg, setErrorMsg] = useState("");
-
+  const [loggingIn, setLoggingIn] = useState(false);
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     userDispatch(user);
@@ -61,10 +61,12 @@ const Login = () => {
       history("/");
     } catch (error) {
       setErrorMsg(error.response.data.message);
+      setLoggingIn(false);
     }
   };
   const handleSubmit = (event) => {
     event.preventDefault();
+    setLoggingIn(true);
     postRequest();
   };
 
@@ -159,6 +161,7 @@ const Login = () => {
             type="submit"
             fullWidth
             variant="contained"
+            disabled={loggingIn}
             sx={[
               {
                 "&:hover": {
@@ -175,7 +178,7 @@ const Login = () => {
               },
             ]}
           >
-            Login
+            {loggingIn ? "Logging in..." : "Login"}
           </Button>
           <Grid container>
             <Grid item>

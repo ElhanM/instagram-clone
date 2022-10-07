@@ -9,13 +9,8 @@ import Loading from "../components/Loading";
 import { useInfiniteQuery } from "react-query";
 
 const Home = () => {
-  const {
-    loading,
-    likeURL,
-    unlikeURL,
-    setValue,
-    postsURL,
-  } = useGlobalContext();
+  const { loading, likeURL, unlikeURL, setValue, postsURL } =
+    useGlobalContext();
   const cookies = new Cookies();
   const [editCommentMode, setEditCommentMode] = useState(false);
 

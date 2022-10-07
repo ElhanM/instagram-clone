@@ -397,7 +397,6 @@ const Navbar = () => {
                   value={""}
                   placeholder="Search…"
                   inputProps={{ "aria-label": "search" }}
-                  // disabled={true}
                   style={{
                     caretColor: "transparent",
                   }}

@@ -5,7 +5,7 @@ import Cookies from "universal-cookie";
 
 const AppContext = React.createContext();
 
-const initialState = { userInfo: null, allPosts: [] };
+const initialState = { userInfo: null };
 
 const CLOUDINARYURL =
   "https://api.cloudinary.com/v1_1/instagram-clone-web-app/image/upload";
@@ -121,10 +121,6 @@ const AppProvider = ({ children }) => {
     }
   };
 
-  const updatePostsDispatch = (postsData) => {
-    dispatch({ type: "UPDATE_POSTS", payload: postsData });
-  };
-
   return (
     <AppContext.Provider
       value={{
@@ -139,7 +135,6 @@ const AppProvider = ({ children }) => {
         registerURL,
         postsURL,
         userDispatch,
-        updatePostsDispatch,
         handleSubmit,
         deleteComment,
         editComment,
