@@ -31,12 +31,6 @@ const Routing = () => {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
-    console.log("user:", { user: !user });
-    console.log(
-      "user:",
-      localStorage.getItem("cookieExpire") <
-        JSON.stringify(new Date().setDate(new Date().getDate()))
-    );
 
     userDispatch(user);
     if (
