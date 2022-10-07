@@ -45,13 +45,11 @@ const ShowPosts = ({
 }) => {
   const {
     userInfo,
-    allPosts,
     handleSubmit,
     deleteComment,
     editComment,
     followRequest,
     postsURL,
-    updatePostsDispatch,
     users,
     authURL,
   } = useGlobalContext();
@@ -99,14 +97,6 @@ const ShowPosts = ({
           Authorization: `Bearer ${cookies.get("authToken")}`,
         },
       });
-      const updatedPosts = allPosts?.map((post) => {
-        if (post?._id === postId) {
-          return;
-        } else {
-          return post;
-        }
-      });
-      updatePostsDispatch(updatedPosts);
     } catch (error) {
       console.log(error);
     }

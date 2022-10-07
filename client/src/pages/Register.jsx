@@ -20,6 +20,7 @@ const Register = () => {
   const { cloudinaryRequest, registerURL, setValue } = useGlobalContext();
   const [image, setImage] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [registering, setRegistering] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [inputs, setInputs] = useState({
     username: "",
@@ -71,6 +72,7 @@ const Register = () => {
     } catch (error) {
       setErrorMsg(error.response.data.message);
       setImageUrl("");
+      setRegistering(false);
     }
   };
 
@@ -224,6 +226,7 @@ const Register = () => {
             type="submit"
             fullWidth
             variant="contained"
+            disabled={registering}
             sx={[
               {
                 "&:hover": {
@@ -240,7 +243,7 @@ const Register = () => {
               },
             ]}
           >
-            Register
+            {registering ? "Registering..." : "Register"}
           </Button>
           <Grid container>
             <Grid item>

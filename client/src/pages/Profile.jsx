@@ -47,7 +47,6 @@ const Profile = () => {
   const { userId } = useParams();
   const {
     userDispatch,
-    allPosts,
     authURL,
     cloudinaryRequest,
     setValue,
@@ -55,7 +54,6 @@ const Profile = () => {
     postsURL,
   } = useGlobalContext();
   const history = useNavigate();
-  const [posts, setPosts] = useState([]);
   const [user, setUser] = useState([]);
   const [image, setImage] = useState("");
   const [imageUrl, setImageUrl] = useState("");
@@ -212,15 +210,11 @@ const Profile = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     axiosGetUser();
     userDispatch(user);
-    setPosts(
-      allPosts?.filter((post) => {
-        return post?.user?._id === userId;
-      })
-    );
+
     if (!user) {
       history("/login");
     }
-  }, [allPosts, userId]);
+  }, [userId]);
   useEffect(() => {
     setValue();
   }, []);
@@ -341,6 +335,19 @@ const Profile = () => {
                             setShowFollowButton(false);
                             setAllowFollow(true);
                             setFollowersCount(followersCount - 1);
+                            // pop item from user?.[0]?.followers
+                            const newFollowers = user[0]?.followers.filter(
+                              (follower) =>
+                                follower !==
+                                JSON.parse(localStorage.getItem("user"))._id
+                            );
+                            setUser([
+                              {
+                                ...user[0],
+                                followers: newFollowers,
+                              },
+                            ]);
+
                             followRequest(user?.[0]?._id);
                           }}
                           sx={[
@@ -368,7 +375,16 @@ const Profile = () => {
                             if (allowFollow) {
                               setShowFollowButton(true);
                               setFollowersCount(followersCount + 1);
-
+                              setUser([
+                                {
+                                  ...user[0],
+                                  followers: [
+                                    ...user?.[0]?.followers,
+                                    JSON.parse(localStorage.getItem("user"))
+                                      ._id,
+                                  ],
+                                },
+                              ]);
                               setAllowFollow(false);
                               followRequest(user?.[0]?._id, "follow");
                             }
@@ -514,11 +530,9 @@ const Profile = () => {
                   },
                 ]}
               >
-                {changingProfilePhoto ? (
-                  <span>Changing... </span>
-                ) : (
-                  <span>Change profile picture</span>
-                )}
+                {changingProfilePhoto
+                  ? "Changing..."
+                  : "Change profile picture"}
               </Button>
             </Box>
           </Box>

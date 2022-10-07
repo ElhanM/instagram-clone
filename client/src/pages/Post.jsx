@@ -50,8 +50,6 @@ const Post = () => {
   const {
     userDispatch,
     userInfo,
-    allPosts,
-    updatePostsDispatch,
     likeURL,
     unlikeURL,
     commentURL,

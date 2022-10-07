@@ -9,7 +9,6 @@ const PostComments = ({
   inputs,
   setInputs,
   deleteComment,
-  allPosts,
   postId,
   userId,
   post,
