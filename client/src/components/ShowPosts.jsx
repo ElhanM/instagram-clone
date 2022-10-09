@@ -111,7 +111,6 @@ const ShowPosts = ({
     post?.likes?.includes(JSON.parse(localStorage.getItem("user"))._id)
   );
 
-
   const content = useMemo(
     () => (
       <>
@@ -604,9 +603,8 @@ const ShowPosts = ({
                           },
                         },
                         width: "30em",
-                        // media query for width 600px and less
                         "@media (max-width: 600px)": {
-                          width: "100%",
+                          width: "80vw",
                         },
 
                         marginTop: "1em",
