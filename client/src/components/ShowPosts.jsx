@@ -604,6 +604,11 @@ const ShowPosts = ({
                           },
                         },
                         width: "30em",
+                        // media query for width 600px and less
+                        "@media (max-width: 600px)": {
+                          width: "100%",
+                        },
+
                         marginTop: "1em",
                       },
                     ]}
