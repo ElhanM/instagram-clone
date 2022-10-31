@@ -1,6 +1,6 @@
 # Instagram clone
 
-## Fullstack web app made using the MERN stack with API debouncing, pagination (infinite scroll done with React Query) and optimistic updates
+## Fullstack web app made using the MERN stack with user authentication, API debouncing, pagination (infinite scroll done with React Query) and optimistic updates
 
 ### Frontend is hosted with netlify and backend with heroku
 
