@@ -1,8 +1,12 @@
 # Instagram clone
 
-## Fullstack web app made using the MERN stack with API debouncing, pagination (infinite scroll done with React Query) and optimistic updates
+## Fullstack web app made using the MERN stack with user authentication, API debouncing, pagination (infinite scroll done with React Query) and optimistic updates
 
 ### Frontend is hosted with netlify and backend with heroku
+
+If you want to check out the project, feel free to create your own account, or use my dummy profile:
+Email: test-user@gmail.com
+Password: test1234
 
 ### External libraries used for frontend: <br />
 Material UI, Axios, SCSS, React Router Dom 6, Universal cookie, React Loader Spinner, React Query
