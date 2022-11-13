@@ -4,8 +4,8 @@
 
 ### Frontend is hosted with netlify and backend with heroku
 
-If you want to check out the project, feel free to create your own account, or use my dummy profile:
-Email: test-user@gmail.com
+If you want to check out the project, feel free to create your own account, or use my dummy profile: <br>
+Email: test-user@gmail.com <br>
 Password: test1234
 
 ### External libraries used for frontend: <br />
