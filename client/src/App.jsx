@@ -7,7 +7,7 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import CreatePost from "./pages/CreatePost";
 import Error from "./pages/Error";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "./components/context";
 import Post from "./pages/Post";

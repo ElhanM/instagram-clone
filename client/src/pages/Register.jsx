@@ -17,7 +17,8 @@ import Cookies from "universal-cookie";
 const Register = () => {
   const cookies = new Cookies();
   const history = useNavigate();
-  const { cloudinaryRequest, registerURL, setValue } = useGlobalContext();
+  const { cloudinaryRequest, registerURL, setValue, userDispatch } =
+    useGlobalContext();
   const [image, setImage] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [registering, setRegistering] = useState(false);
@@ -56,6 +57,7 @@ const Register = () => {
           },
         }
       );
+      userDispatch(response.data.user);
       setImageUrl("");
       localStorage.setItem("user", JSON.stringify(response.data.user));
       localStorage.setItem(
@@ -68,7 +70,7 @@ const Register = () => {
         secure: true,
         sameSite: "none",
       });
-      history("/");
+      history("/explore");
     } catch (error) {
       setErrorMsg(error.response.data.message);
       setImageUrl("");
