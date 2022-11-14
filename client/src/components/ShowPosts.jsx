@@ -5,7 +5,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Link, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
 import CloseIcon from "@mui/icons-material/Close";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import axios from "axios";
@@ -44,13 +44,11 @@ const ShowPosts = ({
   handleChange,
 }) => {
   const {
-    userInfo,
     handleSubmit,
     deleteComment,
     editComment,
     followRequest,
     postsURL,
-    users,
     authURL,
   } = useGlobalContext();
   const [removed, setRemoved] = useState(false);
@@ -68,7 +66,6 @@ const ShowPosts = ({
 
   const [likedUsers, setLikedUsers] = useState([]);
 
-  const history = useNavigate();
   const editPost = async (postId) => {
     try {
       const response = await axios.patch(
@@ -110,6 +107,18 @@ const ShowPosts = ({
   const [showLike, setShowLike] = useState(
     post?.likes?.includes(JSON.parse(localStorage.getItem("user"))._id)
   );
+
+  const followFunction = (follow) => {
+    if (follow === "follow") {
+      setShowFollowButton(true);
+      setAllowFollow(false);
+    } else {
+      setShowFollowButton(false);
+      setAllowFollow(true);
+    }
+
+    followRequest(post?.user?._id, follow);
+  };
 
   const content = useMemo(
     () => (
@@ -211,9 +220,7 @@ const ShowPosts = ({
                       fullWidth
                       variant="contained"
                       onClick={() => {
-                        setShowFollowButton(false);
-                        setAllowFollow(true);
-                        followRequest(post?.user?._id);
+                        followFunction("unfollow");
                       }}
                       sx={[
                         {
@@ -238,10 +245,7 @@ const ShowPosts = ({
                       variant="contained"
                       onClick={() => {
                         if (allowFollow) {
-                          setShowFollowButton(true);
-
-                          setAllowFollow(false);
-                          followRequest(post?.user?._id, "follow");
+                          followFunction("follow");
                         }
                       }}
                       sx={[

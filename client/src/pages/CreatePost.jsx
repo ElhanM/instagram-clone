@@ -14,7 +14,6 @@ const CreatePost = () => {
   const history = useNavigate();
   const {
     userDispatch,
-    userInfo,
     cloudinaryRequest,
     postsURL,
     setValue,

@@ -10,13 +10,8 @@ import Cookies from "universal-cookie";
 import Loading from "../components/Loading";
 
 const ExplorePage = () => {
-  const {
-    loading,
-    likeURL,
-    unlikeURL,
-    setValue,
-    postsURL,
-  } = useGlobalContext();
+  const { loading, likeURL, unlikeURL, setValue, postsURL } =
+    useGlobalContext();
   const cookies = new Cookies();
   const [editCommentMode, setEditCommentMode] = useState(false);
 
@@ -40,6 +35,7 @@ const ExplorePage = () => {
           const nextPage = allPages.length + 1;
           return nextPage <= maxPages ? nextPage : undefined;
         },
+        refetchOnWindowFocus: false,
       }
     );
 
@@ -81,7 +77,6 @@ const ExplorePage = () => {
     [inputs]
   );
 
-  const history = useNavigate();
 
   const likeRequest = async (postId) => {
     try {
@@ -141,6 +136,7 @@ const ExplorePage = () => {
               setInputs={setInputs}
               setEditCommentMode={setEditCommentMode}
               handleChange={handleChange}
+              data={data}
             />
           ))
         )

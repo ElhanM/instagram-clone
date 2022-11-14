@@ -64,7 +64,9 @@ const getUser = async (req, res, next) => {
 const login = async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return next(new ErrorResponse("Please provide an email and a password", 400));
+    return next(
+      new ErrorResponse("Please provide an email and a password", 400)
+    );
   }
   try {
     const user = await User.findOne({ email }).select("+password");
@@ -96,6 +98,11 @@ const sendToken = (user, statusCode, res) => {
 
 const followUser = async (req, res, next) => {
   try {
+    if (req.user.following.includes(req.body.userId)) {
+      return res
+        .status(400)
+        .json({ msg: "You are already following this user" });
+    }
     const followUser = await User.findByIdAndUpdate(
       req.body.userId,
       {

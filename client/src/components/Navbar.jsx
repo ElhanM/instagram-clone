@@ -145,7 +145,7 @@ const Navbar = () => {
 
   const handleDeleteAccount = async () => {
     try {
-      const removeFollowing = await axios.put(
+      await axios.put(
         `${authURL}/unfollow/all`,
         {},
         {
@@ -155,7 +155,7 @@ const Navbar = () => {
           },
         }
       );
-      const unlikePosts = await axios.put(
+      await axios.put(
         `${postsURL}/unlike/all`,
         {},
         {
@@ -166,13 +166,13 @@ const Navbar = () => {
         }
       );
       try {
-        const deletePosts = await axios.delete(`${postsURL}`, {
+        await axios.delete(`${postsURL}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${cookies.get("authToken")}`,
           },
         });
-        const deleteUser = await axios.delete(`${authURL}`, {
+        await axios.delete(`${authURL}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${cookies.get("authToken")}`,
