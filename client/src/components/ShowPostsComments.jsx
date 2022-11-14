@@ -82,13 +82,10 @@ const ShowPostsComments = ({
                   let foundIndex = post?.comments?.findIndex(
                     (x) => x._id == comment?._id
                   );
-                  if (foundIndex !== 0) {
-                    let tempComments = [...post?.comments];
-                    tempComments.splice(foundIndex, foundIndex);
-                    setPost({ ...post, comments: tempComments });
-                  } else {
-                    setPost({ ...post, comments: [] });
-                  }
+                  let tempComments = [...post?.comments];
+                  // remove comment from tempComments array with index of foundIndex
+                  tempComments.splice(foundIndex, 1);
+                  setPost({ ...post, comments: tempComments });
                 }}
               />
             </>
