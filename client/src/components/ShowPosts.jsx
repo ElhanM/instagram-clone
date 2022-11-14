@@ -712,7 +712,7 @@ const ShowPosts = ({
                 likedUsers
                   ?.slice(0)
                   .reverse()
-                  .map((user, index) => (
+                  .map((user) => (
                     <div className="show-posts-likes__user">
                       <div className="show-posts-likes__user__container__header">
                         {
