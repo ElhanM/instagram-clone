@@ -134,6 +134,10 @@ const createPost = async (req, res, next) => {
 
 const likePost = async (req, res, next) => {
   try {
+    const checkLikePost = await Post.findById(req.body.postId);
+    if (checkLikePost.likes.includes(req.user._id)) {
+      return next(new ErrorResponse("You already liked this post", 400));
+    }
     const likePost = await Post.findByIdAndUpdate(
       req.body.postId,
       {

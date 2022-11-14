@@ -35,6 +35,7 @@ const Home = () => {
           const nextPage = allPages.length + 1;
           return nextPage <= maxPages ? nextPage : undefined;
         },
+        refetchOnWindowFocus: false,
       }
     );
 

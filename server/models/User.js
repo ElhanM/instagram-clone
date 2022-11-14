@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema(
       // lowercase all usernames
       set: function (val) {
         return val.toLowerCase();
-      }
+      },
     },
     email: {
       type: String,

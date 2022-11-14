@@ -2,7 +2,7 @@ import { Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
-import React, { useEffect } from "react";
+import React from "react";
 
 const ShowPostsComments = ({
   comment,
@@ -80,7 +80,7 @@ const ShowPostsComments = ({
                 onClick={() => {
                   deleteComment(post?._id, comment?._id);
                   let foundIndex = post?.comments?.findIndex(
-                    (x) => x._id == comment?._id
+                    (x) => x._id === comment?._id
                   );
                   let tempComments = [...post?.comments];
                   // remove comment from tempComments array with index of foundIndex

@@ -49,34 +49,25 @@ const styleLikes = {
 const Post = () => {
   const {
     userDispatch,
-    userInfo,
     likeURL,
     unlikeURL,
-    commentURL,
     handleSubmit,
     deleteComment,
     editComment,
     postsURL,
     setValue,
-    users,
-    setUsers,
     followRequest,
-    refetchProfile,
     setRefetchProfile,
     authURL,
   } = useGlobalContext();
-  const location = useLocation();
 
   const history = useNavigate();
-  const handleOpenEdit = () => setOpen(true);
   const { userId, postId } = useParams();
   const [open, setOpen] = useState(true);
   const [editPostMode, setEditPostMode] = useState(false);
   const [editCommentMode, setEditCommentMode] = useState(false);
   const [allowLike, setAllowLike] = useState(true);
-  const [loading, setLoading] = useState(true);
   const cookies = new Cookies();
-  const [refetchPost, setRefetchPost] = useState(false);
   const [loadingLikes, setloadingLikes] = useState(false);
   const [allowFollow, setAllowFollow] = useState(true);
 
@@ -126,7 +117,7 @@ const Post = () => {
       console.log(error);
     }
   };
-  const { data, isLoading, refetch, isFetching } = useQuery("post", getPost, {
+  const { data, isLoading, refetch } = useQuery("post", getPost, {
     suspense: false,
   });
   useEffect(() => {
@@ -702,7 +693,7 @@ const Post = () => {
                             editComment(postId, inputs);
 
                             let foundIndex = post?.comments?.findIndex(
-                              (x) => x._id == inputs.editCommentId
+                              (x) => x._id === inputs.editCommentId
                             );
                             let tempComments = [...post?.comments];
                             tempComments[foundIndex] = {

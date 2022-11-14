@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState, useContext, useReducer, useEffect } from "react";
+import React, { useState, useContext, useReducer } from "react";
 import reducer from "./reducer";
 import Cookies from "universal-cookie";
 
