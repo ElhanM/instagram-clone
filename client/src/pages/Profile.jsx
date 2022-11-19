@@ -1,7 +1,7 @@
 import { TextField, Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
 import axios from "axios";
 import { useState } from "react";
@@ -44,6 +44,7 @@ const styleFollowersAndFollowing = {
 };
 
 const Profile = () => {
+  const location = useLocation();
   const { userId } = useParams();
   const {
     userDispatch,
@@ -94,6 +95,10 @@ const Profile = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    console.log({ user });
+  }, [user]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -206,7 +211,14 @@ const Profile = () => {
     if (!user) {
       history("/login");
     }
-  }, [userId]);
+
+    setShowFollowButton(
+      user?.[0]?.followers?.includes(
+        JSON.parse(localStorage.getItem("user"))._id
+      )
+    );
+    setFollowersCount(user[0]?.followers?.length);
+  }, [userId, location]);
   useEffect(() => {
     setValue();
   }, []);
