@@ -114,6 +114,8 @@ const Home = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  const [followRerender, setFollowRerender] = useState({});
+
   return (
     <div className="main-page">
       {loading || isLoading ? (
@@ -131,6 +133,8 @@ const Home = () => {
               setInputs={setInputs}
               setEditCommentMode={setEditCommentMode}
               handleChange={handleChange}
+              followRerender={followRerender}
+              setFollowRerender={setFollowRerender}
             />
           ))
         )
