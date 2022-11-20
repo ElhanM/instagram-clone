@@ -5,7 +5,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Link, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import axios from "axios";
@@ -42,6 +42,8 @@ const ShowPosts = ({
   setInputs,
   setEditCommentMode,
   handleChange,
+  followRerender,
+  setFollowRerender,
 }) => {
   const {
     handleSubmit,
@@ -108,6 +110,25 @@ const ShowPosts = ({
     post?.likes?.includes(JSON.parse(localStorage.getItem("user"))._id)
   );
 
+  useEffect(() => {
+    setFollowRerednerFunction(
+      followRerender?.postUserId,
+      followRerender.follow
+    );
+  }, [followRerender]);
+
+  const setFollowRerednerFunction = (followRerenderFun, follow) => {
+    if (post?.user?._id === followRerenderFun) {
+      if (follow === "follow") {
+        setShowFollowButton(true);
+        setAllowFollow(false);
+      } else {
+        setShowFollowButton(false);
+        setAllowFollow(true);
+      }
+    }
+  };
+
   const followFunction = (follow) => {
     if (follow === "follow") {
       setShowFollowButton(true);
@@ -117,6 +138,7 @@ const ShowPosts = ({
       setAllowFollow(true);
     }
 
+    setFollowRerender({ postUserId: post?.user?._id, follow });
     followRequest(post?.user?._id, follow);
   };
 
@@ -791,7 +813,8 @@ export const MemoShowPosts = React.memo(
       prevProps.likedUsers !== nextProps.likedUsers ||
       prevProps.showLike !== nextProps.showLike ||
       prevProps.showFollowButton !== nextProps.showFollowButton ||
-      prevProps.commentsRerender !== nextProps.commentsRerender
+      prevProps.commentsRerender !== nextProps.commentsRerender ||
+      prevProps.followRerender !== nextProps.followRerender
     ) {
       return false;
     }

@@ -77,7 +77,6 @@ const ExplorePage = () => {
     [inputs]
   );
 
-
   const likeRequest = async (postId) => {
     try {
       const response = await axios.put(
@@ -119,6 +118,8 @@ const ExplorePage = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  const [followRerender, setFollowRerender] = useState({});
+
   return (
     <div className="main-page">
       {loading || isLoading ? (
@@ -136,7 +137,8 @@ const ExplorePage = () => {
               setInputs={setInputs}
               setEditCommentMode={setEditCommentMode}
               handleChange={handleChange}
-              data={data}
+              followRerender={followRerender}
+              setFollowRerender={setFollowRerender}
             />
           ))
         )
