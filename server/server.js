@@ -5,9 +5,11 @@ const connectDB = require("./db/connect");
 const post = require("./routes/posts");
 const auth = require("./routes/auth");
 const errorHandler = require("./middleware/error");
+const helmet = require("helmet");
 
 require("dotenv").config();
 
+app.use(helmet());
 app.use(express.json());
 app.use(cors());
 
