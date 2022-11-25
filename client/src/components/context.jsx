@@ -27,6 +27,7 @@ const AppProvider = ({ children }) => {
   const [value, setValue] = useState();
   const cookies = new Cookies();
   const [refetchProfile, setRefetchProfile] = useState(false);
+  const [createPost, setCreatePost] = useState(false);
 
   const [state, dispatch] = useReducer(reducer, initialState);
   const userDispatch = (userData) => {
@@ -133,7 +134,6 @@ const AppProvider = ({ children }) => {
         commentURL,
         loginURL,
         registerURL,
-        postsURL,
         userDispatch,
         handleSubmit,
         deleteComment,
@@ -144,6 +144,7 @@ const AppProvider = ({ children }) => {
         setValue,
         refetchProfile,
         setRefetchProfile,
+        setCreatePost,
       }}
     >
       {children}

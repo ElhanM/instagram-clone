@@ -44,6 +44,9 @@ const ShowPosts = ({
   handleChange,
   followRerender,
   setFollowRerender,
+  myRef,
+  index,
+  row,
 }) => {
   const {
     handleSubmit,
@@ -144,7 +147,7 @@ const ShowPosts = ({
 
   const content = (
     <>
-      <div className="main-page__container">
+      <div className="main-page__container" id={post?._id}>
         <div className="main-page__container__header">
           <div className="main-page__container__header__left">
             <div className="main-page__container__header__left__photo">

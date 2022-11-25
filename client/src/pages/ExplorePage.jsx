@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
 import axios from "axios";
@@ -25,7 +25,7 @@ const ExplorePage = () => {
     });
     return response.data;
   };
-  const { data, hasNextPage, fetchNextPage, isFetching, isLoading } =
+  const { data, hasNextPage, fetchNextPage, isFetching, isLoading, refetch } =
     useInfiniteQuery(
       "explorePosts",
       ({ pageParam = 1 }) => fetchExplorePosts(pageParam),
@@ -39,6 +39,15 @@ const ExplorePage = () => {
       }
     );
 
+  const [followRerender, setFollowRerender] = useState({});
+
+  useEffect(() => {
+    console.log({ data });
+  }, []);
+  const executeScroll = (element) => {
+    element.scrollIntoView();
+  };
+
   useEffect(() => {
     const onScroll = async (event) => {
       const { scrollHeight, scrollTop, clientHeight } =
@@ -48,9 +57,16 @@ const ExplorePage = () => {
         !isFetchingExplore &&
         scrollHeight - scrollTop <= clientHeight * 1.5
       ) {
-        setIsFetchingExplore(true);
-        if (hasNextPage) await fetchNextPage();
-        setIsFetchingExplore(false);
+        if (Object.keys(followRerender).length !== 0) {
+          refetch();
+          const elementId = data.pages[data.pages.length - 2].posts[0]._id;
+          executeScroll(document.getElementById(elementId));
+          setFollowRerender({});
+        } else {
+          setIsFetchingExplore(true);
+          if (hasNextPage) await fetchNextPage();
+          setIsFetchingExplore(false);
+        }
       }
     };
 
@@ -58,7 +74,7 @@ const ExplorePage = () => {
     return () => {
       document.removeEventListener("scroll", onScroll);
     };
-  }, []);
+  }, [followRerender, data]);
 
   const [inputs, setInputs] = useState({
     title: "",
@@ -118,15 +134,13 @@ const ExplorePage = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const [followRerender, setFollowRerender] = useState({});
-
   return (
     <div className="main-page">
       {loading || isLoading ? (
         <Loading />
       ) : (
         data.pages.map((page) =>
-          page.posts.map((post) => (
+          page.posts.map((post, index, row) => (
             <MemoShowPosts
               key={post?._id}
               mapPost={post}
@@ -139,6 +153,8 @@ const ExplorePage = () => {
               handleChange={handleChange}
               followRerender={followRerender}
               setFollowRerender={setFollowRerender}
+              index={index}
+              row={row}
             />
           ))
         )
