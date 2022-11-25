@@ -12,12 +12,8 @@ import Cookies from "universal-cookie";
 const CreatePost = () => {
   const cookies = new Cookies();
   const history = useNavigate();
-  const {
-    userDispatch,
-    cloudinaryRequest,
-    postsURL,
-    setValue,
-  } = useGlobalContext();
+  const { userDispatch, cloudinaryRequest, postsURL, setValue, setCreatePost } =
+    useGlobalContext();
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     userDispatch(user);
@@ -58,6 +54,7 @@ const CreatePost = () => {
           },
         }
       );
+      setCreatePost((prev) => !prev);
       history("/");
       setValue();
     } catch (error) {

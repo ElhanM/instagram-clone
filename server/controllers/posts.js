@@ -14,7 +14,8 @@ const getAllHomePosts = async (req, res, next) => {
     const count = await Post.countDocuments({
       user: [req.user._id, ...req.user.following],
     });
-    const posts = await Post.find({
+    const pages = Math.ceil(count / PAGE_SIZE);
+    let posts = await Post.find({
       user: [req.user._id, ...req.user.following],
     })
       .sort({ _id: -1 })
@@ -24,10 +25,11 @@ const getAllHomePosts = async (req, res, next) => {
       .populate("comments.user", "_id username");
     res.status(200).json({
       info: {
+        pageSize: PAGE_SIZE,
         count,
-        pages: Math.ceil(count / PAGE_SIZE),
+        pages,
         next:
-          page === Math.ceil(count / PAGE_SIZE)
+          page === pages
             ? null
             : `http://localhost:5001/api/posts?page=${page + 1}`,
         previous:
@@ -54,6 +56,7 @@ const getAllExplorePosts = async (req, res, next) => {
     const count = await Post.countDocuments({
       user: { $nin: [req.user._id, ...req.user.following] },
     });
+    const pages = Math.ceil(count / PAGE_SIZE);
     const posts = await Post.find({
       user: { $nin: [req.user._id, ...req.user.following] },
     })
@@ -65,10 +68,11 @@ const getAllExplorePosts = async (req, res, next) => {
       .populate("likes", "_id username");
     res.status(200).json({
       info: {
+        pageSize: PAGE_SIZE,
         count,
-        pages: Math.ceil(count / PAGE_SIZE),
+        pages,
         next:
-          page === Math.ceil(count / PAGE_SIZE)
+          page === pages
             ? null
             : `http://localhost:5001/api/posts?page=${page + 1}`,
         previous:

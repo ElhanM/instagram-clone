@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useGlobalContext } from "../components/context";
 import axios from "axios";
 import { useState } from "react";
@@ -9,7 +9,7 @@ import Loading from "../components/Loading";
 import { useInfiniteQuery } from "react-query";
 
 const Home = () => {
-  const { loading, likeURL, unlikeURL, setValue, postsURL } =
+  const { loading, likeURL, unlikeURL, setValue, postsURL, createPost } =
     useGlobalContext();
   const cookies = new Cookies();
   const [editCommentMode, setEditCommentMode] = useState(false);
@@ -25,7 +25,7 @@ const Home = () => {
     return response.data;
   };
 
-  const { data, hasNextPage, fetchNextPage, isFetching, isLoading } =
+  const { data, hasNextPage, fetchNextPage, isFetching, isLoading, refetch } =
     useInfiniteQuery(
       "homePosts",
       ({ pageParam = 1 }) => fetchHomePosts(pageParam),
@@ -38,6 +38,15 @@ const Home = () => {
         refetchOnWindowFocus: false,
       }
     );
+  useEffect(() => {
+    console.log({ data });
+  }, [data]);
+
+  const [followRerender, setFollowRerender] = useState({});
+
+  const executeScroll = (element) => {
+    element.scrollIntoView();
+  };
 
   useEffect(() => {
     const onScroll = async (event) => {
@@ -45,16 +54,27 @@ const Home = () => {
         event.target.scrollingElement;
 
       if (!isFetchingHome && scrollHeight - scrollTop <= clientHeight * 1.5) {
-        setIsFetchingHome(true);
-        if (hasNextPage) await fetchNextPage();
-        setIsFetchingHome(false);
+        if (Object.keys(followRerender).length !== 0) {
+          refetch();
+          const elementId = data.pages[data.pages.length - 2].posts[0]._id;
+          executeScroll(document.getElementById(elementId));
+          setFollowRerender({});
+        } else {
+          setIsFetchingHome(true);
+          if (hasNextPage) await fetchNextPage();
+          setIsFetchingHome(false);
+        }
       }
     };
     document.addEventListener("scroll", onScroll);
     return () => {
       document.removeEventListener("scroll", onScroll);
     };
-  }, []);
+  }, [followRerender, data]);
+
+  useEffect(() => {
+    console.log({ data });
+  }, [data]);
 
   const [inputs, setInputs] = useState({
     title: "",
@@ -114,7 +134,15 @@ const Home = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const [followRerender, setFollowRerender] = useState({});
+  const [initalRender, setInitalRender] = useState(true);
+  const [postDeleted, setPostDeleted] = useState(false);
+
+  useEffect(() => {
+    if (!initalRender) {
+      refetch();
+    }
+    setInitalRender(false);
+  }, [postDeleted, createPost]);
 
   return (
     <div className="main-page">
@@ -122,7 +150,7 @@ const Home = () => {
         <Loading />
       ) : (
         data.pages.map((page) =>
-          page.posts.map((post) => (
+          page.posts.map((post, index, row) => (
             <MemoShowPosts
               key={post?._id}
               mapPost={post}
@@ -135,6 +163,10 @@ const Home = () => {
               handleChange={handleChange}
               followRerender={followRerender}
               setFollowRerender={setFollowRerender}
+              setPostDeleted={setPostDeleted}
+              executeScroll={executeScroll}
+              index={index}
+              row={row}
             />
           ))
         )

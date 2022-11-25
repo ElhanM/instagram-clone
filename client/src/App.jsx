@@ -14,6 +14,7 @@ import Post from "./pages/Post";
 import Cookies from "universal-cookie";
 import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 import Loading from "./components/Loading";
 
 const queryClient = new QueryClient({
@@ -64,6 +65,7 @@ const Routing = () => {
                   <React.Suspense fallback={<Loading />}>
                     <Home />
                   </React.Suspense>
+                  <ReactQueryDevtools initialIsOpen={false} />
                 </QueryClientProvider>
               }
             />
