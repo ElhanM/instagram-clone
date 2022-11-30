@@ -9,8 +9,20 @@ import Loading from "../components/Loading";
 import { useInfiniteQuery } from "react-query";
 
 const Home = () => {
-  const { loading, likeURL, unlikeURL, setValue, postsURL, createPost } =
-    useGlobalContext();
+  const {
+    loading,
+    likeURL,
+    unlikeURL,
+    setValue,
+    postsURL,
+    createPost,
+    dataStateHome,
+    setDataStateHome,
+    followRerender,
+    setFollowRerender,
+    homeRerender,
+    setHomeRerender,
+  } = useGlobalContext();
   const cookies = new Cookies();
   const [editCommentMode, setEditCommentMode] = useState(false);
 
@@ -38,15 +50,38 @@ const Home = () => {
         refetchOnWindowFocus: false,
       }
     );
-  useEffect(() => {
-    console.log({ data });
-  }, [data]);
 
-  const [followRerender, setFollowRerender] = useState({});
+  const [initialRefetch, setInitialRefetch] = useState(
+    Object.keys(followRerender).length !== 0
+  );
 
-  const executeScroll = (element) => {
-    element.scrollIntoView();
+  const initalRenderPosts = async () => {
+    setDataStateHome([]);
+    await refetch();
+    setInitialRefetch(false);
+    setFollowRerender({});
+    setHomeRerender(false);
   };
+
+  useEffect(() => {
+    if (initialRefetch || homeRerender) initalRenderPosts();
+  }, []);
+  useEffect(() => {
+    console.log("Loading: ", { followRerender });
+    console.log("Loading: ", { initialRefetch });
+  }, [followRerender]);
+  useEffect(() => {
+    // setDataStateHome to data?.pages, make items unique based off of _id in posts, and keep old items
+    if (data && !isFetching) {
+      const newData = data?.pages?.map((page) => page.posts).flat();
+      const oldData = dataStateHome;
+      const uniqueData = newData?.filter(
+        (newItem) => !oldData.some((oldItem) => oldItem._id === newItem._id)
+      );
+
+      setDataStateHome([...oldData, ...uniqueData]);
+    }
+  }, [data, isFetching]);
 
   useEffect(() => {
     const onScroll = async (event) => {
@@ -54,16 +89,9 @@ const Home = () => {
         event.target.scrollingElement;
 
       if (!isFetchingHome && scrollHeight - scrollTop <= clientHeight * 1.5) {
-        if (Object.keys(followRerender).length !== 0) {
-          refetch();
-          const elementId = data.pages[data.pages.length - 2].posts[0]._id;
-          executeScroll(document.getElementById(elementId));
-          setFollowRerender({});
-        } else {
-          setIsFetchingHome(true);
-          if (hasNextPage) await fetchNextPage();
-          setIsFetchingHome(false);
-        }
+        setIsFetchingHome(true);
+        if (hasNextPage) await fetchNextPage();
+        setIsFetchingHome(false);
       }
     };
     document.addEventListener("scroll", onScroll);
@@ -71,10 +99,6 @@ const Home = () => {
       document.removeEventListener("scroll", onScroll);
     };
   }, [followRerender, data]);
-
-  useEffect(() => {
-    console.log({ data });
-  }, [data]);
 
   const [inputs, setInputs] = useState({
     title: "",
@@ -146,32 +170,30 @@ const Home = () => {
 
   return (
     <div className="main-page">
-      {loading || isLoading ? (
+      {loading || isLoading || initialRefetch ? (
         <Loading />
       ) : (
-        data.pages.map((page) =>
-          page.posts.map((post, index, row) => (
-            <MemoShowPosts
-              key={post?._id}
-              mapPost={post}
-              unlikeRequest={unlikeRequest}
-              likeRequest={likeRequest}
-              editCommentMode={editCommentMode}
-              inputs={inputs}
-              setInputs={setInputs}
-              setEditCommentMode={setEditCommentMode}
-              handleChange={handleChange}
-              followRerender={followRerender}
-              setFollowRerender={setFollowRerender}
-              setPostDeleted={setPostDeleted}
-              executeScroll={executeScroll}
-              index={index}
-              row={row}
-            />
-          ))
-        )
+        dataStateHome.map((post) => (
+          <MemoShowPosts
+            key={post?._id}
+            mapPost={post}
+            unlikeRequest={unlikeRequest}
+            likeRequest={likeRequest}
+            editCommentMode={editCommentMode}
+            inputs={inputs}
+            setInputs={setInputs}
+            setEditCommentMode={setEditCommentMode}
+            handleChange={handleChange}
+            setPostDeleted={setPostDeleted}
+            refetch={refetch}
+            initialRefetch={initialRefetch}
+          />
+        ))
       )}
-      {isFetching && !isLoading && <Loading />}
+      {isFetching &&
+        !isLoading &&
+        !initialRefetch &&
+        dataStateHome.length !== 0 && <Loading />}
 
       {!loading && !isFetching && (
         <Typography

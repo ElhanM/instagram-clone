@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState, useContext, useReducer } from "react";
+import React, { useState, useContext, useReducer, useEffect } from "react";
 import reducer from "./reducer";
 import Cookies from "universal-cookie";
 
@@ -122,6 +122,18 @@ const AppProvider = ({ children }) => {
     }
   };
 
+  const [dataStateHome, setDataStateHome] = useState([]);
+  const [dataStateExplore, setDataStateExplore] = useState([]);
+  const [followRerender, setFollowRerender] = useState({});
+  const [homeRerender, setHomeRerender] = useState(false);
+  const [exploreRerender, setExploreRerender] = useState(false);
+  useEffect(() => {
+    if (Object.keys(followRerender).length !== 0) {
+      setHomeRerender(true);
+      setExploreRerender(true);
+    }
+  }, [followRerender]);
+
   return (
     <AppContext.Provider
       value={{
@@ -145,6 +157,16 @@ const AppProvider = ({ children }) => {
         refetchProfile,
         setRefetchProfile,
         setCreatePost,
+        dataStateHome,
+        setDataStateHome,
+        dataStateExplore,
+        setDataStateExplore,
+        followRerender,
+        setFollowRerender,
+        homeRerender,
+        setHomeRerender,
+        exploreRerender,
+        setExploreRerender,
       }}
     >
       {children}

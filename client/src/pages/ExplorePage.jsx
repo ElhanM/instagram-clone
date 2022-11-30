@@ -10,8 +10,19 @@ import Cookies from "universal-cookie";
 import Loading from "../components/Loading";
 
 const ExplorePage = () => {
-  const { loading, likeURL, unlikeURL, setValue, postsURL } =
-    useGlobalContext();
+  const {
+    loading,
+    likeURL,
+    unlikeURL,
+    setValue,
+    postsURL,
+    dataStateExplore,
+    setDataStateExplore,
+    followRerender,
+    setFollowRerender,
+    exploreRerender,
+    setExploreRerender,
+  } = useGlobalContext();
   const cookies = new Cookies();
   const [editCommentMode, setEditCommentMode] = useState(false);
 
@@ -39,14 +50,37 @@ const ExplorePage = () => {
       }
     );
 
-  const [followRerender, setFollowRerender] = useState({});
+  const [initialRefetch, setInitialRefetch] = useState(
+    Object.keys(followRerender).length !== 0
+  );
+
+  const initalRenderExplore = async () => {
+    setDataStateExplore([]);
+    await refetch();
+    setInitialRefetch(false);
+    setFollowRerender({});
+    setExploreRerender(false);
+  };
+  useEffect(() => {
+    if (initialRefetch || exploreRerender) initalRenderExplore();
+  }, []);
+  useEffect(() => {
+    console.log("Loading: ", { followRerender });
+    console.log("Loading: ", { initialRefetch });
+  }, [followRerender]);
 
   useEffect(() => {
-    console.log({ data });
-  }, []);
-  const executeScroll = (element) => {
-    element.scrollIntoView();
-  };
+    // setDataStateExplore to data?.pages, make items unique based off of _id in posts, and keep old items
+    if (data && !isFetching) {
+      const newData = data?.pages?.map((page) => page.posts).flat();
+      const oldData = dataStateExplore;
+      const uniqueData = newData?.filter(
+        (newItem) => !oldData.some((oldItem) => oldItem._id === newItem._id)
+      );
+
+      setDataStateExplore([...oldData, ...uniqueData]);
+    }
+  }, [data, isFetching]);
 
   useEffect(() => {
     const onScroll = async (event) => {
@@ -57,16 +91,9 @@ const ExplorePage = () => {
         !isFetchingExplore &&
         scrollHeight - scrollTop <= clientHeight * 1.5
       ) {
-        if (Object.keys(followRerender).length !== 0) {
-          refetch();
-          const elementId = data.pages[data.pages.length - 2].posts[0]._id;
-          executeScroll(document.getElementById(elementId));
-          setFollowRerender({});
-        } else {
-          setIsFetchingExplore(true);
-          if (hasNextPage) await fetchNextPage();
-          setIsFetchingExplore(false);
-        }
+        setIsFetchingExplore(true);
+        if (hasNextPage) await fetchNextPage();
+        setIsFetchingExplore(false);
       }
     };
 
@@ -136,31 +163,30 @@ const ExplorePage = () => {
 
   return (
     <div className="main-page">
-      {loading || isLoading ? (
+      {loading ||
+      isLoading ||
+      dataStateExplore.length === 0 ||
+      initialRefetch ? (
         <Loading />
       ) : (
-        data.pages.map((page) =>
-          page.posts.map((post, index, row) => (
-            <MemoShowPosts
-              key={post?._id}
-              mapPost={post}
-              unlikeRequest={unlikeRequest}
-              likeRequest={likeRequest}
-              editCommentMode={editCommentMode}
-              inputs={inputs}
-              setInputs={setInputs}
-              setEditCommentMode={setEditCommentMode}
-              handleChange={handleChange}
-              followRerender={followRerender}
-              setFollowRerender={setFollowRerender}
-              index={index}
-              row={row}
-            />
-          ))
-        )
+        dataStateExplore.map((post) => (
+          <MemoShowPosts
+            key={post?._id}
+            mapPost={post}
+            unlikeRequest={unlikeRequest}
+            likeRequest={likeRequest}
+            editCommentMode={editCommentMode}
+            inputs={inputs}
+            setInputs={setInputs}
+            setEditCommentMode={setEditCommentMode}
+            handleChange={handleChange}
+            initialRefetch={initialRefetch}
+            refetch={refetch}
+          />
+        ))
       )}
 
-      {isFetching && !isLoading && <Loading />}
+      {isFetching && !isLoading && !initialRefetch && <Loading />}
 
       {!loading && !isFetching && (
         <Typography
