@@ -42,11 +42,8 @@ const ShowPosts = ({
   setInputs,
   setEditCommentMode,
   handleChange,
-  followRerender,
-  setFollowRerender,
-  myRef,
-  index,
-  row,
+  refetch,
+  initialRefetch,
 }) => {
   const {
     handleSubmit,
@@ -55,6 +52,8 @@ const ShowPosts = ({
     followRequest,
     postsURL,
     authURL,
+    followRerender,
+    setFollowRerender,
   } = useGlobalContext();
   const [removed, setRemoved] = useState(false);
   const [post, setPost] = useState(mapPost);
@@ -113,13 +112,6 @@ const ShowPosts = ({
     post?.likes?.includes(JSON.parse(localStorage.getItem("user"))._id)
   );
 
-  useEffect(() => {
-    setFollowRerednerFunction(
-      followRerender?.postUserId,
-      followRerender.follow
-    );
-  }, [followRerender]);
-
   const setFollowRerednerFunction = (followRerenderFun, follow) => {
     if (post?.user?._id === followRerenderFun) {
       if (follow === "follow") {
@@ -131,23 +123,27 @@ const ShowPosts = ({
       }
     }
   };
+  useEffect(() => {
+    setFollowRerednerFunction(
+      followRerender?.postUserId,
+      followRerender.follow
+    );
+  }, [followRerender]);
 
-  const followFunction = (follow) => {
-    if (follow === "follow") {
-      setShowFollowButton(true);
-      setAllowFollow(false);
-    } else {
-      setShowFollowButton(false);
-      setAllowFollow(true);
-    }
-
+  const followFunction = async (follow) => {
+    await followRequest(post?.user?._id, follow);
     setFollowRerender({ postUserId: post?.user?._id, follow });
-    followRequest(post?.user?._id, follow);
+    await refetch();
   };
+
+  const [initalRender, setInitalRender] = useState(false);
+  useEffect(() => {
+    setInitalRender((prev) => !prev);
+  }, []);
 
   const content = (
     <>
-      <div className="main-page__container" id={post?._id}>
+      <div className="main-page__container">
         <div className="main-page__container__header">
           <div className="main-page__container__header__left">
             <div className="main-page__container__header__left__photo">
@@ -817,7 +813,8 @@ export const MemoShowPosts = React.memo(
       prevProps.showLike !== nextProps.showLike ||
       prevProps.showFollowButton !== nextProps.showFollowButton ||
       prevProps.commentsRerender !== nextProps.commentsRerender ||
-      prevProps.followRerender !== nextProps.followRerender
+      prevProps.followRerender !== nextProps.followRerender ||
+      prevProps.initialRefetch !== nextProps.initialRefetch
     ) {
       return false;
     }
