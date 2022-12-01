@@ -62,7 +62,6 @@ const ShowPosts = ({
   const [allowLike, setAllowLike] = useState(true);
   const [editPostMode, setEditPostMode] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [allowFollow, setAllowFollow] = useState(true);
 
   const [showLikes, setShowLikes] = useState(false);
   const handleOpen = () => setShowLikes(true);
@@ -116,10 +115,8 @@ const ShowPosts = ({
     if (post?.user?._id === followRerenderFun) {
       if (follow === "follow") {
         setShowFollowButton(true);
-        setAllowFollow(false);
       } else {
         setShowFollowButton(false);
-        setAllowFollow(true);
       }
     }
   };
@@ -264,9 +261,7 @@ const ShowPosts = ({
                     fullWidth
                     variant="contained"
                     onClick={() => {
-                      if (allowFollow) {
-                        followFunction("follow");
-                      }
+                      followFunction("follow");
                     }}
                     sx={[
                       {
