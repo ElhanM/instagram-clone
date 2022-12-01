@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useMemo } from "react";
 import { useGlobalContext } from "../components/context";
 import axios from "axios";
 import { useState } from "react";
@@ -50,6 +49,10 @@ const ExplorePage = () => {
       }
     );
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const [initialRefetch, setInitialRefetch] = useState(
     Object.keys(followRerender).length !== 0
   );
@@ -64,22 +67,20 @@ const ExplorePage = () => {
   useEffect(() => {
     if (initialRefetch || exploreRerender) initalRenderExplore();
   }, []);
-  useEffect(() => {
-    console.log("Loading: ", { followRerender });
-    console.log("Loading: ", { initialRefetch });
-  }, [followRerender]);
 
+  const [textRender, setTextRender] = useState(false);
   useEffect(() => {
     // setDataStateExplore to data?.pages, make items unique based off of _id in posts, and keep old items
-    if (data && !isFetching) {
+    setTextRender(false);
+    if (Object.keys(data) !== 0 && !isFetching && !isLoading) {
       const newData = data?.pages?.map((page) => page.posts).flat();
       const oldData = dataStateExplore;
       const uniqueData = newData?.filter(
         (newItem) => !oldData.some((oldItem) => oldItem._id === newItem._id)
       );
-
       setDataStateExplore([...oldData, ...uniqueData]);
     }
+    setTextRender(true);
   }, [data, isFetching]);
 
   useEffect(() => {
@@ -157,16 +158,9 @@ const ExplorePage = () => {
     setValue(1);
   }, []);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   return (
     <div className="main-page">
-      {loading ||
-      isLoading ||
-      dataStateExplore.length === 0 ||
-      initialRefetch ? (
+      {loading || isLoading || initialRefetch ? (
         <Loading />
       ) : (
         dataStateExplore.map((post) => (
@@ -188,7 +182,7 @@ const ExplorePage = () => {
 
       {isFetching && !isLoading && !initialRefetch && <Loading />}
 
-      {!loading && !isFetching && (
+      {!loading && !isFetching && textRender !== 0 && (
         <Typography
           variant="h6"
           noWrap

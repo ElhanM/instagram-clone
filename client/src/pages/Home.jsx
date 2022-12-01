@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo } from "react";
 import { useGlobalContext } from "../components/context";
 import axios from "axios";
 import { useState } from "react";
@@ -51,6 +51,10 @@ const Home = () => {
       }
     );
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const [initialRefetch, setInitialRefetch] = useState(
     Object.keys(followRerender).length !== 0
   );
@@ -66,13 +70,12 @@ const Home = () => {
   useEffect(() => {
     if (initialRefetch || homeRerender) initalRenderPosts();
   }, []);
-  useEffect(() => {
-    console.log("Loading: ", { followRerender });
-    console.log("Loading: ", { initialRefetch });
-  }, [followRerender]);
+
+  const [textRender, setTextRender] = useState(false);
   useEffect(() => {
     // setDataStateHome to data?.pages, make items unique based off of _id in posts, and keep old items
-    if (data && !isFetching) {
+    setTextRender(false);
+    if (Object.keys(data) !== 0 && !isFetching && !isLoading) {
       const newData = data?.pages?.map((page) => page.posts).flat();
       const oldData = dataStateHome;
       const uniqueData = newData?.filter(
@@ -81,6 +84,7 @@ const Home = () => {
 
       setDataStateHome([...oldData, ...uniqueData]);
     }
+    setTextRender(true);
   }, [data, isFetching]);
 
   useEffect(() => {
@@ -154,10 +158,6 @@ const Home = () => {
     setValue();
   }, []);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   const [initalRender, setInitalRender] = useState(true);
   const [postDeleted, setPostDeleted] = useState(false);
 
@@ -185,17 +185,14 @@ const Home = () => {
             setEditCommentMode={setEditCommentMode}
             handleChange={handleChange}
             setPostDeleted={setPostDeleted}
-            refetch={refetch}
             initialRefetch={initialRefetch}
+            refetch={refetch}
           />
         ))
       )}
-      {isFetching &&
-        !isLoading &&
-        !initialRefetch &&
-        dataStateHome.length !== 0 && <Loading />}
+      {isFetching && !isLoading && !initialRefetch && <Loading />}
 
-      {!loading && !isFetching && (
+      {!loading && !isFetching && textRender && (
         <Typography
           variant="h6"
           noWrap
