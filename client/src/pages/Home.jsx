@@ -16,12 +16,15 @@ const Home = () => {
     setValue,
     postsURL,
     createPost,
+    setCreatePost,
     dataStateHome,
     setDataStateHome,
     followRerender,
     setFollowRerender,
     homeRerender,
     setHomeRerender,
+    postDeleted,
+    setPostDeleted,
   } = useGlobalContext();
   const cookies = new Cookies();
   const [editCommentMode, setEditCommentMode] = useState(false);
@@ -61,6 +64,9 @@ const Home = () => {
 
   const initalRenderPosts = async () => {
     setDataStateHome([]);
+    for (const key in data) {
+      delete data[key];
+    }
     await refetch();
     setInitialRefetch(false);
     setFollowRerender({});
@@ -73,7 +79,6 @@ const Home = () => {
 
   const [textRender, setTextRender] = useState(false);
   useEffect(() => {
-    // setDataStateHome to data?.pages, make items unique based off of _id in posts, and keep old items
     setTextRender(false);
     if (Object.keys(data) !== 0 && !isFetching && !isLoading) {
       const newData = data?.pages?.map((page) => page.posts).flat();
@@ -158,15 +163,14 @@ const Home = () => {
     setValue();
   }, []);
 
-  const [initalRender, setInitalRender] = useState(true);
-  const [postDeleted, setPostDeleted] = useState(false);
-
   useEffect(() => {
-    if (!initalRender) {
+    if (postDeleted || createPost) {
+      setDataStateHome([]);
       refetch();
+      setPostDeleted(false);
+      setCreatePost(false);
     }
-    setInitalRender(false);
-  }, [postDeleted, createPost]);
+  }, []);
 
   return (
     <div className="main-page">

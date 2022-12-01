@@ -134,6 +134,8 @@ const AppProvider = ({ children }) => {
     }
   }, [followRerender]);
 
+  const [postDeleted, setPostDeleted] = useState(false);
+
   return (
     <AppContext.Provider
       value={{
@@ -156,6 +158,7 @@ const AppProvider = ({ children }) => {
         setValue,
         refetchProfile,
         setRefetchProfile,
+        createPost,
         setCreatePost,
         dataStateHome,
         setDataStateHome,
@@ -167,6 +170,8 @@ const AppProvider = ({ children }) => {
         setHomeRerender,
         exploreRerender,
         setExploreRerender,
+        postDeleted,
+        setPostDeleted,
       }}
     >
       {children}
