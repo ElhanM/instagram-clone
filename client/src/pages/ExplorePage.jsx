@@ -59,6 +59,9 @@ const ExplorePage = () => {
 
   const initalRenderExplore = async () => {
     setDataStateExplore([]);
+    for (const key in data) {
+      delete data[key];
+    }
     await refetch();
     setInitialRefetch(false);
     setFollowRerender({});
@@ -67,6 +70,10 @@ const ExplorePage = () => {
   useEffect(() => {
     if (initialRefetch || exploreRerender) initalRenderExplore();
   }, []);
+
+  useEffect(() => {
+    console.log({ data });
+  }, [data]);
 
   const [textRender, setTextRender] = useState(false);
   useEffect(() => {

@@ -54,7 +54,7 @@ const CreatePost = () => {
           },
         }
       );
-      setCreatePost((prev) => !prev);
+      setCreatePost(true);
       history("/");
       setValue();
     } catch (error) {

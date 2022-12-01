@@ -43,7 +43,7 @@ const ShowPosts = ({
   setEditCommentMode,
   handleChange,
   refetch,
-  initialRefetch,
+  setPostDeleted,
 }) => {
   const {
     handleSubmit,
@@ -224,6 +224,7 @@ const ShowPosts = ({
                   ]}
                   onClick={() => {
                     setRemoved(true);
+                    setPostDeleted(true);
                     deletePost(post?._id);
                   }}
                 />
