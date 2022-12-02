@@ -7,10 +7,10 @@ import { Typography } from "@mui/material";
 import Cookies from "universal-cookie";
 import Loading from "../components/Loading";
 import { useInfiniteQuery } from "react-query";
+import { useLocation } from "react-router-dom";
 
 const Home = () => {
   const {
-    loading,
     likeURL,
     unlikeURL,
     setValue,
@@ -25,9 +25,13 @@ const Home = () => {
     setHomeRerender,
     postDeleted,
     setPostDeleted,
+    loading,
+    setLoading,
   } = useGlobalContext();
   const cookies = new Cookies();
   const [editCommentMode, setEditCommentMode] = useState(false);
+
+  const location = useLocation();
 
   const [isFetchingHome, setIsFetchingHome] = useState(false);
   const fetchHomePosts = async (page = 1) => {
@@ -55,6 +59,22 @@ const Home = () => {
     );
 
   useEffect(() => {
+    if (postDeleted) {
+      setDataStateHome([]);
+      setLoading(true);
+    }
+  }, [location.pathname]);
+  useEffect(() => {
+    if (postDeleted || createPost) {
+      setDataStateHome([]);
+      refetch();
+      setPostDeleted(false);
+      setCreatePost(false);
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
@@ -74,19 +94,19 @@ const Home = () => {
   };
 
   useEffect(() => {
-    if (initialRefetch || homeRerender) initalRenderPosts();
+    if (initialRefetch || homeRerender)
+      if (Object.keys(data).length !== 0) initalRenderPosts();
   }, []);
 
   const [textRender, setTextRender] = useState(false);
   useEffect(() => {
     setTextRender(false);
-    if (Object.keys(data) !== 0 && !isFetching && !isLoading) {
+    if (Object.keys(data).length !== 0 && !isFetching && !isLoading) {
       const newData = data?.pages?.map((page) => page.posts).flat();
       const oldData = dataStateHome;
       const uniqueData = newData?.filter(
         (newItem) => !oldData.some((oldItem) => oldItem._id === newItem._id)
       );
-
       setDataStateHome([...oldData, ...uniqueData]);
     }
     setTextRender(true);
@@ -163,15 +183,6 @@ const Home = () => {
     setValue();
   }, []);
 
-  useEffect(() => {
-    if (postDeleted || createPost) {
-      setDataStateHome([]);
-      refetch();
-      setPostDeleted(false);
-      setCreatePost(false);
-    }
-  }, []);
-
   return (
     <div className="main-page">
       {loading || isLoading || initialRefetch ? (
@@ -196,7 +207,7 @@ const Home = () => {
       )}
       {isFetching && !isLoading && !initialRefetch && <Loading />}
 
-      {!loading && !isFetching && textRender && (
+      {!isFetching && textRender && (
         <Typography
           variant="h6"
           noWrap

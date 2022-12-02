@@ -222,9 +222,7 @@ const Post = () => {
     setRefetchPostInitial(true);
     refetch();
   }, [postId]);
-  useEffect(() => {
-    console.log({ refetchPostInitial });
-  }, [refetchPostInitial]);
+
   return (
     <>
       <div>

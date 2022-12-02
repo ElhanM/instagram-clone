@@ -10,7 +10,6 @@ import Loading from "../components/Loading";
 
 const ExplorePage = () => {
   const {
-    loading,
     likeURL,
     unlikeURL,
     setValue,
@@ -68,27 +67,23 @@ const ExplorePage = () => {
     setExploreRerender(false);
   };
   useEffect(() => {
-    if (initialRefetch || exploreRerender) initalRenderExplore();
+    if (initialRefetch || exploreRerender)
+      if (Object.keys(data).length !== 0) initalRenderExplore();
   }, []);
-
-  useEffect(() => {
-    console.log({ data });
-  }, [data]);
 
   const [textRender, setTextRender] = useState(false);
   useEffect(() => {
-    // setDataStateExplore to data?.pages, make items unique based off of _id in posts, and keep old items
     setTextRender(false);
-    if (Object.keys(data) !== 0 && !isFetching && !isLoading) {
+    if (Object.keys(data).length !== 0 && !isFetching && !isLoading) {
       const newData = data?.pages?.map((page) => page.posts).flat();
       const oldData = dataStateExplore;
       const uniqueData = newData?.filter(
-        (newItem) => !oldData.some((oldItem) => oldItem._id === newItem._id)
+        (newItem) => !oldData?.some((oldItem) => oldItem?._id === newItem?._id)
       );
       setDataStateExplore([...oldData, ...uniqueData]);
     }
     setTextRender(true);
-  }, [data, isFetching]);
+  }, [data, isFetching, initialRefetch]);
 
   useEffect(() => {
     const onScroll = async (event) => {
@@ -167,7 +162,7 @@ const ExplorePage = () => {
 
   return (
     <div className="main-page">
-      {loading || isLoading || initialRefetch ? (
+      {isLoading || initialRefetch ? (
         <Loading />
       ) : (
         dataStateExplore.map((post) => (
@@ -189,7 +184,7 @@ const ExplorePage = () => {
 
       {isFetching && !isLoading && !initialRefetch && <Loading />}
 
-      {!loading && !isFetching && textRender !== 0 && (
+      {!isFetching && textRender !== 0 && (
         <Typography
           variant="h6"
           noWrap
