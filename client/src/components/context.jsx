@@ -116,7 +116,6 @@ const AppProvider = ({ children }) => {
 
       const response = await axios.post(CLOUDINARYURL, data);
       setImageUrl(response.data.url);
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -127,6 +126,7 @@ const AppProvider = ({ children }) => {
   const [followRerender, setFollowRerender] = useState({});
   const [homeRerender, setHomeRerender] = useState(false);
   const [exploreRerender, setExploreRerender] = useState(false);
+  
   useEffect(() => {
     if (Object.keys(followRerender).length !== 0) {
       setHomeRerender(true);
@@ -135,6 +135,7 @@ const AppProvider = ({ children }) => {
   }, [followRerender]);
 
   const [postDeleted, setPostDeleted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   return (
     <AppContext.Provider
@@ -172,6 +173,8 @@ const AppProvider = ({ children }) => {
         setExploreRerender,
         postDeleted,
         setPostDeleted,
+        loading,
+        setLoading,
       }}
     >
       {children}

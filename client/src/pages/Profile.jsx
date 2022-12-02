@@ -96,10 +96,6 @@ const Profile = () => {
     }
   };
 
-  useEffect(() => {
-    console.log({ user });
-  }, [user]);
-
   const handleSubmit = (event) => {
     event.preventDefault();
     setChangingProfilePhoto(true);
