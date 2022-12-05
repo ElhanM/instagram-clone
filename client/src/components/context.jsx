@@ -49,7 +49,6 @@ const AppProvider = ({ children }) => {
       if (posts) {
         setPosts({ ...posts, comments: response.data.comment.comments });
       }
-      console.log(posts);
     } catch (error) {
       console.log(error);
     }
@@ -134,7 +133,6 @@ const AppProvider = ({ children }) => {
     }
   }, [followRerender]);
 
-  const [postDeleted, setPostDeleted] = useState(false);
   const [loading, setLoading] = useState(false);
 
   return (
@@ -171,8 +169,6 @@ const AppProvider = ({ children }) => {
         setHomeRerender,
         exploreRerender,
         setExploreRerender,
-        postDeleted,
-        setPostDeleted,
         loading,
         setLoading,
       }}

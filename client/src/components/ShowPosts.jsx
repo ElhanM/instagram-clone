@@ -43,7 +43,8 @@ const ShowPosts = ({
   setEditCommentMode,
   handleChange,
   refetch,
-  setPostDeleted,
+  dataStateHome,
+  setDataStateHome,
 }) => {
   const {
     handleSubmit,
@@ -224,8 +225,11 @@ const ShowPosts = ({
                   ]}
                   onClick={() => {
                     setRemoved(true);
-                    setPostDeleted(true);
                     deletePost(post?._id);
+                    // filter post with the deleted post id from dataStateHome
+                    if(dataStateHome.length !== 0){
+                      setDataStateHome(dataStateHome.filter((post) => post._id !== mapPost._id));
+                    }
                   }}
                 />
               </>

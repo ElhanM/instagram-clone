@@ -23,8 +23,6 @@ const Home = () => {
     setFollowRerender,
     homeRerender,
     setHomeRerender,
-    postDeleted,
-    setPostDeleted,
     loading,
     setLoading,
   } = useGlobalContext();
@@ -59,18 +57,10 @@ const Home = () => {
     );
 
   useEffect(() => {
-    if (postDeleted) {
-      setDataStateHome([]);
-      setLoading(true);
-    }
-  }, [location.pathname]);
-  useEffect(() => {
-    if (postDeleted || createPost) {
+    if (createPost) {
       setDataStateHome([]);
       refetch();
-      setPostDeleted(false);
       setCreatePost(false);
-      setLoading(false);
     }
   }, []);
 
@@ -185,7 +175,7 @@ const Home = () => {
 
   return (
     <div className="main-page">
-      {loading || isLoading || initialRefetch ? (
+      {isLoading || initialRefetch ? (
         <Loading />
       ) : (
         dataStateHome.map((post) => (
@@ -199,9 +189,10 @@ const Home = () => {
             setInputs={setInputs}
             setEditCommentMode={setEditCommentMode}
             handleChange={handleChange}
-            setPostDeleted={setPostDeleted}
             initialRefetch={initialRefetch}
             refetch={refetch}
+            dataStateHome={dataStateHome}
+            setDataStateHome={setDataStateHome}
           />
         ))
       )}
