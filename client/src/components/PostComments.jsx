@@ -107,7 +107,7 @@ const PostComments = ({
               onClick={() => {
                 deleteComment(postId, comment._id);
                 let foundIndex = post?.comments?.findIndex(
-                  (x) => x._id == comment?._id
+                  (x) => x._id === comment?._id
                 );
                 if (foundIndex !== 0) {
                   let tempComments = [...post?.comments];

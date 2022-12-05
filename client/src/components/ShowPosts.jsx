@@ -2,7 +2,7 @@ import { Button, FormControl, TextField, Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
 import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useState } from "react";
@@ -12,7 +12,6 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Cookies from "universal-cookie";
-import { useMemo } from "react";
 import React, { Suspense, lazy } from "react";
 import Loading from "./Loading";
 
@@ -227,8 +226,10 @@ const ShowPosts = ({
                     setRemoved(true);
                     deletePost(post?._id);
                     // filter post with the deleted post id from dataStateHome
-                    if(dataStateHome.length !== 0){
-                      setDataStateHome(dataStateHome.filter((post) => post._id !== mapPost._id));
+                    if (dataStateHome.length !== 0) {
+                      setDataStateHome(
+                        dataStateHome.filter((post) => post._id !== mapPost._id)
+                      );
                     }
                   }}
                 />

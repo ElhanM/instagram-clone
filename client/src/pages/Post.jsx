@@ -16,7 +16,6 @@ import PostComments from "../components/PostComments";
 import Cookies from "universal-cookie";
 import Loading from "../components/Loading";
 import { useQuery } from "react-query";
-import { useLocation } from "react-router-dom";
 
 const style = {
   position: "absolute",

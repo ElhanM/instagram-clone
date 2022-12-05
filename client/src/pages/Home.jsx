@@ -23,8 +23,6 @@ const Home = () => {
     setFollowRerender,
     homeRerender,
     setHomeRerender,
-    loading,
-    setLoading,
   } = useGlobalContext();
   const cookies = new Cookies();
   const [editCommentMode, setEditCommentMode] = useState(false);
