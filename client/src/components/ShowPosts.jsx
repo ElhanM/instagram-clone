@@ -44,6 +44,7 @@ const ShowPosts = ({
   refetch,
   dataStateHome,
   setDataStateHome,
+  initialRefetch,
 }) => {
   const {
     handleSubmit,
@@ -794,6 +795,16 @@ const ShowPosts = ({
       </Modal>
     </>
   );
+  useEffect(() => {
+    console.log("111 post", post);
+    console.log("111 showLikes", showLikes);
+    console.log("111 likedUsers", likedUsers);
+    console.log("111 showLike", showLike);
+    console.log("111 showFollowButton", showFollowButton);
+    console.log("111 commentsRerender", commentsRerender);
+    console.log("111 followRerender", followRerender);
+    console.log("111 initialRefetch", initialRefetch);
+  }, []);
 
   if (removed) return;
 
@@ -805,9 +816,7 @@ export const MemoShowPosts = React.memo(
   function areEqual(prevProps, nextProps) {
     if (
       prevProps.editCommentMode !== nextProps.editCommentMode ||
-      prevProps.handleChange !== nextProps.handleChange ||
       prevProps.post !== nextProps.post ||
-      prevProps.editCommentMode !== nextProps.editCommentMode ||
       prevProps.handleChange !== nextProps.handleChange ||
       prevProps.showLikes !== nextProps.showLikes ||
       prevProps.likedUsers !== nextProps.likedUsers ||
