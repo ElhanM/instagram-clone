@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useGlobalContext } from "../components/context";
 import axios from "axios";
 import { useState } from "react";
@@ -124,8 +124,9 @@ const Home = () => {
     editCommentId: "",
     editCommentPostId: "",
   });
-  const handleChange = useMemo(
-    () => (e) => {
+
+  const handleChange = useCallback(
+    (e) => {
       setInputs({
         ...inputs,
         [e.target.name]: e.target.value,
