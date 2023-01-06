@@ -26,15 +26,6 @@ MONGO_URI= holds MongoDB connection string <br />
 JWT_SECRET= holds 512-bit key generated using https://allkeysgenerator.com/ <br />
 JWT_EXPIRE= holds JWT experation date, which in my case is 30d <br />
 
-# Photos of the project
+# Video of the project
+https://user-images.githubusercontent.com/103935603/211108305-136ea0bf-3917-4804-a55e-2d84834e921e.mp4
 
-![Home page](https://res.cloudinary.com/instagram-clone-web-app/image/upload/v1669996759/Home_page_hsbaw4.png)
-![Create post](https://res.cloudinary.com/instagram-clone-web-app/image/upload/v1669996758/Create_post_bpyo3g.png)
-![Register page](https://res.cloudinary.com/instagram-clone-web-app/image/upload/v1669996759/Register_qttocw.png)
-![Liked by modal](https://res.cloudinary.com/instagram-clone-web-app/image/upload/v1669996759/Liked_by_dfqznz.png)
-![Edit post](https://res.cloudinary.com/instagram-clone-web-app/image/upload/v1669996759/Edit_post_b9trbn.png)
-![Search users](https://res.cloudinary.com/instagram-clone-web-app/image/upload/v1669996760/Search_users_pfp9fe.png)
-![View user following](https://res.cloudinary.com/instagram-clone-web-app/image/upload/v1669996760/View_user_following_o8gphg.png)
-![Post page](https://res.cloudinary.com/instagram-clone-web-app/image/upload/v1669996760/Post_page_uhv0mo.png)
-![Profile page](https://res.cloudinary.com/instagram-clone-web-app/image/upload/v1669996762/Profile_page_jhourj.png)
-![Error page](https://res.cloudinary.com/instagram-clone-web-app/image/upload/v1669996758/Create_post_bpyo3g.png)
