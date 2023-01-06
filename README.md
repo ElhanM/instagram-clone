@@ -12,7 +12,6 @@ Material UI, Axios, SCSS, React Router Dom 6, Universal cookie, React Loader Spi
 
 Bcryptjs, CORS, Dotenv, Express, Jsonwebtoken, Mongoose and Nodemon for dev
 
-
 ### .env for client
 
 .env file for client folder contains the following enviromental variables: <br />
