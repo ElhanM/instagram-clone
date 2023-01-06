@@ -795,16 +795,6 @@ const ShowPosts = ({
       </Modal>
     </>
   );
-  useEffect(() => {
-    console.log("111 post", post);
-    console.log("111 showLikes", showLikes);
-    console.log("111 likedUsers", likedUsers);
-    console.log("111 showLike", showLike);
-    console.log("111 showFollowButton", showFollowButton);
-    console.log("111 commentsRerender", commentsRerender);
-    console.log("111 followRerender", followRerender);
-    console.log("111 initialRefetch", initialRefetch);
-  }, []);
 
   if (removed) return;
 

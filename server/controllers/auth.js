@@ -1,10 +1,22 @@
 const User = require("../models/User");
 const ErrorResponse = require("../utils/errorResponse");
 
+const sendToken = (user, statusCode, res) => {
+  const token = user.getSignedToken();
+  res.status(statusCode).json({
+    success: true,
+    token,
+    user,
+  });
+};
+
 const register = async (req, res, next) => {
   const { username, email, password, profilePhoto } = req.body;
   try {
-    const user = await User.create({ username, email, password, profilePhoto });
+    const user = await User.create(
+      { username, email, password, profilePhoto },
+      { runValidators: true }
+    );
     sendToken(user, 201, res);
   } catch (error) {
     next(error);
@@ -87,15 +99,6 @@ const login = async (req, res, next) => {
   }
 };
 
-const sendToken = (user, statusCode, res) => {
-  const token = user.getSignedToken();
-  res.status(statusCode).json({
-    success: true,
-    token,
-    user,
-  });
-};
-
 const followUser = async (req, res, next) => {
   try {
     if (req.user.following.includes(req.body.userId)) {
@@ -166,7 +169,7 @@ const changeProfilePhoto = async (req, res, next) => {
     const changeProfilePhoto = await User.findOneAndUpdate(
       { _id: req.user._id },
       { profilePhoto },
-      { new: true }
+      { new: true, runValidators: true }
     );
     res
       .status(201)

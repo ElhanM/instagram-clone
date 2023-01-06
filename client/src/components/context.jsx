@@ -7,8 +7,7 @@ const AppContext = React.createContext();
 
 const initialState = { userInfo: null };
 
-const CLOUDINARYURL =
-  "https://api.cloudinary.com/v1_1/instagram-clone-web-app/image/upload";
+const CLOUDINARYURL = `${process.env.REACT_APP_CLOUDINARY_URL}`;
 
 const baseURL =
   process.env.REACT_APP_LOCAL_URL ||
@@ -28,6 +27,7 @@ const AppProvider = ({ children }) => {
   const cookies = new Cookies();
   const [refetchProfile, setRefetchProfile] = useState(false);
   const [createPost, setCreatePost] = useState(false);
+  const [refetchProfilePosts, setRefetchProfilePosts] = useState(false);
 
   const [state, dispatch] = useReducer(reducer, initialState);
   const userDispatch = (userData) => {
@@ -125,7 +125,7 @@ const AppProvider = ({ children }) => {
   const [followRerender, setFollowRerender] = useState({});
   const [homeRerender, setHomeRerender] = useState(false);
   const [exploreRerender, setExploreRerender] = useState(false);
-  
+
   useEffect(() => {
     if (Object.keys(followRerender).length !== 0) {
       setHomeRerender(true);
@@ -171,6 +171,8 @@ const AppProvider = ({ children }) => {
         setExploreRerender,
         loading,
         setLoading,
+        refetchProfilePosts,
+        setRefetchProfilePosts,
       }}
     >
       {children}
