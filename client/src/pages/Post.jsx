@@ -58,6 +58,7 @@ const Post = () => {
     followRequest,
     setRefetchProfile,
     authURL,
+    setRefetchProfilePosts,
   } = useGlobalContext();
 
   const history = useNavigate();
@@ -175,7 +176,7 @@ const Post = () => {
           Authorization: `Bearer ${cookies.get("authToken")}`,
         },
       });
-
+      setRefetchProfilePosts((prev) => !prev);
       history(`/profile/${userId}`);
     } catch (error) {
       console.log(error);

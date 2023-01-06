@@ -53,6 +53,7 @@ const Profile = () => {
     setValue,
     followRequest,
     postsURL,
+    refetchProfilePosts,
   } = useGlobalContext();
   const history = useNavigate();
   const [user, setUser] = useState([]);
@@ -178,7 +179,7 @@ const Profile = () => {
   );
   useEffect(() => {
     refetch();
-  }, [userId]);
+  }, [userId, refetchProfilePosts]);
   useEffect(() => {
     const onScroll = async (event) => {
       const { scrollHeight, scrollTop, clientHeight } =

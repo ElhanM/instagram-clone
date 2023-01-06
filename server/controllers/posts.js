@@ -129,7 +129,9 @@ const getAllPostsByUser = async (req, res, next) => {
 const createPost = async (req, res, next) => {
   try {
     req.user.password = undefined;
-    const post = await Post.create({ ...req.body, user: req.user });
+    const post = await Post.create(
+      { ...req.body, user: req.user },
+    );
     res.status(201).json({ post });
   } catch (error) {
     next(error);
@@ -215,7 +217,7 @@ const editComment = async (req, res, next) => {
     const post = await Post.findOneAndUpdate(
       { _id: postId, "comments._id": req.body.commentId },
       { $set: { "comments.$.text": req.body.commentText } },
-      { new: true }
+      { new: true, runValidators: true }
     )
       .populate("user", "_id username followers following profilePhoto")
       .populate("comments.user", "_id username");

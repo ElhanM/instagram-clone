@@ -2,11 +2,7 @@
 
 ## Fullstack web app made using the MERN stack with user authentication, API debouncing, pagination (infinite scroll done with React Query) and optimistic updates
 
-### Frontend is hosted with netlify and backend with heroku
-
-If you want to check out the project, feel free to create your own account, or use my dummy profile: <br>
-Email: test-user@gmail.com <br>
-Password: test1234
+## Photo upload is done with Cloudinary API
 
 ### External libraries used for frontend: <br />
 
@@ -16,12 +12,12 @@ Material UI, Axios, SCSS, React Router Dom 6, Universal cookie, React Loader Spi
 
 Bcryptjs, CORS, Dotenv, Express, Jsonwebtoken, Mongoose and Nodemon for dev
 
-### Link to project: https://instagram-clone-elhan.netlify.app/
 
 ### .env for client
 
 .env file for client folder contains the following enviromental variables: <br />
 REACT_APP_LOCAL_URL= holds local url so I do not send requests to the hosted backend when developing
+REACT_APP_CLOUDINARY_URL = holds admin's Cloudinary API url
 
 ### .env for server
 

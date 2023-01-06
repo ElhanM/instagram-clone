@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect } from "react";
 import { useGlobalContext } from "../components/context";
 import axios from "axios";
 import { useState } from "react";
@@ -7,7 +7,6 @@ import { Typography } from "@mui/material";
 import Cookies from "universal-cookie";
 import Loading from "../components/Loading";
 import { useInfiniteQuery } from "react-query";
-import { useLocation } from "react-router-dom";
 
 const Home = () => {
   const {
@@ -26,8 +25,6 @@ const Home = () => {
   } = useGlobalContext();
   const cookies = new Cookies();
   const [editCommentMode, setEditCommentMode] = useState(false);
-
-  const location = useLocation();
 
   const [isFetchingHome, setIsFetchingHome] = useState(false);
   const fetchHomePosts = async (page = 1) => {
