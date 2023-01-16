@@ -20,6 +20,9 @@ const ExplorePage = () => {
     setFollowRerender,
     exploreRerender,
     setExploreRerender,
+    user,
+    initialRenderExplore,
+    setInitialRenderExplore,
   } = useGlobalContext();
   const cookies = new Cookies();
   const [editCommentMode, setEditCommentMode] = useState(false);
@@ -47,6 +50,14 @@ const ExplorePage = () => {
         refetchOnWindowFocus: false,
       }
     );
+
+  useEffect(() => {
+    if (initialRenderExplore) {
+      setDataStateExplore([]);
+      refetch();
+    }
+    setInitialRenderExplore(false);
+  }, [user]);
 
   useEffect(() => {
     window.scrollTo(0, 0);

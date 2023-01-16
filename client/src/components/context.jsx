@@ -134,6 +134,8 @@ const AppProvider = ({ children }) => {
   }, [followRerender]);
 
   const [loading, setLoading] = useState(false);
+  const [initialRenderHome, setInitialRenderHome] = useState(false);
+  const [initialRenderExplore, setInitialRenderExplore] = useState(false);
 
   return (
     <AppContext.Provider
@@ -173,6 +175,10 @@ const AppProvider = ({ children }) => {
         setLoading,
         refetchProfilePosts,
         setRefetchProfilePosts,
+        initialRenderHome,
+        setInitialRenderHome,
+        initialRenderExplore,
+        setInitialRenderExplore,
       }}
     >
       {children}

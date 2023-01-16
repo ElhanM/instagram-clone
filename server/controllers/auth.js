@@ -86,6 +86,8 @@ const login = async (req, res, next) => {
       return next(new ErrorResponse("Invalid credentials", 401));
     }
     // this.password refers to the password in the user object, not the password in the req.body
+    // how does this.password know what the password is?
+    // because we are using the findOne method on the user object, we are telling mongoose to include the password field in the user object
     const isMatch = await user.matchPasswords(password);
     if (!isMatch) {
       return next(new ErrorResponse("Invalid credentials", 401));
