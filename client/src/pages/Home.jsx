@@ -22,6 +22,9 @@ const Home = () => {
     setFollowRerender,
     homeRerender,
     setHomeRerender,
+    user,
+    initialRenderHome,
+    setInitialRenderHome,
   } = useGlobalContext();
   const cookies = new Cookies();
   const [editCommentMode, setEditCommentMode] = useState(false);
@@ -50,6 +53,16 @@ const Home = () => {
         refetchOnWindowFocus: false,
       }
     );
+
+  useEffect(() => {
+    console.log("triggered");
+    console.log("triggered", { initialRenderHome });
+    if (initialRenderHome) {
+      setDataStateHome([]);
+      refetch();
+    }
+    setInitialRenderHome(false);
+  }, [user]);
 
   useEffect(() => {
     if (createPost) {

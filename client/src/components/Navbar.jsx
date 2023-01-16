@@ -104,8 +104,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Navbar = () => {
   const cookies = new Cookies();
-  const { userDispatch, userInfo, postsURL, authURL, value, setValue } =
-    useGlobalContext();
+  const {
+    userDispatch,
+    setInitialRenderHome,
+    setInitialRenderExplore,
+    userInfo,
+    postsURL,
+    authURL,
+    value,
+    setValue,
+  } = useGlobalContext();
   const [users, setUsers] = useState([]);
   const [initialSearch, setInitialSearch] = useState(true);
   const [searchValue, setSearchValue] = useState("");
@@ -580,6 +588,8 @@ const Navbar = () => {
                         localStorage.removeItem("user");
                         localStorage.removeItem("cookieExpire");
                         userDispatch(null);
+                        setInitialRenderHome(true);
+                        setInitialRenderExplore(true);
                       }}
                       className="navbar-link"
                     >
