@@ -7,7 +7,7 @@ const AppContext = React.createContext();
 
 const initialState = { userInfo: null };
 
-const CLOUDINARYURL = `${process.env.REACT_APP_CLOUDINARY_API}`;
+const CLOUDINARYAPI = `${process.env.REACT_APP_CLOUDINARY_API}`;
 
 const baseURL =
   process.env.REACT_APP_LOCAL_URL ||
@@ -113,7 +113,7 @@ const AppProvider = ({ children }) => {
       data.append("upload_preset", "instagram-clone");
       data.append("cloud_name", "instagram-clone-web-app");
 
-      const response = await axios.post(CLOUDINARYURL, data);
+      const response = await axios.post(CLOUDINARYAPI, data);
       setImageUrl(response.data.url);
     } catch (error) {
       console.log(error);
