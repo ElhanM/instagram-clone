@@ -1,22 +1,10 @@
 const User = require("../models/User");
 const ErrorResponse = require("../utils/errorResponse");
 
-const sendToken = (user, statusCode, res) => {
-  const token = user.getSignedToken();
-  res.status(statusCode).json({
-    success: true,
-    token,
-    user,
-  });
-};
-
 const register = async (req, res, next) => {
   const { username, email, password, profilePhoto } = req.body;
   try {
-    const user = await User.create(
-      { username, email, password, profilePhoto },
-      { runValidators: true }
-    );
+    const user = await User.create({ username, email, password, profilePhoto });
     sendToken(user, 201, res);
   } catch (error) {
     next(error);
@@ -86,8 +74,6 @@ const login = async (req, res, next) => {
       return next(new ErrorResponse("Invalid credentials", 401));
     }
     // this.password refers to the password in the user object, not the password in the req.body
-    // how does this.password know what the password is?
-    // because we are using the findOne method on the user object, we are telling mongoose to include the password field in the user object
     const isMatch = await user.matchPasswords(password);
     if (!isMatch) {
       return next(new ErrorResponse("Invalid credentials", 401));
@@ -99,6 +85,15 @@ const login = async (req, res, next) => {
       success: false,
     });
   }
+};
+
+const sendToken = (user, statusCode, res) => {
+  const token = user.getSignedToken();
+  res.status(statusCode).json({
+    success: true,
+    token,
+    user,
+  });
 };
 
 const followUser = async (req, res, next) => {
@@ -171,7 +166,7 @@ const changeProfilePhoto = async (req, res, next) => {
     const changeProfilePhoto = await User.findOneAndUpdate(
       { _id: req.user._id },
       { profilePhoto },
-      { new: true, runValidators: true }
+      { new: true }
     );
     res
       .status(201)
