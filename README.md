@@ -18,7 +18,7 @@ Bcryptjs, CORS, Dotenv, Express, Jsonwebtoken, Mongoose and Nodemon for dev
 
 .env file for client folder contains the following enviromental variables: <br />
 REACT_APP_LOCAL_URL= holds local url so I do not send requests to the hosted backend when developing
-REACT_APP_CLOUDINARY_URL = holds admin's Cloudinary API Environment variable
+REACT_APP_CLOUDINARY_API = holds admin's Cloudinary API Environment variable
 
 ### .env for server
 
