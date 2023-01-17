@@ -4,8 +4,6 @@ Fullstack web app made using the MERN stack with user authentication, API deboun
 
 Photo upload is done with Cloudinary API
 
-<hr>
-
 ## External libraries used for frontend: <br />
 
 Material UI, Axios, SCSS, React Router Dom 6, Universal cookie, React Loader Spinner, React Query
@@ -25,7 +23,7 @@ REACT_APP_CLOUDINARY_API = holds admin's Cloudinary API Environment variable
 .env file for server folder contains the following enviromental variables: <br />
 MONGO_URI= holds MongoDB connection string <br />
 JWT_SECRET= holds 512-bit key generated using https://allkeysgenerator.com/ <br />
-JWT_EXPIRE= holds JWT experation date, which in my case is 30d <br />
+JWT_EXPIRE= holds JWT experation date, which in my case is 35d <br />
 
 ## Video of the project
 
