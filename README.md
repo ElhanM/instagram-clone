@@ -55,7 +55,7 @@ cp .env.example .env
 yarn install && yarn dev or npm install && npm run dev
 ```
 
-dont forget to add your own .env variables
+Dont forget to update the .env files
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
