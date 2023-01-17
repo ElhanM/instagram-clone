@@ -7,7 +7,7 @@ const AppContext = React.createContext();
 
 const initialState = { userInfo: null };
 
-const CLOUDINARYURL = `${process.env.REACT_APP_CLOUDINARY_URL}`;
+const CLOUDINARYURL = `${process.env.REACT_APP_CLOUDINARY_API}`;
 
 const baseURL =
   process.env.REACT_APP_LOCAL_URL ||

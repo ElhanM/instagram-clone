@@ -1,8 +1,10 @@
 # Instagram clone
 
-## Fullstack web app made using the MERN stack with user authentication, API debouncing, pagination (infinite scroll done with React Query) and optimistic updates
+### Fullstack web app made using the MERN stack with user authentication, API debouncing, pagination (infinite scroll done with React Query) and optimistic updates
 
-## Photo upload is done with Cloudinary API
+### Photo upload is done with Cloudinary API
+
+<hr>
 
 ### External libraries used for frontend: <br />
 
@@ -16,7 +18,7 @@ Bcryptjs, CORS, Dotenv, Express, Jsonwebtoken, Mongoose and Nodemon for dev
 
 .env file for client folder contains the following enviromental variables: <br />
 REACT_APP_LOCAL_URL= holds local url so I do not send requests to the hosted backend when developing
-REACT_APP_CLOUDINARY_URL = holds admin's Cloudinary API url
+REACT_APP_CLOUDINARY_URL = holds admin's Cloudinary API Environment variable
 
 ### .env for server
 
@@ -26,5 +28,5 @@ JWT_SECRET= holds 512-bit key generated using https://allkeysgenerator.com/ <br 
 JWT_EXPIRE= holds JWT experation date, which in my case is 30d <br />
 
 # Video of the project
-https://user-images.githubusercontent.com/103935603/211108305-136ea0bf-3917-4804-a55e-2d84834e921e.mp4
 
+https://user-images.githubusercontent.com/103935603/211108305-136ea0bf-3917-4804-a55e-2d84834e921e.mp4
