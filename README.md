@@ -1,43 +1,48 @@
-# Instagram clone
+# Instagram Clone 
 
-Fullstack web app made using the MERN stack with user authentication, API debouncing, pagination (infinite scroll done with React Query) and optimistic updates
+A full-stack web application built using the MERN stack, featuring user authentication, API debouncing, pagination (implemented with React Query), and optimistic updates. Photo uploads are handled using the Cloudinary API.
 
-Photo upload is done with Cloudinary API
+## External Libraries - Frontend
 
-## External libraries used for frontend: <br />
+- Material UI
+- Axios
+- SCSS
+- React Router Dom 6
+- Universal Cookie
+- React Loader Spinner
+- React Query
 
-Material UI, Axios, SCSS, React Router Dom 6, Universal cookie, React Loader Spinner, React Query
+## External Libraries - Backend
 
-## External libraries used for backend: <br />
+- Bcryptjs
+- CORS
+- Dotenv
+- Express
+- Jsonwebtoken
+- Mongoose
+- Nodemon (for development)
 
-Bcryptjs, CORS, Dotenv, Express, Jsonwebtoken, Mongoose and Nodemon for dev
+## Environmental Variables
 
-## .env for client
+### Client
 
-.env file for client folder contains the following enviromental variables: <br />
-REACT_APP_LOCAL_URL= holds local url so I do not send requests to the hosted backend when developing
-REACT_APP_CLOUDINARY_API = holds admin's Cloudinary API Environment variable
+- `REACT_APP_LOCAL_URL`: Holds the local URL for development, to prevent sending requests to the hosted backend.
+- `REACT_APP_CLOUDINARY_API`: Holds the admin's Cloudinary API key.
 
-## .env for server
+### Server
 
-.env file for server folder contains the following enviromental variables: <br />
-MONGO_URI= holds MongoDB connection string <br />
-JWT_SECRET= holds 512-bit key generated using https://allkeysgenerator.com/ <br />
-JWT_EXPIRE= holds JWT experation date, which in my case is 35d <br />
+- `MONGO_URI`: Holds the MongoDB connection string.
+- `JWT_SECRET`: Holds a 512-bit key generated using https://allkeysgenerator.com/.
+- `JWT_EXPIRE`: Holds the JWT expiration date (set to 35 days in this case).
 
-## Video of the project
+## Getting Started
 
-https://user-images.githubusercontent.com/103935603/211108305-136ea0bf-3917-4804-a55e-2d84834e921e.mp4
-
-## Get Started
-
-To set up the app, clone the repository:
-
+1. Clone the repository:
 ```bash
 git clone git@github.com:ElhanM/instagram-clone.git
 ```
 
-execute the following commands for client:
+2. Go to the client folder and run the following commands:
 
 ```bash
 cd client
@@ -45,7 +50,7 @@ cp .env.example .env
 yarn install && yarn start or npm install && npm start
 ```
 
-and for server:
+3. do the same for server the server folder:
 
 ```bash
 cd server
