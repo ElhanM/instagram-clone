@@ -33,7 +33,7 @@ A full-stack web application built using the MERN stack, featuring user authenti
 
 - `MONGO_URI`: Holds the MongoDB connection string.
 - `JWT_SECRET`: Holds a 512-bit key generated using https://allkeysgenerator.com/.
-- `JWT_EXPIRE`: Holds the JWT expiration date (set to 35 days in this case).
+- `JWT_EXPIRE`: Holds the JWT expiration date (set to 35 days in my case).
 
 ## Getting Started
 
