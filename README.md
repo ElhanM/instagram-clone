@@ -50,7 +50,7 @@ cp .env.example .env
 yarn install && yarn start or npm install && npm start
 ```
 
-3. do the same for server the server folder:
+3. Do the same for the server folder:
 
 ```bash
 cd server
@@ -58,7 +58,7 @@ cp .env.example .env
 yarn install && yarn dev or npm install && npm run dev
 ```
 
-Dont forget to update the .env files
+## Dont forget to update the .env files!
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
