@@ -806,7 +806,6 @@ export const MemoShowPosts = React.memo(
   function areEqual(prevProps, nextProps) {
     if (
       prevProps.editCommentMode !== nextProps.editCommentMode ||
-      prevProps.post !== nextProps.post ||
       prevProps.handleChange !== nextProps.handleChange ||
       prevProps.showLikes !== nextProps.showLikes ||
       prevProps.likedUsers !== nextProps.likedUsers ||

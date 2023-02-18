@@ -1,6 +1,15 @@
 const User = require("../models/User");
 const ErrorResponse = require("../utils/errorResponse");
 
+const sendToken = (user, statusCode, res) => {
+  const token = user.getSignedToken();
+  res.status(statusCode).json({
+    success: true,
+    token,
+    user,
+  });
+};
+
 const register = async (req, res, next) => {
   const { username, email, password, profilePhoto } = req.body;
   try {
@@ -85,15 +94,6 @@ const login = async (req, res, next) => {
       success: false,
     });
   }
-};
-
-const sendToken = (user, statusCode, res) => {
-  const token = user.getSignedToken();
-  res.status(statusCode).json({
-    success: true,
-    token,
-    user,
-  });
 };
 
 const followUser = async (req, res, next) => {

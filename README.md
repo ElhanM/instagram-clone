@@ -2,6 +2,10 @@
 
 A full-stack web application built using the MERN stack, featuring user authentication, API debouncing, pagination (implemented with React Query), and optimistic updates. Photo uploads are handled using the Cloudinary API.
 
+## Video of the project
+
+https://user-images.githubusercontent.com/103935603/211108305-136ea0bf-3917-4804-a55e-2d84834e921e.mp4
+
 ## External Libraries - Frontend
 
 - Material UI
