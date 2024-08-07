@@ -55,8 +55,6 @@ const Home = () => {
     );
 
   useEffect(() => {
-    console.log("triggered");
-    console.log("triggered", { initialRenderHome });
     if (initialRenderHome) {
       setDataStateHome([]);
       refetch();
